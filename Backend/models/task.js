@@ -20,7 +20,7 @@ const taskSchema = new mongoose.Schema({
   projectId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Project",
-    required: [true, "a task must belong to a project"],
+    required: [true, "A task must belong to a project"],
     validate: {
       validator: async function (v) {
         const project = await Project.findById(v);
@@ -96,12 +96,11 @@ const taskSchema = new mongoose.Schema({
       },
     ],
     validate: {
-      validator: {
-        validator: function (idList) {
-          return idList.length > 0;
-        },
-        message: "There must be at least one developer for this task",
+      validator: function (idList) {
+        return idList.length > 0 && idList.length <= 10;
       },
+      message:
+        "Number of developers for a task must be greater than 0 and less than 10 ",
     },
   },
 });
@@ -125,7 +124,7 @@ taskSchema.pre("save", async function (next) {
     this.developers.map(async (developerId) => {
       const developer = await User.findById(developerId);
       if (!developer) {
-        throw new HandledError(`no users found with id = ${developerId}`, 404);
+        throw new HandledError(`no users found with id = ${developerId}`, 400);
       }
 
       const membership = await ProjectMember.findOne({
@@ -141,9 +140,21 @@ taskSchema.pre("save", async function (next) {
     })
   );
 
+  const uniqueIds = {};
+  for (const developer of this.developers) {
+    if (developer in uniqueIds) {
+      throw new HandledError(
+        `you can not add a developer twice (id = ${developer})`,
+        400
+      );
+    }
+
+    uniqueIds[developer] = 1;
+  }
+
   next();
 });
 
-const Task = mongoose.Model(taskSchema, "Task");
+const Task = mongoose.model("Task", taskSchema);
 
 module.exports = Task;
