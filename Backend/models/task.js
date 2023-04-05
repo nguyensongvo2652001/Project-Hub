@@ -1,4 +1,8 @@
 const mongoose = require("mongoose");
+const Project = require("./project");
+const User = require("./user");
+const { HandledError } = require("../utils/errorHandling");
+const ProjectMember = require("./projectMember");
 
 const taskTypeOptions = [
   "feature",
@@ -19,7 +23,7 @@ const taskSchema = new mongoose.Schema({
     required: [true, "a task must belong to a project"],
     validate: {
       validator: async function (v) {
-        const project = await mongoose.model("Project").findById(v);
+        const project = await Project.findById(v);
         return project !== null;
       },
       message: (props) => `Project with id ${props.value} does not exist`,
@@ -31,10 +35,10 @@ const taskSchema = new mongoose.Schema({
     required: [true, "a task must have a creator"],
     validate: {
       validator: async function (v) {
-        const project = await mongoose.model("Project").findById(v);
-        return project !== null;
+        const user = await User.findById(v);
+        return user !== null;
       },
-      message: (props) => `Project with id ${props.value} does not exist`,
+      message: (props) => `User with id ${props.value} does not exist`,
     },
   },
   dateCreated: {
@@ -93,8 +97,8 @@ const taskSchema = new mongoose.Schema({
     ],
     validate: {
       validator: {
-        validator: function (v) {
-          return v.length > 0;
+        validator: function (idList) {
+          return idList.length > 0;
         },
         message: "There must be at least one developer for this task",
       },
@@ -107,6 +111,38 @@ taskSchema.index({ name: 1 });
 taskSchema.index({ type: 1 });
 taskSchema.index({ status: 1 });
 taskSchema.index({ description: 1 });
+
+taskSchema.pre("save", async function (next) {
+  const membership = await ProjectMember.findOne({
+    projectId: this.projectId,
+    memberId: this.creator,
+  });
+  if (!membership) {
+    throw new HandledError("creator must be a member of the project", 403);
+  }
+
+  await Promise.all(
+    this.developers.map(async (developerId) => {
+      const developer = await User.findById(developerId);
+      if (!developer) {
+        throw new HandledError(`no users found with id = ${developerId}`, 404);
+      }
+
+      const membership = await ProjectMember.findOne({
+        projectId: this.projectId,
+        memberId: developerId,
+      });
+      if (!membership) {
+        throw new HandledError(
+          `user with id = ${developerId} is not a member of project id = ${this.projectId}`,
+          400
+        );
+      }
+    })
+  );
+
+  next();
+});
 
 const Task = mongoose.Model(taskSchema, "Task");
 
