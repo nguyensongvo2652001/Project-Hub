@@ -5,6 +5,17 @@ const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    maxLength: [100, "your name can not be longer than 100 characters"],
+    default: "nonameuser",
+    trim: true,
+  },
+  jobTitle: {
+    type: String,
+    maxLength: [100, "your job title can not be longer than 100 characters"],
+    trim: true,
+  },
   email: {
     type: String,
     required: [true, "Email is required"],

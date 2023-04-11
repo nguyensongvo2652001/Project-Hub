@@ -11,4 +11,14 @@ router
     projectController.createProject
   );
 
+router.use(authController.checkAuthentication);
+router
+  .route("/:id")
+  .get(projectController.getProject)
+  .patch(
+    projectController.checkUserIsOwner,
+    projectController.filterProjectData,
+    projectController.updateProject
+  );
+
 module.exports = router;
