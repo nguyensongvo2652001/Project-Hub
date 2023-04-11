@@ -9,7 +9,7 @@ const User = require("../models/user");
 const ProjectMember = require("../models/projectMember");
 const Project = require("../models/project");
 
-describe("Test create new project route", () => {
+describe("Test get project route", () => {
   let agent,
     getProjectRoute,
     user,

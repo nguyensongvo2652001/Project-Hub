@@ -6,151 +6,123 @@ const {
   testShouldFailIfUserNotLoggedIn,
 } = require("./utils/auth");
 const User = require("../models/user");
-const ProjectMember = require("../models/projectMember");
 const Project = require("../models/project");
+const ProjectMember = require("../models/projectMember");
 
-describe("Test create new project route", () => {
-  let agent,
-    getProjectRoute,
-    user,
-    user2,
-    user3,
-    password,
-    privateProject,
-    publicProject;
+describe("Test update project route", () => {
+  let agent, updateProjectRoute, owner, member, randomUser, password, project;
   beforeEach(async () => {
     agent = request.agent(app);
-    getProjectRoute = `${process.env.BASE_V1_API_ROUTE}/project`;
+    updateProjectRoute = `${process.env.BASE_V1_API_ROUTE}/project`;
     loginRoute = `${process.env.BASE_V1_API_ROUTE}/auth/login`;
     password = "someThing2605!";
-    user = await User.create({
-      email: "user@example.com",
+    owner = await User.create({
+      email: "owner@example.com",
       password,
     });
-    user2 = await User.create({
-      email: "user2@example.com",
+    member = await User.create({
+      email: "member@example.com",
       password,
     });
-    user3 = await User.create({
-      email: "user3@example.com",
+    randomUser = await User.create({
+      email: "randomUser@example.com",
       password,
     });
-    privateProject = await Project.create({
+    project = await Project.create({
       name: "project",
       tag: "Mobile",
-      owner: user._id,
-      status: "private",
-    });
-    publicProject = await Project.create({
-      name: "project",
-      tag: "Mobile",
-      owner: user._id,
-      status: "public",
+      owner: owner._id,
     });
     await ProjectMember.create({
-      projectId: privateProject._id,
-      memberId: user3._id,
-      status: "pending",
-      role: "developer",
-    });
-    await ProjectMember.create({
-      projectId: publicProject._id,
-      memberId: user3._id,
-      status: "pending",
-      role: "developer",
+      projectId: project._id,
+      memberId: member._id,
     });
   });
 
   it("should fail if user not logged in", async function () {
-    await testShouldFailIfUserNotLoggedIn(agent, getProjectRoute, async () => {
-      await agent.get(`${getProjectRoute}/${publicProject._id}`);
-    });
+    await testShouldFailIfUserNotLoggedIn(
+      agent,
+      `${updateProjectRoute}/${project._id}`,
+      async () => {
+        await agent.patch(`${updateProjectRoute}/${project._id}`);
+      }
+    );
   });
 
   it("should return status code 400 if the project id is invalid", async function () {
     const cookie = await getLoginCookie(app, loginRoute, {
-      email: user.email,
+      email: owner.email,
       password,
     });
 
     const res = await agent
-      .get(`${getProjectRoute}/123`)
+      .patch(`${updateProjectRoute}/123`)
       .set("Cookie", cookie)
       .expect(400);
   });
 
   it("should return status code 404 if the server can not find the project in database based the provided id", async function () {
     const cookie = await getLoginCookie(app, loginRoute, {
-      email: user.email,
+      email: owner.email,
       password,
     });
 
     const randomId = new mongoose.Types.ObjectId();
     const res = await agent
-      .get(`${getProjectRoute}/${randomId}`)
+      .patch(`${updateProjectRoute}/${randomId}`)
       .set("Cookie", cookie)
       .expect(404);
   });
 
-  it("should return status code 404 if the project status is private and the logged in user is not a member of the project", async function () {
+  it("should return status code 404 if the user is not a member of the project", async function () {
     const cookie = await getLoginCookie(app, loginRoute, {
-      email: user2.email,
+      email: randomUser.email,
       password,
     });
 
+    const randomId = new mongoose.Types.ObjectId();
     const res = await agent
-      .get(`${getProjectRoute}/${privateProject._id}`)
+      .patch(`${updateProjectRoute}/${project._id}`)
       .set("Cookie", cookie)
       .expect(404);
   });
 
-  it("should return status code 200 if the project status is private and the logged in user is a member of the project", async function () {
+  it("should return status code 403 if the user is a member but not the owner of the project", async function () {
     const cookie = await getLoginCookie(app, loginRoute, {
-      email: user.email,
+      email: member.email,
       password,
     });
 
+    const randomId = new mongoose.Types.ObjectId();
     const res = await agent
-      .get(`${getProjectRoute}/${privateProject._id}`)
+      .patch(`${updateProjectRoute}/${project._id}`)
       .set("Cookie", cookie)
-      .expect(200);
-
-    const { project } = res.body.data;
-    const actualMembers = await ProjectMember.find({
-      projectId: privateProject._id,
-      status: "done",
-    });
-    const allMembers = await ProjectMember.find({
-      projectId: privateProject._id,
-    });
-
-    expect(project.numberOfMembers).toEqual(actualMembers.length);
-    expect(project.numberOfMembers).not.toEqual(allMembers.length);
-    expect(project.owner.name).toBeDefined();
+      .expect(403);
   });
 
-  it("should return status code 200 if the project status is public", async function () {
+  it("should return status code 200 if updated successfully", async function () {
     const cookie = await getLoginCookie(app, loginRoute, {
-      email: user2.email,
+      email: owner.email,
       password,
     });
 
+    const data = {
+      status: "private",
+      name: "new name",
+      description: "new description",
+    };
+
+    const randomId = new mongoose.Types.ObjectId();
     const res = await agent
-      .get(`${getProjectRoute}/${publicProject._id}`)
+      .patch(`${updateProjectRoute}/${project._id}`)
+      .send(data)
       .set("Cookie", cookie)
       .expect(200);
 
-    const { project } = res.body.data;
-    const actualMembers = await ProjectMember.find({
-      projectId: publicProject._id,
-      status: "done",
-    });
-    const allMembers = await ProjectMember.find({
-      projectId: publicProject._id,
-    });
+    const updatedProject = await Project.findById(project._id);
 
-    expect(project.numberOfMembers).toEqual(actualMembers.length);
-    expect(project.numberOfMembers).not.toEqual(allMembers.length);
-    expect(project.owner.name).toBeDefined();
+    expect(updatedProject.status).toEqual(data.status);
+    expect(updatedProject.name).toEqual(data.name);
+    expect(updatedProject.description).toEqual(data.description);
   });
 });
