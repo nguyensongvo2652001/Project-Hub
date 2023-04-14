@@ -41,21 +41,6 @@ describe("Test create new project route", () => {
       .expect(400);
   });
 
-  it("should fail if the project tag is not provided", async function () {
-    const cookie = await getLoginCookie(app, loginRoute, {
-      email: user.email,
-      password,
-    });
-
-    const res = await agent
-      .post(createProjectRoute)
-      .send({
-        name: "Twitter clone",
-      })
-      .set("Cookie", cookie)
-      .expect(400);
-  });
-
   it("should fail if the project tag is not valid", async function () {
     const cookie = await getLoginCookie(app, loginRoute, {
       email: user.email,

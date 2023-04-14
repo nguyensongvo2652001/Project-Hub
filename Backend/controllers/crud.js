@@ -35,9 +35,14 @@ const getAll = (Model) =>
     });
   });
 
-const getOne = (Model) =>
+const getOne = (Model, crudOptions) =>
   catchAsync(async (req, res, next) => {
-    const doc = await Model.findById(req.params.id);
+    let selectOptions = "";
+    if (crudOptions) {
+      selectOptions = crudOptions.selectOptions;
+    }
+
+    const doc = await Model.findById(req.params.id).select(selectOptions);
     const modelName = Model.modelName.toLowerCase();
 
     if (!doc) {

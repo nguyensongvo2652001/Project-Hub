@@ -16,6 +16,11 @@ const userSchema = new mongoose.Schema({
     maxLength: [100, "your job title can not be longer than 100 characters"],
     trim: true,
   },
+  description: {
+    type: String,
+    maxLength: [300, "your description can not be longer than 300 characters"],
+    trim: true,
+  },
   email: {
     type: String,
     required: [true, "Email is required"],

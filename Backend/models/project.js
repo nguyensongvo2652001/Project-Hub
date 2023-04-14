@@ -20,7 +20,6 @@ const projectSchema = new mongoose.Schema(
     },
     tag: {
       type: String,
-      required: [true, "Project must have a tag"],
       validate: {
         validator: function (v) {
           return projectTags.includes(v);

@@ -9,7 +9,7 @@ const User = require("../models/user");
 const Project = require("../models/project");
 const Task = require("../models/task");
 
-describe("Test get project route", () => {
+describe("Test get all tasks from project route", () => {
   let agent, getAllTasksRoute, password, owner1, owner2, project1, project2;
   beforeEach(async () => {
     agent = request.agent(app);
