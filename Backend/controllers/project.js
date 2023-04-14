@@ -77,8 +77,8 @@ const checkUserIsMemberOfProject = catchAsync(async (req, res, next) => {
   if (!projectMember) {
     return next(
       new HandledError(
-        `you are not a member of project (id = ${req.params.projectId})`,
-        403
+        `you are not a member of project (id = ${req.params.projectId}) or project id is invalid`,
+        400
       )
     );
   }
