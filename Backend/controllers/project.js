@@ -68,6 +68,24 @@ const checkUserIsOwner = catchAsync(async (req, res, next) => {
   next();
 });
 
+const checkUserIsMemberOfProject = catchAsync(async (req, res, next) => {
+  const projectMember = await ProjectMember.findOne({
+    memberId: req.user._id,
+    projectId: req.params.projectId,
+  });
+
+  if (!projectMember) {
+    return next(
+      new HandledError(
+        `you are not a member of project (id = ${req.params.projectId})`,
+        403
+      )
+    );
+  }
+
+  next();
+});
+
 const filterProjectData = (req, res, next) => {
   const acceptedFields = ["name", "description", "tag", "status"];
   const filteredProjectData = {};
@@ -90,6 +108,7 @@ module.exports = {
   setOwnerId,
   getProject,
   checkUserIsOwner,
+  checkUserIsMemberOfProject,
   updateProject,
   filterProjectData,
 };

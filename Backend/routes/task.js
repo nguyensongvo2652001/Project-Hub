@@ -1,10 +1,13 @@
 const express = require("express");
 const taskController = require("../controllers/task");
 const authController = require("../controllers/auth");
-const router = express.Router();
 
+const router = express.Router({ mergeParams: true });
+
+router.use(authController.checkAuthentication);
 router
   .route("/")
-  .post(authController.checkAuthentication, taskController.createTask);
+  .get(taskController.prepareGetAllTasksQuery, taskController.getAllTasks)
+  .post(taskController.createTask);
 
 module.exports = router;

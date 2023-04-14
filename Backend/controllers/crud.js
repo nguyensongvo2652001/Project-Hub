@@ -1,4 +1,5 @@
 const { HandledError, catchAsync } = require("../utils/errorHandling");
+const APIFeatures = require("../utils/apiFeatures");
 
 const createOne = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -15,7 +16,13 @@ const createOne = (Model) =>
 
 const getAll = (Model) =>
   catchAsync(async (req, res, next) => {
-    const docs = await Model.find();
+    const features = new APIFeatures(Model.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+
+    const docs = await features.query;
     const modelName = Model.modelName.toLowerCase();
     const pluralModelName = `${modelName}s`;
 
