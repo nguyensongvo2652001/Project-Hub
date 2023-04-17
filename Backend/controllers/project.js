@@ -101,6 +101,13 @@ const filterProjectData = (req, res, next) => {
   next();
 };
 
+const filterOnlyPublicProjects = (req, res, next) => {
+  req.body = { status: "public" };
+
+  next();
+};
+
+const getAllProjects = crud.getAll(Project);
 const updateProject = crud.updateOne(Project);
 
 module.exports = {
@@ -111,4 +118,5 @@ module.exports = {
   checkUserIsMemberOfProject,
   updateProject,
   filterProjectData,
+  getAllProjects,
 };

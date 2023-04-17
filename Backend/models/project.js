@@ -71,6 +71,10 @@ const projectSchema = new mongoose.Schema(
         "your description should not be longer than 500 characters",
       ],
     },
+    lastChanged: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     toJSON: { virtuals: true },
