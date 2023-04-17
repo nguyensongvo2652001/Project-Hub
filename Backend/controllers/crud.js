@@ -57,12 +57,17 @@ const getOne = (Model, crudOptions) =>
     });
   });
 
-const updateOne = (Model) =>
+const updateOne = (Model, crudOptions) =>
   catchAsync(async (req, res, next) => {
+    let selectOptions = "";
+    if (crudOptions) {
+      selectOptions = crudOptions.selectOptions;
+    }
+
     const doc = await Model.findOneAndUpdate({ _id: req.params.id }, req.body, {
       new: true,
       runValidators: true,
-    });
+    }).select(selectOptions);
 
     const modelName = Model.modelName.toLowerCase();
 

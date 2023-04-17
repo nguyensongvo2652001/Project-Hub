@@ -12,6 +12,10 @@ router
   .get(
     userController.prepareGetCurrentUserProfileMiddleware,
     userController.getUser
+  )
+  .patch(
+    userController.prepareUpdateUserRouteMiddleware,
+    userController.updateUser
   );
 
 router
