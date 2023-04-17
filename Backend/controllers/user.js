@@ -18,4 +18,13 @@ const prepareGetAllJoinedProjectsMiddleware = catchAsync(
   }
 );
 
-module.exports = { getUser, prepareGetAllJoinedProjectsMiddleware };
+const prepareGetCurrentUserProfileMiddleware = (req, res, next) => {
+  req.params.id = req.user._id;
+  next();
+};
+
+module.exports = {
+  getUser,
+  prepareGetAllJoinedProjectsMiddleware,
+  prepareGetCurrentUserProfileMiddleware,
+};

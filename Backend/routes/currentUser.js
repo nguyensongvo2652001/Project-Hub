@@ -8,6 +8,13 @@ const router = express.Router();
 router.use(authController.checkAuthentication);
 
 router
+  .route("/")
+  .get(
+    userController.prepareGetCurrentUserProfileMiddleware,
+    userController.getUser
+  );
+
+router
   .route("/project")
   .get(
     userController.prepareGetAllJoinedProjectsMiddleware,
