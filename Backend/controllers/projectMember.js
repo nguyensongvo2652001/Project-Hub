@@ -108,4 +108,39 @@ const confirmMembership = catchAsync(async (req, res, next) => {
   });
 });
 
-module.exports = { inviteMemberToProject, confirmMembership };
+const getAllProjectMembers = catchAsync(async (req, res, next) => {
+  if (!req.params.projectId) {
+    return next(new HandledError("you must specify the project id", 400));
+  }
+
+  const memberships = await ProjectMember.find({
+    projectId: req.params.projectId,
+  }).populate({
+    path: "memberId",
+    select: "name email",
+  });
+
+  const promises = memberships.map(async (membership) => {
+    const performance = await membership.getMemberPerformance(
+      membership.memberId._id,
+      membership.projectId
+    );
+    membership.performance = performance;
+  });
+
+  await Promise.all(promises);
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      length: memberships.length,
+      members: memberships,
+    },
+  });
+});
+
+module.exports = {
+  inviteMemberToProject,
+  confirmMembership,
+  getAllProjectMembers,
+};

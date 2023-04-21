@@ -2,7 +2,7 @@ const User = require("../models/user");
 const ProjectMember = require("../models/projectMember");
 const CRUDOptions = require("../utils/crudOptions");
 const { catchAsync } = require("../utils/errorHandling");
-const { getOne, updateOne } = require("./crud");
+const { getOne, updateOne, getAll } = require("./crud");
 
 const allowedVisibleFieldsForUsers = "name jobTitle description email";
 const allowedUpdateFieldsForUsers = ["name", "jobTitle", "description"];

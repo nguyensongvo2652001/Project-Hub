@@ -2,6 +2,7 @@ const express = require("express");
 const projectController = require("../controllers/project");
 const authController = require("../controllers/auth");
 const taskRouter = require("./task");
+const projectMemberController = require("../controllers/projectMember");
 const router = express.Router();
 
 router
@@ -27,6 +28,12 @@ router.use(
   "/:projectId/task",
   projectController.checkUserIsMemberOfProject,
   taskRouter
+);
+
+router.get(
+  "/:projectId/member",
+  projectController.checkUserIsMemberOfProject,
+  projectMemberController.getAllProjectMembers
 );
 
 module.exports = router;
