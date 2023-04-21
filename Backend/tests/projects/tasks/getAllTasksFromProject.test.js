@@ -1,13 +1,13 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
-const app = require("../app");
+const app = require("../../../app");
 const {
   getLoginCookie,
   testShouldFailIfUserNotLoggedIn,
-} = require("./utils/auth");
-const User = require("../models/user");
-const Project = require("../models/project");
-const Task = require("../models/task");
+} = require("../../utils/auth");
+const User = require("../../../models/user");
+const Project = require("../../../models/project");
+const Task = require("../../../models/task");
 
 describe("Test get all tasks from project route", () => {
   let agent, getAllTasksRoute, password, owner1, owner2, project1, project2;

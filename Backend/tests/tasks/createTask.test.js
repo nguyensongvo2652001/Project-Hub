@@ -1,12 +1,12 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
-const app = require("../app");
+const app = require("../../app");
 const {
   getLoginCookie,
   testShouldFailIfUserNotLoggedIn,
-} = require("./utils/auth");
-const User = require("../models/user");
-const Project = require("../models/project");
+} = require("../utils/auth");
+const User = require("../../models/user");
+const Project = require("../../models/project");
 
 describe("Test create new task route", () => {
   let agent, createTaskRoute, member, randomUser, password, project, randomDate;

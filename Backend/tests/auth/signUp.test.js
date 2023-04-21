@@ -1,8 +1,8 @@
 const cookie = require("cookie");
 const request = require("supertest");
-const app = require("../app");
-const User = require("../models/user");
-const { testSendAuthResponse } = require("./utils/auth");
+const app = require("../../app");
+const User = require("../../models/user");
+const { testSendAuthResponse } = require("../utils/auth");
 
 describe("Test sign up route", () => {
   it("should create a new user successfully", async () => {

@@ -1,12 +1,12 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
-const app = require("../app");
+const app = require("../../app");
 const {
   getLoginCookie,
   testShouldFailIfUserNotLoggedIn,
-} = require("./utils/auth");
-const User = require("../models/user");
-const Project = require("../models/project");
+} = require("../utils/auth");
+const User = require("../../models/user");
+const Project = require("../../models/project");
 
 describe("Test get all joined projects route", () => {
   let agent, getJoinedProjectsRoute, user, user2, password, project1, project2;

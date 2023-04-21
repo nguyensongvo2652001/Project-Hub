@@ -1,13 +1,13 @@
 const request = require("supertest");
 const mongoose = require("mongoose");
-const app = require("../app");
+const app = require("../../app");
 const {
   getLoginCookie,
   testShouldFailIfUserNotLoggedIn,
-} = require("./utils/auth");
-const User = require("../models/user");
-const Project = require("../models/project");
-const ProjectMember = require("../models/projectMember");
+} = require("../utils/auth");
+const User = require("../../models/user");
+const Project = require("../../models/project");
+const ProjectMember = require("../../models/projectMember");
 
 describe("Test update project route", () => {
   let agent, updateProjectRoute, owner, member, randomUser, password, project;

@@ -1,7 +1,7 @@
 const request = require("supertest");
-const app = require("../app");
-const User = require("../models/user");
-const { testSendAuthResponse } = require("./utils/auth");
+const app = require("../../app");
+const User = require("../../models/user");
+const { testSendAuthResponse } = require("../utils/auth");
 
 describe("Test reset password route", () => {
   const rawPasswordResetToken = "validToken";
