@@ -22,7 +22,16 @@ const getAll = (Model, crudOptions) =>
       .limitFields()
       .paginate();
 
-    const docs = await features.query;
+    let query = features.query;
+
+    const populateOptions = crudOptions?.populateOptions;
+    if (populateOptions) {
+      for (const populateOption of populateOptions) {
+        query = query.populate(populateOption);
+      }
+    }
+
+    const docs = await query;
     const modelName = Model.modelName.toLowerCase();
     const pluralModelName = `${modelName}s`;
 
