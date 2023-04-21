@@ -108,6 +108,33 @@ projectSchema.index({ owner: 1 });
 projectSchema.index({ name: 1 });
 projectSchema.index({ status: 1 });
 
+projectSchema.virtual("tasksCount").get(function () {
+  return this._tasksCount;
+});
+
+projectSchema.virtual("tasksCount").set(function (value) {
+  this._tasksCount = value;
+});
+
+projectSchema.methods.countTasksByType = async function () {
+  // We can not use Task model directly because we have to import the Task model in this file
+  // which will cause circular dependency (the Task model already imported the Project model in task.js)
+  const result = await mongoose.model("Task").aggregate([
+    {
+      $lookup: {
+        from: "projects",
+        localField: "projectId",
+        foreignField: "_id",
+        as: "project",
+      },
+    },
+    { $unwind: "$project" },
+    { $match: { "project._id": this._id } },
+    { $group: { _id: "$type", count: { $sum: 1 } } },
+  ]);
+  return result;
+};
+
 const Project = mongoose.model("Project", projectSchema);
 
 module.exports = Project;

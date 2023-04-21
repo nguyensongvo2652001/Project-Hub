@@ -24,17 +24,20 @@ const getProject = catchAsync(async (req, res, next) => {
     );
   }
 
-  if (project.status === "private") {
-    const membership = await ProjectMember.findOne({
-      projectId: project._id,
-      memberId: req.user._id,
-    });
+  const membership = await ProjectMember.findOne({
+    projectId: project._id,
+    memberId: req.user._id,
+  });
 
-    if (!membership) {
-      return next(
-        new HandledError(`No projects found with id = ${req.params.id}`, 404)
-      );
-    }
+  if (project.status === "private" && !membership) {
+    return next(
+      new HandledError(`No projects found with id = ${req.params.id}`, 404)
+    );
+  }
+
+  if (membership) {
+    const tasksCountByType = await project.countTasksByType();
+    project.tasksCount = tasksCountByType;
   }
 
   project.status = undefined;

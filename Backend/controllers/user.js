@@ -20,6 +20,7 @@ const prepareUpdateUserRouteMiddleware = (req, res, next) => {
 
   next();
 };
+
 const updateUserCrudOptions = new CRUDOptions();
 updateUserCrudOptions.selectOptions = allowedVisibleFieldsForUsers;
 const updateUser = updateOne(User, updateUserCrudOptions);

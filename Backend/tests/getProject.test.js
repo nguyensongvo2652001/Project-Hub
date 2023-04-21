@@ -129,7 +129,7 @@ describe("Test get project route", () => {
     expect(project.owner.name).toBeDefined();
   });
 
-  it("should return status code 200 if the project status is public", async function () {
+  it("should return status code 200 if the project status is public (user is not member)", async function () {
     const cookie = await getLoginCookie(app, loginRoute, {
       email: user2.email,
       password,
@@ -152,5 +152,32 @@ describe("Test get project route", () => {
     expect(project.numberOfMembers).toEqual(actualMembers.length);
     expect(project.numberOfMembers).not.toEqual(allMembers.length);
     expect(project.owner.name).toBeDefined();
+    expect(project.tasksCount).not.toBeDefined();
+  });
+
+  it("should return status code 200 if the project status is public (user is member)", async function () {
+    const cookie = await getLoginCookie(app, loginRoute, {
+      email: user.email,
+      password,
+    });
+
+    const res = await agent
+      .get(`${getProjectRoute}/${publicProject._id}`)
+      .set("Cookie", cookie)
+      .expect(200);
+
+    const { project } = res.body.data;
+    const actualMembers = await ProjectMember.find({
+      projectId: publicProject._id,
+      status: "done",
+    });
+    const allMembers = await ProjectMember.find({
+      projectId: publicProject._id,
+    });
+
+    expect(project.numberOfMembers).toEqual(actualMembers.length);
+    expect(project.numberOfMembers).not.toEqual(allMembers.length);
+    expect(project.owner.name).toBeDefined();
+    expect(project.tasksCount).toBeDefined();
   });
 });
