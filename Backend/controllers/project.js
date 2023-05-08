@@ -1,5 +1,7 @@
 const Project = require("../models/project");
 const ProjectMember = require("../models/projectMember");
+const User = require("../models/user");
+const APIFeatures = require("../utils/apiFeatures");
 const { catchAsync, HandledError } = require("../utils/errorHandling");
 const crud = require("./crud");
 
@@ -119,6 +121,61 @@ const sortProjectsByDateCreatedMiddleware = (req, res, next) => {
 const getAllProjects = crud.getAll(Project);
 const updateProject = crud.updateOne(Project);
 
+const searchProjects = catchAsync(async (req, res, next) => {
+  let { q } = req.query;
+
+  if (!q) {
+    q = "";
+  }
+
+  const searchQuery = { $regex: q, $options: "i" };
+
+  const possibleOwners = await User.find({
+    $or: [
+      { name: searchQuery },
+      { email: searchQuery },
+      { description: searchQuery },
+      { jobTitle: searchQuery },
+    ],
+  });
+
+  const possibleOwnersId = possibleOwners.map((owner) => owner._id);
+
+  const query = Project.find({
+    $or: [
+      { name: searchQuery },
+      { tag: searchQuery },
+      { description: searchQuery },
+      { owner: { $in: possibleOwnersId } },
+    ],
+    status: "public",
+  }).populate({
+    path: "owner",
+    select: "name email jobTitle description",
+  });
+
+  const queryString = req.query;
+
+  if (!queryString.sort) {
+    queryString.sort = "-dateCreated";
+  }
+
+  const features = new APIFeatures(query, req.query)
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const projects = await features.query;
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      length: projects.length,
+      projects,
+    },
+  });
+});
+
 module.exports = {
   createProject,
   setOwnerId,
@@ -130,4 +187,5 @@ module.exports = {
   getAllProjects,
   filterOnlyPublicProjectsMiddleware,
   sortProjectsByDateCreatedMiddleware,
+  searchProjects,
 };

@@ -6,6 +6,7 @@ const projectMemberController = require("../controllers/projectMember");
 const router = express.Router();
 
 router.use(authController.checkAuthentication);
+router.get("/search", projectController.searchProjects);
 router
   .route("/")
   .get(
