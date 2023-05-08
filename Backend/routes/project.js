@@ -5,15 +5,16 @@ const taskRouter = require("./task");
 const projectMemberController = require("../controllers/projectMember");
 const router = express.Router();
 
+router.use(authController.checkAuthentication);
 router
   .route("/")
-  .post(
-    authController.checkAuthentication,
-    projectController.setOwnerId,
-    projectController.createProject
-  );
+  .get(
+    projectController.filterOnlyPublicProjectsMiddleware,
+    projectController.sortProjectsByDateCreatedMiddleware,
+    projectController.getAllProjects
+  )
+  .post(projectController.setOwnerId, projectController.createProject);
 
-router.use(authController.checkAuthentication);
 router
   .route("/:id")
   .get()

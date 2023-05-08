@@ -104,8 +104,14 @@ const filterProjectData = (req, res, next) => {
   next();
 };
 
-const filterOnlyPublicProjects = (req, res, next) => {
+const filterOnlyPublicProjectsMiddleware = (req, res, next) => {
   req.body = { status: "public" };
+
+  next();
+};
+
+const sortProjectsByDateCreatedMiddleware = (req, res, next) => {
+  req.query.sort = "-dateCreated";
 
   next();
 };
@@ -122,4 +128,6 @@ module.exports = {
   updateProject,
   filterProjectData,
   getAllProjects,
+  filterOnlyPublicProjectsMiddleware,
+  sortProjectsByDateCreatedMiddleware,
 };
