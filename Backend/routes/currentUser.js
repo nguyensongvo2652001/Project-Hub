@@ -11,10 +11,12 @@ router
   .route("/")
   .get(
     userController.prepareGetCurrentUserProfileMiddleware,
+    userController.prepareUserSelectMiddleware,
     userController.getUser
   )
   .patch(
     userController.prepareUpdateUserRouteMiddleware,
+    userController.prepareUserSelectMiddleware,
     userController.updateUser
   );
 

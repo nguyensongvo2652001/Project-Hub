@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.use(authController.checkAuthentication);
 
-router.route("/:id").get(userController.getUser);
+router
+  .route("/:id")
+  .get(userController.prepareUserSelectMiddleware, userController.getUser);
 
 module.exports = router;

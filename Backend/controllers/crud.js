@@ -14,7 +14,7 @@ const createOne = (Model) =>
     });
   });
 
-const getAll = (Model, crudOptions) =>
+const getAll = (Model) =>
   catchAsync(async (req, res, next) => {
     const features = new APIFeatures(Model.find(req.body), req.query)
       .filter()
@@ -24,7 +24,7 @@ const getAll = (Model, crudOptions) =>
 
     let query = features.query;
 
-    const populateOptions = crudOptions?.populateOptions;
+    const populateOptions = req.populateOptions;
     if (populateOptions) {
       for (const populateOption of populateOptions) {
         query = query.populate(populateOption);
@@ -44,12 +44,9 @@ const getAll = (Model, crudOptions) =>
     });
   });
 
-const getOne = (Model, crudOptions) =>
+const getOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    let selectOptions = "";
-    if (crudOptions) {
-      selectOptions = crudOptions.selectOptions;
-    }
+    let selectOptions = req.selectOptions;
 
     const doc = await Model.findById(req.params.id).select(selectOptions);
     const modelName = Model.modelName.toLowerCase();
@@ -66,12 +63,9 @@ const getOne = (Model, crudOptions) =>
     });
   });
 
-const updateOne = (Model, crudOptions) =>
+const updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    let selectOptions = "";
-    if (crudOptions) {
-      selectOptions = crudOptions.selectOptions;
-    }
+    let selectOptions = req.selectOptions;
 
     const doc = await Model.findOneAndUpdate({ _id: req.params.id }, req.body, {
       new: true,

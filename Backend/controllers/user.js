@@ -4,12 +4,14 @@ const CRUDOptions = require("../utils/crudOptions");
 const { catchAsync } = require("../utils/errorHandling");
 const { getOne, updateOne, getAll } = require("./crud");
 
-const allowedVisibleFieldsForUsers = "name jobTitle description email";
 const allowedUpdateFieldsForUsers = ["name", "jobTitle", "description"];
 
-const getUserCrudOptions = new CRUDOptions();
-getUserCrudOptions.selectOptions = allowedVisibleFieldsForUsers;
-const getUser = getOne(User, getUserCrudOptions);
+const prepareUserSelectMiddleware = (req, res, next) => {
+  req.selectOptions = "name jobTitle description email";
+
+  next();
+};
+const getUser = getOne(User);
 
 const prepareUpdateUserRouteMiddleware = (req, res, next) => {
   Object.keys(req.body).forEach((key) => {
@@ -21,9 +23,7 @@ const prepareUpdateUserRouteMiddleware = (req, res, next) => {
   next();
 };
 
-const updateUserCrudOptions = new CRUDOptions();
-updateUserCrudOptions.selectOptions = allowedVisibleFieldsForUsers;
-const updateUser = updateOne(User, updateUserCrudOptions);
+const updateUser = updateOne(User);
 
 const prepareGetAllJoinedProjectsMiddleware = catchAsync(
   async (req, res, next) => {
@@ -41,6 +41,7 @@ const prepareGetCurrentUserProfileMiddleware = (req, res, next) => {
 };
 
 module.exports = {
+  prepareUserSelectMiddleware,
   getUser,
   prepareGetAllJoinedProjectsMiddleware,
   prepareGetCurrentUserProfileMiddleware,
