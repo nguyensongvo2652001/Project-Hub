@@ -2,6 +2,7 @@ const User = require("../models/user");
 const ProjectMember = require("../models/projectMember");
 const { catchAsync } = require("../utils/errorHandling");
 const { getOne, updateOne, getAll } = require("./crud");
+const APIFeatures = require("../utils/apiFeatures");
 
 const allowedUpdateFieldsForUsers = ["name", "jobTitle", "description"];
 
@@ -39,6 +40,42 @@ const prepareGetCurrentUserProfileMiddleware = (req, res, next) => {
   next();
 };
 
+const searchUsers = catchAsync(async (req, res, next) => {
+  let { q } = req.query;
+
+  if (!q) {
+    q = "";
+  }
+
+  const searchQuery = { $regex: q, $options: "i" };
+
+  const query = User.find({
+    $or: [
+      { name: searchQuery },
+      { email: searchQuery },
+      { description: searchQuery },
+      { jobTitle: searchQuery },
+    ],
+  });
+
+  req.query.fields = "email name jobTitle avatar background description";
+
+  const features = new APIFeatures(query, req.query)
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const users = await features.query;
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      length: users.length,
+      users,
+    },
+  });
+});
+
 module.exports = {
   prepareUserSelectMiddleware,
   getUser,
@@ -46,4 +83,5 @@ module.exports = {
   prepareGetCurrentUserProfileMiddleware,
   prepareUpdateUserRouteMiddleware,
   updateUser,
+  searchUsers,
 };

@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.use(authController.checkAuthentication);
 
+router.get("/search", userController.searchUsers);
+
 router
   .route("/:id")
   .get(userController.prepareUserSelectMiddleware, userController.getUser);

@@ -160,7 +160,7 @@ const searchProjects = catchAsync(async (req, res, next) => {
     queryString.sort = "-dateCreated";
   }
 
-  const features = new APIFeatures(query, req.query)
+  const features = new APIFeatures(query, queryString)
     .sort()
     .limitFields()
     .paginate();
