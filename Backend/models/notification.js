@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 const { HandledError } = require("../utils/errorHandling");
 
 const notificationScopeOptions = ["personal", "project"];
+const notificationTypeOptions = [
+  process.env.NOTIFICATION_PROJECT_INVITATION_TYPE,
+  process.env.NOTIFICATION_PROJECT_INVITATION_CONFIRM_TYPE,
+  process.env.NOTIFICATION_NEW_TASK_TYPE,
+  process.env.NOTIFICATION_UPDATE_PROJECT_TYPE,
+];
 
 const notificationSchema = new mongoose.Schema({
   initiator: {
@@ -20,27 +26,6 @@ const notificationSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  message: {
-    type: String,
-    trim: true,
-    required: [true, "Notification must have a message"],
-    maxLength: [
-      250,
-      "your notication message should not have more than 200 characters",
-    ],
-  },
-  link: {
-    type: String,
-    trim: true,
-  },
-  linkMessage: {
-    type: String,
-    trim: true,
-    maxLength: [
-      150,
-      "your notication link message should not have more than 150 characters",
-    ],
-  },
   scope: {
     type: String,
     enum: notificationScopeOptions,
@@ -57,17 +42,43 @@ const notificationSchema = new mongoose.Schema({
     },
   },
   receiver: {
-    //This field is only necessary in case the scope is personal
+    required: [true, "Notifications must have receiver"],
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+  },
+  type: {
+    type: String,
+    enum: notificationTypeOptions,
+    validate: {
+      validator: function (v) {
+        return notificationTypeOptions.includes(v);
+      },
+      message: (props) =>
+        `${
+          props.value
+        } is not a valid type. Type must be one of ${notificationTypeOptions.join(
+          ", "
+        )}.`,
+    },
   },
 });
 
 notificationSchema.pre("save", async function (next) {
-  if (this.scope === "personal" && !this.receiver) {
-    return next(
-      new HandledError("Personal notification must have a receiver", 400)
-    );
+  const id = this.receiver;
+
+  if (this.scope === "personal") {
+    const user = await mongoose.model("User").findById(id);
+    if (!user) {
+      return next(
+        new HandledError(`There are no users with provided id = ${id}`, 404)
+      );
+    }
+  } else {
+    const project = await mongoose.model("Project").findById(id);
+    if (!project) {
+      return next(
+        new HandledError(`There are no projects with provided id = ${id}`, 404)
+      );
+    }
   }
 
   next();

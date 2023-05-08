@@ -23,6 +23,7 @@ router
   .patch(
     projectController.checkUserIsOwner,
     projectController.filterProjectData,
+    projectController.prepareUpdateProjectMiddleware,
     projectController.updateProject
   );
 

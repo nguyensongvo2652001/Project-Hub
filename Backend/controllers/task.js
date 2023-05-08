@@ -1,3 +1,5 @@
+const Notification = require("../models/notification");
+const Project = require("../models/project");
 const Task = require("../models/task");
 const { catchAsync, HandledError } = require("../utils/errorHandling");
 const crud = require("./crud");
@@ -12,6 +14,17 @@ const createTask = catchAsync(async (req, res, next) => {
     type,
     developers,
     creator: req.user._id,
+  });
+
+  const project = await Project.findById(projectId);
+  project.lastChanged = Date.now();
+  await project.save();
+
+  await Notification.create({
+    initiator: req.user._id,
+    type: process.env.NOTIFICATION_NEW_TASK_TYPE,
+    scope: "project",
+    receiver: projectId,
   });
 
   res.status(201).json({

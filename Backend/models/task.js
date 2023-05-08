@@ -45,10 +45,6 @@ const taskSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  lastChange: {
-    type: Date,
-    default: Date.now,
-  },
   startDate: {
     type: Date,
   },

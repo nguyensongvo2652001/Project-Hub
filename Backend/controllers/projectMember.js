@@ -1,6 +1,7 @@
 const ProjectMember = require("../models/projectMember");
 const User = require("../models/user");
 const Project = require("../models/project");
+const Notification = require("../models/notification");
 const { catchAsync, HandledError } = require("../utils/errorHandling");
 const { findUserByEmail } = require("../utils/helpers/user");
 const { findDocumentById } = require("../utils/helpers/general");
@@ -64,6 +65,13 @@ const inviteMemberToProject = catchAsync(async (req, res, next) => {
   const link = `${process.env.BASE_V1_API_ROUTE}/confirmMembership/${token}`;
   await sendEmail(email, link);
 
+  await Notification.create({
+    initiator: req.user._id,
+    type: process.env.NOTIFICATION_PROJECT_INVITATION_TYPE,
+    scope: "personal",
+    receiver: newMember._id,
+  });
+
   res.status(200).json({
     message: `An invitation letter has been sent to ${email}`,
   });
@@ -98,6 +106,13 @@ const confirmMembership = catchAsync(async (req, res, next) => {
 
   membership.invitationToken = undefined;
   await membership.save();
+
+  await Notification.create({
+    initiator: req.user._id,
+    type: process.env.NOTIFICATION_PROJECT_INVITATION_CONFIRM_TYPE,
+    scope: "project",
+    receiver: membership.projectId,
+  });
 
   res.status(200).json({
     status: "success",

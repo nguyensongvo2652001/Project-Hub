@@ -1,3 +1,4 @@
+const Notification = require("../models/notification");
 const Project = require("../models/project");
 const ProjectMember = require("../models/projectMember");
 const User = require("../models/user");
@@ -119,6 +120,25 @@ const sortProjectsByDateCreatedMiddleware = (req, res, next) => {
 };
 
 const getAllProjects = crud.getAll(Project);
+
+const updateProjectFinished = async (req, project) => {
+  await Notification.create({
+    initiator: req.user._id,
+    type: process.env.NOTIFICATION_UPDATE_PROJECT_TYPE,
+    scope: "project",
+    receiver: project._id,
+  });
+
+  project.lastChanged = Date.now();
+  await project.save();
+};
+
+const prepareUpdateProjectMiddleware = (req, res, next) => {
+  req.onFinish = updateProjectFinished;
+
+  next();
+};
+
 const updateProject = crud.updateOne(Project);
 
 const searchProjects = catchAsync(async (req, res, next) => {
@@ -188,4 +208,5 @@ module.exports = {
   filterOnlyPublicProjectsMiddleware,
   sortProjectsByDateCreatedMiddleware,
   searchProjects,
+  prepareUpdateProjectMiddleware,
 };

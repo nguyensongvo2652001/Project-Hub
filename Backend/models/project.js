@@ -117,8 +117,6 @@ projectSchema.virtual("tasksCount").set(function (value) {
 });
 
 projectSchema.methods.countTasksByType = async function () {
-  // We can not use Task model directly because we have to import the Task model in this file
-  // which will cause circular dependency (the Task model already imported the Project model in task.js)
   const result = await mongoose.model("Task").aggregate([
     {
       $lookup: {
