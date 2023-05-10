@@ -154,8 +154,50 @@ const getAllProjectMembers = catchAsync(async (req, res, next) => {
   });
 });
 
+const validateIfUserIsAllowToEditRole = catchAsync(async (req, res, next) => {
+  const updateMembershipId = req.params.id;
+  const needToUpdateMembership = await ProjectMember.findById(
+    updateMembershipId
+  );
+  if (!needToUpdateMembership) {
+    return next(
+      new HandledError(
+        `no membership found with this id = ${updateMembershipId}`,
+        404
+      )
+    );
+  }
+
+  if (needToUpdateMembership.memberId.equals(req.user._id)) {
+    return next(new HandledError(`you can not edit your own role`, 400));
+  }
+
+  if (currentUserMembership.role !== "owner") {
+    return next(
+      new HandledError(`you are not allowed to perform this action`, 403)
+    );
+  }
+
+  req.currentUserMembership = currentUserMembership;
+  req.needToUpdateMembership = needToUpdateMembership;
+
+  return next();
+});
+
+const editMemberRole = catchAsync(async (req, res, next) => {
+  const newRole = req.body.role;
+
+  await ProjectMember.findByIdAndUpdate(req.params.id, { role: newRole });
+  if (newRole === "owner") {
+    req.currentUserMembership.role = "admin";
+    await req.currentLoggedInUserMembership.save();
+  }
+});
+
 module.exports = {
   inviteMemberToProject,
   confirmMembership,
   getAllProjectMembers,
+  validateIfUserIsAllowToEditRole,
+  editMemberRole,
 };
