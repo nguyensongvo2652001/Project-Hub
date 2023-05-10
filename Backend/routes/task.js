@@ -16,6 +16,11 @@ router
     taskController.filterRequestBodyBeforeUpdateTaskMiddleware,
     taskController.prepareUpdateTaskOnFinishMiddleware,
     taskController.updateTask
+  )
+  .delete(
+    taskController.validateIfUserIsAllowedToMofidyTaskMiddleware,
+    taskController.prepareDeleteTaskOnFinishMiddleware,
+    taskController.deleteTask
   );
 
 module.exports = router;

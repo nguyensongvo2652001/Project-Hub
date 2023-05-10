@@ -126,7 +126,24 @@ const prepareUpdateTaskOnFinishMiddleware = (req, res, next) => {
 
     await Notification.create({
       initiator: req.user._id,
-      type: process.env.NOTIFICATION_UPDATE_PROJECT_TYPE,
+      type: process.env.NOTIFICATION_UPDATE_TASK_TYPE,
+      scope: "project",
+      receiver: task.projectId,
+    });
+  };
+
+  next();
+};
+
+const prepareDeleteTaskOnFinishMiddleware = (req, res, next) => {
+  req.onFinish = async (req, task) => {
+    const project = await Project.findById(task.projectId);
+    project.lastChanged = Date.now();
+    await project.save();
+
+    await Notification.create({
+      initiator: req.user._id,
+      type: process.env.NOTIFICATION_DELETE_TASK_TYPE,
       scope: "project",
       receiver: task.projectId,
     });
@@ -136,6 +153,7 @@ const prepareUpdateTaskOnFinishMiddleware = (req, res, next) => {
 };
 
 const updateTask = crud.updateOne(Task);
+const deleteTask = crud.deleteOne(Task);
 
 module.exports = {
   createTask,
@@ -144,5 +162,7 @@ module.exports = {
   validateIfUserIsAllowedToMofidyTaskMiddleware,
   filterRequestBodyBeforeUpdateTaskMiddleware,
   prepareUpdateTaskOnFinishMiddleware,
+  prepareDeleteTaskOnFinishMiddleware,
   updateTask,
+  deleteTask,
 };

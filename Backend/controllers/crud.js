@@ -99,6 +99,10 @@ const deleteOne = (Model) =>
       return next(new HandledError(`No ${modelName} found with that id`, 404));
     }
 
+    if (req.onFinish) {
+      await req.onFinish(req, doc);
+    }
+
     res.status(204).json({
       status: "success",
       data: null,
