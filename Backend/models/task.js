@@ -51,6 +51,9 @@ const taskSchema = new mongoose.Schema({
   deadline: {
     type: Date,
   },
+  finishDate: {
+    type: Date,
+  },
   name: {
     type: String,
     trim: true,
@@ -107,29 +110,21 @@ taskSchema.index({ type: 1 });
 taskSchema.index({ status: 1 });
 taskSchema.index({ description: 1 });
 
-taskSchema.pre("save", async function (next) {
-  const membership = await ProjectMember.findOne({
-    projectId: this.projectId,
-    memberId: this.creator,
-  });
-  if (!membership) {
-    throw new HandledError("creator must be a member of the project", 403);
-  }
-
+const validateDevelopers = async (developers, projectId) => {
   await Promise.all(
-    this.developers.map(async (developerId) => {
+    developers.map(async (developerId) => {
       const developer = await User.findById(developerId);
       if (!developer) {
         throw new HandledError(`no users found with id = ${developerId}`, 400);
       }
 
       const membership = await ProjectMember.findOne({
-        projectId: this.projectId,
+        projectId,
         memberId: developerId,
       });
       if (!membership) {
         throw new HandledError(
-          `user with id = ${developerId} is not a member of project id = ${this.projectId}`,
+          `user with id = ${developerId} is not a member of project id = ${projectId}`,
           400
         );
       }
@@ -137,7 +132,7 @@ taskSchema.pre("save", async function (next) {
   );
 
   const uniqueIds = {};
-  for (const developer of this.developers) {
+  for (const developer of developers) {
     if (developer in uniqueIds) {
       throw new HandledError(
         `you can not add a developer twice (id = ${developer})`,
@@ -147,6 +142,20 @@ taskSchema.pre("save", async function (next) {
 
     uniqueIds[developer] = 1;
   }
+};
+
+taskSchema.pre("save", async function (next) {
+  if (!this.isNew) return next();
+
+  const membership = await ProjectMember.findOne({
+    projectId: this.projectId,
+    memberId: this.creator,
+  });
+  if (!membership) {
+    throw new HandledError("creator must be a member of the project", 403);
+  }
+
+  await validateDevelopers(this.developers, this.projectId);
 
   next();
 });

@@ -1,6 +1,8 @@
 const Notification = require("../models/notification");
 const Project = require("../models/project");
+const ProjectMember = require("../models/projectMember");
 const Task = require("../models/task");
+const User = require("../models/user");
 const { catchAsync, HandledError } = require("../utils/errorHandling");
 const crud = require("./crud");
 
@@ -57,4 +59,90 @@ const prepareGetAllTasksQuery = (req, res, next) => {
 
 const getAllTasks = crud.getAll(Task);
 
-module.exports = { createTask, prepareGetAllTasksQuery, getAllTasks };
+const validateIfUserIsAllowedToMofidyTaskMiddleware = catchAsync(
+  async (req, res, next) => {
+    const taskId = req.params.id;
+    const task = await Task.findById(taskId);
+
+    if (!task) {
+      return next(new HandledError(`No tasks found with id = ${taskId}`, 404));
+    }
+
+    const membership = await ProjectMember.findOne({
+      projectId: task.projectId,
+      memberId: req.user._id,
+    });
+    const notAllowedToModifyTaskError = new HandledError(
+      "You are not allowed to modify this task",
+      403
+    );
+
+    if (!membership) {
+      return next(notAllowedToModifyTaskError);
+    }
+
+    if (membership.role === "admin" || membership.role === "owner") {
+      return next();
+    }
+
+    if (!req.user._id.equals(task.creator)) {
+      return next(notAllowedToModifyTaskError);
+    }
+
+    next();
+  }
+);
+
+const filterRequestBodyBeforeUpdateTaskMiddleware = (req, res, next) => {
+  const allowedFieldsToUpdate = [
+    "startDate",
+    "deadline",
+    "finishDate",
+    "name",
+    "type",
+    "status",
+    "description",
+    "developers",
+  ];
+
+  const filteredRequestBody = {};
+
+  for (const field of allowedFieldsToUpdate) {
+    if (req.body[field]) {
+      filteredRequestBody[field] = req.body[field];
+    }
+  }
+
+  req.body = filteredRequestBody;
+
+  next();
+};
+
+const prepareUpdateTaskOnFinishMiddleware = (req, res, next) => {
+  req.onFinish = async (req, task) => {
+    const project = await Project.findById(task.projectId);
+    project.lastChanged = Date.now();
+    await project.save();
+
+    await Notification.create({
+      initiator: req.user._id,
+      type: process.env.NOTIFICATION_UPDATE_PROJECT_TYPE,
+      scope: "project",
+      receiver: task.projectId,
+    });
+  };
+
+  next();
+};
+
+const updateTask = crud.updateOne(Task);
+
+module.exports = {
+  createTask,
+  prepareGetAllTasksQuery,
+  getAllTasks,
+  validateIfUserIsAllowedToMofidyTaskMiddleware,
+  filterRequestBodyBeforeUpdateTaskMiddleware,
+  prepareUpdateTaskOnFinishMiddleware,
+  updateTask,
+};

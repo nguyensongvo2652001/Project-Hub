@@ -9,5 +9,13 @@ router
   .route("/")
   .get(taskController.prepareGetAllTasksQuery, taskController.getAllTasks)
   .post(taskController.createTask);
+router
+  .route("/:id")
+  .patch(
+    taskController.validateIfUserIsAllowedToMofidyTaskMiddleware,
+    taskController.filterRequestBodyBeforeUpdateTaskMiddleware,
+    taskController.prepareUpdateTaskOnFinishMiddleware,
+    taskController.updateTask
+  );
 
 module.exports = router;

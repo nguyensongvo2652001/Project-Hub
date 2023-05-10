@@ -1,5 +1,5 @@
 module.exports = {
-  setupFilesAfterEnv: ["./jest.setup.js"],
+  setupFilesAfterEnv: ["./jestSetup.js"],
   injectGlobals: true,
   testEnvironment: "node",
 };
