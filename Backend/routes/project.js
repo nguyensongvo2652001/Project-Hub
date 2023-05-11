@@ -1,6 +1,7 @@
 const express = require("express");
 const projectController = require("../controllers/project");
 const authController = require("../controllers/auth");
+const statController = require("../controllers/stat");
 const taskRouter = require("./task");
 const projectMemberController = require("../controllers/projectMember");
 const router = express.Router();
@@ -26,12 +27,6 @@ router
     projectController.prepareUpdateProjectMiddleware,
     projectController.updateProject
   );
-
-router.use(
-  "/:projectId/task",
-  projectController.checkUserIsMemberOfProject,
-  taskRouter
-);
 
 router.get(
   "/:projectId/member",
