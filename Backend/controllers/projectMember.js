@@ -159,6 +159,11 @@ const validateIfUserIsAllowToEditRole = catchAsync(async (req, res, next) => {
   const needToUpdateMembership = await ProjectMember.findById(
     updateMembershipId
   );
+  const currentUserMembership = await ProjectMember.findOne({
+    projectId: needToUpdateMembership.projectId,
+    memberId: req.user._id,
+  });
+
   if (!needToUpdateMembership) {
     return next(
       new HandledError(
@@ -181,17 +186,41 @@ const validateIfUserIsAllowToEditRole = catchAsync(async (req, res, next) => {
   req.currentUserMembership = currentUserMembership;
   req.needToUpdateMembership = needToUpdateMembership;
 
-  return next();
+  next();
 });
 
 const editMemberRole = catchAsync(async (req, res, next) => {
   const newRole = req.body.role;
+  if (!newRole) {
+    return next(new HandledError("role can not be empty", 400));
+  }
 
-  await ProjectMember.findByIdAndUpdate(req.params.id, { role: newRole });
+  const newMembership = await ProjectMember.findByIdAndUpdate(
+    req.params.id,
+    { role: newRole },
+    { runValidators: true, new: true }
+  );
   if (newRole === "owner") {
     req.currentUserMembership.role = "admin";
-    await req.currentLoggedInUserMembership.save();
+    await req.currentUserMembership.save();
   }
+
+  await Notification.create({
+    initiator: req.user._id,
+    type: process.env.NOTIFICATION_EDIT_MEMBER_ROLE_TYPE,
+    scope: "project",
+    receiver: req.currentUserMembership.projectId,
+  });
+  await Project.findByIdAndUpdate(req.currentUserMembership.projectId, {
+    lastChanged: Date.now(),
+  });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      membership: newMembership,
+    },
+  });
 });
 
 module.exports = {
