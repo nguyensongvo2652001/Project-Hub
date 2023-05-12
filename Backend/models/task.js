@@ -96,7 +96,7 @@ const taskSchema = new mongoose.Schema({
     ],
     validate: {
       validator: function (idList) {
-        return idList.length > 0 && idList.length <= 10;
+        return idList.length <= 10;
       },
       message:
         "Number of developers for a task must be greater than 0 and less than 10 ",
