@@ -1,9 +1,9 @@
 const express = require("express");
 const projectController = require("../controllers/project");
 const authController = require("../controllers/auth");
-const statController = require("../controllers/stat");
 const taskRouter = require("./task");
 const projectMemberController = require("../controllers/projectMember");
+const projectStatController = require("../controllers/projectStat");
 const router = express.Router();
 
 router.use(authController.checkAuthentication);
@@ -19,7 +19,6 @@ router
 
 router
   .route("/:id")
-  .get()
   .get(projectController.getProject)
   .patch(
     projectController.checkUserIsOwner,
@@ -27,6 +26,12 @@ router
     projectController.prepareUpdateProjectMiddleware,
     projectController.updateProject
   );
+
+router.get(
+  "/:projectId/stat",
+  projectController.checkUserIsMemberOfProject,
+  projectStatController.getProjectStat
+);
 
 router.get(
   "/:projectId/member",
