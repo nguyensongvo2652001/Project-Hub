@@ -59,6 +59,33 @@ const prepareGetAllTasksQuery = (req, res, next) => {
 
 const getAllTasks = crud.getAll(Task);
 
+const validateIfUserIsAllowedToGetTaskDetailMiddleware = catchAsync(
+  async (req, res, next) => {
+    const task = await Task.findById(req.params.id);
+
+    if (!task) {
+      return next(
+        new HandledError(`No tasks found with id = ${req.params.id}`, 404)
+      );
+    }
+
+    const membership = await ProjectMember.findOne({
+      projectId: task.projectId,
+      memberId: req.user._id,
+    });
+
+    if (!membership) {
+      return next(
+        new HandledError(`You are not allowed to view this task`, 403)
+      );
+    }
+
+    next();
+  }
+);
+
+const getTask = crud.getOne(Task);
+
 const validateIfUserIsAllowedToMofidyTaskMiddleware = catchAsync(
   async (req, res, next) => {
     const taskId = req.params.id;
@@ -165,4 +192,6 @@ module.exports = {
   prepareDeleteTaskOnFinishMiddleware,
   updateTask,
   deleteTask,
+  validateIfUserIsAllowedToGetTaskDetailMiddleware,
+  getTask,
 };

@@ -160,6 +160,17 @@ taskSchema.pre("save", async function (next) {
   next();
 });
 
+taskSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "creator",
+    select: "name avatar",
+  }).populate({
+    path: "developers",
+    select: "name avatar",
+  });
+  next();
+});
+
 const Task = mongoose.model("Task", taskSchema);
 
 module.exports = Task;

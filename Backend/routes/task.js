@@ -21,6 +21,10 @@ router
     taskController.validateIfUserIsAllowedToMofidyTaskMiddleware,
     taskController.prepareDeleteTaskOnFinishMiddleware,
     taskController.deleteTask
+  )
+  .get(
+    taskController.validateIfUserIsAllowedToGetTaskDetailMiddleware,
+    taskController.getTask
   );
 
 module.exports = router;

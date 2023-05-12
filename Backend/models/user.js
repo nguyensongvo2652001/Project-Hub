@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     maxLength: [100, "your name can not be longer than 100 characters"],
-    default: "nonameuser",
     trim: true,
   },
   jobTitle: {
@@ -77,6 +76,12 @@ userSchema.methods.checkPassword = async function (password) {
   const isMatch = await bcrypt.compare(password, this.password);
   return isMatch;
 };
+
+userSchema.pre("save", async function (next) {
+  if (this.name) return next();
+  this.name = this.email.split("@")[0];
+  next();
+});
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
