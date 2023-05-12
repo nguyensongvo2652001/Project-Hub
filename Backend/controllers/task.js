@@ -3,6 +3,7 @@ const Project = require("../models/project");
 const ProjectMember = require("../models/projectMember");
 const Task = require("../models/task");
 const User = require("../models/user");
+const APIFeatures = require("../utils/apiFeatures");
 const { catchAsync, HandledError } = require("../utils/errorHandling");
 const crud = require("./crud");
 
@@ -182,6 +183,47 @@ const prepareDeleteTaskOnFinishMiddleware = (req, res, next) => {
 const updateTask = crud.updateOne(Task);
 const deleteTask = crud.deleteOne(Task);
 
+const searchTasks = catchAsync(async (req, res, next) => {
+  let { q } = req.query;
+
+  if (!q) {
+    q = "";
+  }
+
+  const searchQuery = { $regex: q, $options: "i" };
+
+  const query = Task.find({
+    $or: [
+      { name: searchQuery },
+      { description: searchQuery },
+      { status: searchQuery },
+      { type: searchQuery },
+    ],
+    projectId: req.params.projectId,
+  });
+
+  const queryString = req.query;
+
+  if (!queryString.sort) {
+    queryString.sort = "-dateCreated";
+  }
+
+  const features = new APIFeatures(query, queryString)
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const tasks = await features.query;
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      length: tasks.length,
+      tasks,
+    },
+  });
+});
+
 module.exports = {
   createTask,
   prepareGetAllTasksQuery,
@@ -194,4 +236,5 @@ module.exports = {
   deleteTask,
   validateIfUserIsAllowedToGetTaskDetailMiddleware,
   getTask,
+  searchTasks,
 };

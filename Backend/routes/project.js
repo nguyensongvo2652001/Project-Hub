@@ -1,7 +1,7 @@
 const express = require("express");
 const projectController = require("../controllers/project");
 const authController = require("../controllers/auth");
-const taskRouter = require("./task");
+const taskController = require("../controllers/task");
 const projectMemberController = require("../controllers/projectMember");
 const projectStatController = require("../controllers/projectStat");
 const notificationController = require("../controllers/notification");
@@ -46,6 +46,12 @@ router.get(
   notificationController.prepareGetProjectNotificationsRoute,
   notificationController.prepareProjectNotificationPopulateOptions,
   notificationController.getAllNotifications
+);
+
+router.get(
+  "/:projectId/task/search",
+  projectController.checkUserIsMemberOfProject,
+  taskController.searchTasks
 );
 
 module.exports = router;
