@@ -9,7 +9,6 @@ const notificationTypeOptions = [
   process.env.NOTIFICATION_UPDATE_TASK_TYPE,
   process.env.NOTIFICATION_DELETE_TASK_TYPE,
   process.env.NOTIFICATION_UPDATE_PROJECT_TYPE,
-  process.env.NOTIFICATION_EDIT_MEMBER_ROLE_TYPE,
 ];
 
 const notificationSchema = new mongoose.Schema({

@@ -205,16 +205,6 @@ const editMemberRole = catchAsync(async (req, res, next) => {
     await req.currentUserMembership.save();
   }
 
-  await Notification.create({
-    initiator: req.user._id,
-    type: process.env.NOTIFICATION_EDIT_MEMBER_ROLE_TYPE,
-    scope: "project",
-    receiver: req.currentUserMembership.projectId,
-  });
-  await Project.findByIdAndUpdate(req.currentUserMembership.projectId, {
-    lastChanged: Date.now(),
-  });
-
   res.status(200).json({
     status: "success",
     data: {
