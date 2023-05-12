@@ -44,6 +44,7 @@ const notificationSchema = new mongoose.Schema({
         )}.`,
     },
   },
+  //Note that this field can be User (if the scope is personal) or Project (if the scope is project)
   receiver: {
     required: [true, "Notifications must have receiver"],
     type: mongoose.Schema.Types.ObjectId,
