@@ -84,6 +84,7 @@ projectMemberSchema.index({ projectId: 1 });
 projectMemberSchema.index({ memberId: 1 });
 projectMemberSchema.index({ role: 1 });
 projectMemberSchema.index({ invitationToken: 1 });
+projectMemberSchema.index({ status: 1 });
 
 projectMemberSchema.methods.createInvitationToken = function () {
   const token = crypto.randomBytes(32).toString("hex");

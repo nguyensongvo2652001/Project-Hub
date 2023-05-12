@@ -65,6 +65,10 @@ const notificationSchema = new mongoose.Schema({
   },
 });
 
+notificationSchema.index({ type: 1 });
+notificationSchema.index({ scope: 1 });
+notificationSchema.index({ receiver: 1 });
+
 notificationSchema.pre("save", async function (next) {
   const id = this.receiver;
 

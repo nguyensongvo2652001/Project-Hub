@@ -105,10 +105,14 @@ const taskSchema = new mongoose.Schema({
 });
 
 taskSchema.index({ projectId: 1 });
+taskSchema.index({ dateCreated: 1 });
+taskSchema.index({ finishDate: 1 });
+taskSchema.index({ creator: 1 });
 taskSchema.index({ name: 1 });
 taskSchema.index({ type: 1 });
 taskSchema.index({ status: 1 });
 taskSchema.index({ description: 1 });
+taskSchema.index({ developers: 1 });
 
 const validateDevelopers = async (developers, projectId) => {
   await Promise.all(
