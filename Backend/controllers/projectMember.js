@@ -6,6 +6,7 @@ const { catchAsync, HandledError } = require("../utils/errorHandling");
 const { findUserByEmail } = require("../utils/helpers/user");
 const { findDocumentById } = require("../utils/helpers/general");
 const userStatController = require("./userStat");
+const APIFeatures = require("../utils/apiFeatures");
 
 async function sendEmail(email, link) {
   console.log(`Send email to ${email} with the link: ${link}`);
@@ -155,6 +156,52 @@ const getAllProjectMembers = catchAsync(async (req, res, next) => {
   });
 });
 
+const searchProjectMembers = catchAsync(async (req, res, next) => {
+  let { q } = req.query;
+
+  if (!q) {
+    q = "";
+  }
+
+  const searchQuery = { $regex: q, $options: "i" };
+
+  const possibleUsers = await User.find({
+    $or: [
+      { name: searchQuery },
+      { email: searchQuery },
+      { jobTitle: searchQuery },
+      { description: searchQuery },
+    ],
+  }).select("_id");
+  const possibleMemberIds = possibleUsers.map((user) => user._id);
+
+  const { projectId } = req.params;
+  const query = ProjectMember.find({
+    memberId: { $in: possibleMemberIds },
+    projectId,
+  });
+
+  const queryString = req.query;
+  if (!queryString.sort) {
+    queryString.sort = "-dateJoined";
+  }
+
+  const features = new APIFeatures(query, queryString)
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const members = await features.query;
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      length: members.length,
+      members,
+    },
+  });
+});
+
 const validateIfUserIsAllowToEditRole = catchAsync(async (req, res, next) => {
   const updateMembershipId = req.params.id;
   const needToUpdateMembership = await ProjectMember.findById(
@@ -220,4 +267,5 @@ module.exports = {
   getAllProjectMembers,
   validateIfUserIsAllowToEditRole,
   editMemberRole,
+  searchProjectMembers,
 };

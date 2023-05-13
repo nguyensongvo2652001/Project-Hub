@@ -28,30 +28,22 @@ router
     projectController.updateProject
   );
 
-router.get(
-  "/:projectId/stat",
-  projectController.checkUserIsMemberOfProject,
-  projectStatController.getProjectStat
-);
+router.use("/:projectId", projectController.checkUserIsMemberOfProject);
+router.get("/:projectId/stat", projectStatController.getProjectStat);
 
+router.get("/:projectId/member", projectMemberController.getAllProjectMembers);
 router.get(
-  "/:projectId/member",
-  projectController.checkUserIsMemberOfProject,
-  projectMemberController.getAllProjectMembers
+  "/:projectId/member/search",
+  projectMemberController.searchProjectMembers
 );
 
 router.get(
   "/:projectId/notification",
-  projectController.checkUserIsMemberOfProject,
   notificationController.prepareGetProjectNotificationsRoute,
   notificationController.prepareProjectNotificationPopulateOptions,
   notificationController.getAllNotifications
 );
 
-router.get(
-  "/:projectId/task/search",
-  projectController.checkUserIsMemberOfProject,
-  taskController.searchTasks
-);
+router.get("/:projectId/task/search", taskController.searchTasks);
 
 module.exports = router;

@@ -74,6 +74,14 @@ const projectMemberSchema = new mongoose.Schema(
   }
 );
 
+projectMemberSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "memberId",
+    select: "name email avatar jobTitle",
+  });
+  next();
+});
+
 projectMemberSchema.virtual("performance").get(function () {
   return this._performance;
 });
