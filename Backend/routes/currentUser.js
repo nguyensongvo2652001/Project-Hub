@@ -3,6 +3,7 @@ const userController = require("../controllers/user");
 const authController = require("../controllers/auth");
 const projectController = require("../controllers/project");
 const notificationController = require("../controllers/notification");
+const userStatController = require("../controllers/userStat");
 
 const router = express.Router();
 
@@ -35,4 +36,5 @@ router
     projectController.getAllProjects
   );
 
+router.get("/stat", userStatController.getPersonalStat);
 module.exports = router;
