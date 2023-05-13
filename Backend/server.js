@@ -1,4 +1,5 @@
 const { connectDB } = require("./utils/db");
+const taskController = require("./controllers/task");
 
 process.on("uncaughtException", (err) => {
   console.error(err, "Uncaught Exception Caught");
@@ -16,7 +17,11 @@ dotenv.config({ path: "./env/main.env" });
 let uri = process.env.DB_STRING;
 uri = uri.replace(/<password>/, process.env.DB_PASSWORD);
 uri = uri.replace(/<databaseName>/, process.env.DB_NAME);
-connectDB(uri);
+
+(async () => {
+  await connectDB(uri);
+  taskController.updateTaskStatusCron();
+})();
 
 const app = require("./app");
 

@@ -1,3 +1,4 @@
+const CronJob = require("cron").CronJob;
 const Notification = require("../models/notification");
 const Project = require("../models/project");
 const ProjectMember = require("../models/projectMember");
@@ -224,6 +225,29 @@ const searchTasks = catchAsync(async (req, res, next) => {
   });
 });
 
+const updateTaskStatusCron = () => {
+  new CronJob({
+    cronTime: "0 0 * * *",
+    onTick: async () => {
+      try {
+        const overdueTasks = await Task.find({ deadline: { $lt: Date.now() } });
+
+        const overdueTasksId = overdueTasks.map((task) => task._id);
+
+        await Task.updateMany(
+          { _id: { $in: overdueTasksId } },
+          { $set: { status: "overdue" } }
+        );
+      } catch (error) {
+        console.error(
+          `Something went wrong updating task status using cron: ${error}`
+        );
+      }
+    },
+    start: true,
+  });
+};
+
 module.exports = {
   createTask,
   prepareGetAllTasksQuery,
@@ -237,4 +261,5 @@ module.exports = {
   validateIfUserIsAllowedToGetTaskDetailMiddleware,
   getTask,
   searchTasks,
+  updateTaskStatusCron,
 };
