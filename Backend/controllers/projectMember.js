@@ -5,6 +5,7 @@ const Notification = require("../models/notification");
 const { catchAsync, HandledError } = require("../utils/errorHandling");
 const { findUserByEmail } = require("../utils/helpers/user");
 const { findDocumentById } = require("../utils/helpers/general");
+const userStatController = require("./userStat");
 
 async function sendEmail(email, link) {
   console.log(`Send email to ${email} with the link: ${link}`);
@@ -136,11 +137,11 @@ const getAllProjectMembers = catchAsync(async (req, res, next) => {
   });
 
   const promises = memberships.map(async (membership) => {
-    const performance = await membership.getMemberPerformance(
-      membership.memberId._id,
-      membership.projectId
-    );
-    membership.performance = performance;
+    membership.performance =
+      await userStatController.getPerformanceInOneProject(
+        membership.memberId._id,
+        membership.projectId
+      );
   });
 
   await Promise.all(promises);

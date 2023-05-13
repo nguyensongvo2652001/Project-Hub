@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { HandledError } = require("../utils/errorHandling");
+const Task = require("./task");
+const userStatController = require("../controllers/userStat");
 
 const projectMemberSchema = new mongoose.Schema(
   {
@@ -101,41 +103,6 @@ projectMemberSchema.methods.checkRoles = function (...acceptedRoles) {
   }
 
   return true;
-};
-
-projectMemberSchema.methods.getMemberPerformance = async function (
-  memberId,
-  projectId
-) {
-  const pipeline = [
-    {
-      $match: {
-        projectId,
-        developers: { $elemMatch: { $eq: memberId } },
-      },
-    },
-    {
-      $facet: {
-        tasksCount: [{ $count: "count" }],
-        doneTasksCount: [{ $match: { type: "done" } }, { $count: "count" }],
-      },
-    },
-  ];
-
-  const [result] = await mongoose.model("Task").aggregate(pipeline);
-
-  const tasksCount = result["tasksCount"][0]?.count || 0;
-  const doneTasksCount = result["doneTasksCount"][0]?.count || 0;
-  let completionRate = 0;
-  if (tasksCount > 0) {
-    completionRate = doneTasksCount / tasksCount;
-  }
-
-  return {
-    tasksCount,
-    doneTasksCount,
-    completionRate,
-  };
 };
 
 const ProjectMember = mongoose.model("ProjectMember", projectMemberSchema);
