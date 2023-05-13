@@ -7,10 +7,7 @@ const { findUserByEmail } = require("../utils/helpers/user");
 const { findDocumentById } = require("../utils/helpers/general");
 const userStatController = require("./userStat");
 const APIFeatures = require("../utils/apiFeatures");
-
-async function sendEmail(email, link) {
-  console.log(`Send email to ${email} with the link: ${link}`);
-}
+const Email = require("../utils/email");
 
 const inviteMemberToProject = catchAsync(async (req, res, next) => {
   const { email, projectId } = req.body;
@@ -21,9 +18,24 @@ const inviteMemberToProject = catchAsync(async (req, res, next) => {
     );
   }
 
+  const currentLoggedInUserMembership = await ProjectMember.findOne({
+    projectId,
+    memberId: req.user._id,
+  });
+  if (!currentLoggedInUserMembership) {
+    return next(
+      new HandledError(
+        `You are not a member of project with id ${projectId}`,
+        403
+      )
+    );
+  }
+
+  currentLoggedInUserMembership.checkRoles("owner", "admin");
+
   const newMember = await findUserByEmail(email);
 
-  await findDocumentById(Project, projectId);
+  const project = await findDocumentById(Project, projectId);
 
   let newMemberMembership = await ProjectMember.findOne({
     projectId,
@@ -44,35 +56,23 @@ const inviteMemberToProject = catchAsync(async (req, res, next) => {
       projectId,
       status: "pending",
     });
-  }
 
-  const currentLoggedInUserMembership = await ProjectMember.findOne({
-    projectId,
-    memberId: req.user._id,
-  });
-  if (!currentLoggedInUserMembership) {
-    return next(
-      new HandledError(
-        `You are not a member of project with id ${projectId}`,
-        403
-      )
-    );
+    await Notification.create({
+      initiator: req.user._id,
+      type: process.env.NOTIFICATION_PROJECT_INVITATION_TYPE,
+      scope: "personal",
+      receiver: newMember._id,
+    });
   }
-
-  currentLoggedInUserMembership.checkRoles("owner", "admin");
 
   const token = newMemberMembership.createInvitationToken();
   await newMemberMembership.save();
 
   const link = `${process.env.BASE_V1_API_ROUTE}/confirmMembership/${token}`;
-  await sendEmail(email, link);
 
-  await Notification.create({
-    initiator: req.user._id,
-    type: process.env.NOTIFICATION_PROJECT_INVITATION_TYPE,
-    scope: "personal",
-    receiver: newMember._id,
-  });
+  const emailSender = new Email(newMember, link);
+  emailSender.projectName = project.name;
+  await emailSender.sendProjectInvitation();
 
   res.status(200).json({
     message: `An invitation letter has been sent to ${email}`,

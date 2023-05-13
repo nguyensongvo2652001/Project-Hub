@@ -6,16 +6,17 @@ module.exports = class Email {
   constructor(user, url) {
     this.to = user.email;
     this.url = url;
-    this.from = `Testing`;
+    this.from = `ProjectHub`;
+    this.projectName = undefined;
   }
 
   newTransport() {
     if (process.env.NODE_ENV === "production") {
       return nodemailer.createTransport({
-        service: "SendGrid",
+        service: "gmail",
         auth: {
-          user: process.env.SENDGRID_USERNAME,
-          pass: process.env.SENDGRID_PASSWORD,
+          user: process.env.GMAIL_USERNAME,
+          pass: process.env.GMAIL_PASSWORD,
         },
       });
     }
@@ -35,9 +36,10 @@ module.exports = class Email {
     const html = pug.renderFile(
       `${__dirname}/../views/emails/${template}.pug`,
       {
-        email: this.email,
+        email: this.to,
         url: this.url,
         subject,
+        projectName: this.projectName,
       }
     );
 
@@ -61,5 +63,9 @@ module.exports = class Email {
       "passwordReset",
       "Your password reset token (valid for only 10 minutes)"
     );
+  }
+
+  async sendProjectInvitation() {
+    await this.send("projectInvitation", "Project invitation");
   }
 };
