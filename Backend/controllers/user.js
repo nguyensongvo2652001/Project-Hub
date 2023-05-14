@@ -1,13 +1,21 @@
+const AWS = require("aws-sdk");
+const multer = require("multer");
 const User = require("../models/user");
 const ProjectMember = require("../models/projectMember");
-const { catchAsync } = require("../utils/errorHandling");
+const { catchAsync, HandledError } = require("../utils/errorHandling");
 const { getOne, updateOne, getAll } = require("./crud");
 const APIFeatures = require("../utils/apiFeatures");
 
-const allowedUpdateFieldsForUsers = ["name", "jobTitle", "description"];
+const allowedUpdateFieldsForUsers = [
+  "name",
+  "jobTitle",
+  "description",
+  "avatar",
+  "background",
+];
 
 const prepareUserSelectMiddleware = (req, res, next) => {
-  req.selectOptions = "name jobTitle description email";
+  req.selectOptions = "name jobTitle description email avatar background";
 
   next();
 };
@@ -19,6 +27,78 @@ const prepareUpdateUserRouteMiddleware = (req, res, next) => {
   });
 
   req.params.id = req.user._id;
+
+  next();
+};
+
+const imageUpload = multer({
+  storage: multer.memoryStorage(),
+  fileFilter: function (req, file, cb) {
+    const { mimetype } = file;
+    if (!mimetype) return cb(null, false);
+    if (!mimetype.startsWith("image"))
+      return cb(new HandledError("invalid image", 400), false);
+
+    cb(null, true);
+  },
+});
+
+const getImageData = imageUpload.fields([
+  { name: "avatar", maxCount: 1 },
+  { name: "background", maxCount: 1 },
+]);
+
+const checkForImagesUpload = (req, res, next) => {
+  console.log(req.files.avatar);
+};
+
+const s3 = new AWS.S3({
+  accessKeyId: process.env.B2_KEY_ID,
+  secretAccessKey: process.env.B2_APPLICATION_KEY,
+  endpoint: process.env.B2_BUCKET_ENDPOINT,
+});
+
+const uploadFile = async (file, fileName, folder) => {
+  const { buffer } = file;
+
+  const params = {
+    Bucket: process.env.B2_BUCKET_NAME,
+    Key: `${folder}/${fileName}`,
+    Body: buffer,
+    ACL: "public-read",
+  };
+
+  const result = await s3.upload(params).promise();
+
+  return result.Location;
+};
+
+const uploadAvatar = catchAsync(async (req, res, next) => {
+  const { avatar } = req.files;
+  if (!avatar) return next();
+
+  const avatarFileName = `${req.user._id}.jpg`;
+
+  const imageUrl = await uploadFile(avatar[0], avatarFileName, "users/avatar");
+
+  req.body.avatar = imageUrl;
+
+  next();
+});
+
+const uploadBackground = async (req, res, next) => {
+  const { background } = req.files;
+  if (!background) return next();
+
+  const backgroundFileName = `${req.user._id}.jpg`;
+
+  const imageUrl = await uploadFile(
+    background[0],
+    backgroundFileName,
+    "users/background"
+  );
+
+  req.body.background = imageUrl;
 
   next();
 };
@@ -83,5 +163,9 @@ module.exports = {
   prepareGetCurrentUserProfileMiddleware,
   prepareUpdateUserRouteMiddleware,
   updateUser,
+  checkForImagesUpload,
   searchUsers,
+  getImageData,
+  uploadAvatar,
+  uploadBackground,
 };

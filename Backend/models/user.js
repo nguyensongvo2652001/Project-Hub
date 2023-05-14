@@ -51,6 +51,16 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: String,
+  avatar: {
+    type: String,
+    default:
+      "https://projecthubbucket.s3.us-east-005.backblazeb2.com/users/avatar/default_avatar.jpg",
+  },
+  background: {
+    type: String,
+    default:
+      "https://projectHubBucket.s3.us-east-005.backblazeb2.com/users/background/default_background.jpg",
+  },
 });
 
 userSchema.index({ passwordResetToken: 1 });

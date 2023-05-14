@@ -43,6 +43,13 @@ const handleJsonWebTokenError = (err) => {
   );
 };
 
+const handleMulterError = (err) => {
+  return new HandledError(
+    "something went wrong uploading your files, please check your files again",
+    400
+  );
+};
+
 const errorController = (err, req, res, next) => {
   if (process.env.NODE_ENV === "DEBUG") {
     console.error(err.stack);
@@ -72,6 +79,10 @@ const errorController = (err, req, res, next) => {
 
   if (err.name === "JsonWebTokenError") {
     err = handleJsonWebTokenError(err);
+  }
+
+  if (err.name === "MulterError") {
+    err = handleMulterError(err);
   }
 
   if (!err.isOperational) {

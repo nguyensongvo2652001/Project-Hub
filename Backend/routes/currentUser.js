@@ -18,7 +18,10 @@ router
   )
   .patch(
     userController.prepareUpdateUserRouteMiddleware,
+    userController.getImageData,
     userController.prepareUserSelectMiddleware,
+    userController.uploadAvatar,
+    userController.uploadBackground,
     userController.updateUser
   );
 
