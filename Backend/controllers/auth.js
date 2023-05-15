@@ -12,7 +12,8 @@ const sendAuthResponse = (res, { user, statusCode, message }) => {
   res.cookie("token", token, {
     httpOnly: true,
     maxAge: Number(process.env.JWT_EXPIRES_IN_SECONDS) * 1000,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
+    sameSite: "none",
   });
 
   user.password = undefined;
@@ -69,6 +70,37 @@ const logout = (req, res) => {
     message: "log out successfully",
   });
 };
+
+const validateToken = async (token) => {
+  try {
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+    const user = await User.findById(decodedToken.userId);
+    if (!user) {
+      return false;
+    }
+
+    if (user.passwordChangedAfter(decodedToken.iat)) {
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    return false;
+  }
+};
+
+const validateTokenController = catchAsync(async (req, res, next) => {
+  const token = req.cookies.token;
+  const tokenIsValid = await validateToken(token);
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      tokenIsValid,
+    },
+  });
+});
 
 const checkAuthentication = catchAsync(async (req, res, next) => {
   let token;
@@ -186,4 +218,5 @@ module.exports = {
   checkAuthentication,
   forgotPassword,
   resetPassword,
+  validateTokenController,
 };

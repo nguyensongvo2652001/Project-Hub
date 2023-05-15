@@ -1,5 +1,11 @@
+import NoAuthComponent from "../components/NoAuthComponent/NoAuthComponent";
+
 const AuthPage = () => {
-  return <h1>Auth Page</h1>;
+  return (
+    <NoAuthComponent>
+      <h1>Auth Page</h1>{" "}
+    </NoAuthComponent>
+  );
 };
 
 export default AuthPage;

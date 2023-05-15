@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const demoRoute = require("./routes/demo");
 const authRoute = require("./routes/auth");
@@ -14,6 +15,13 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
+
+const corsOptions = {
+  origin: "http://localhost:3001",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204,
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 const baseApiRoute = process.env.BASE_V1_API_ROUTE || "/api/v1";
 console.log(baseApiRoute);
