@@ -1,7 +1,7 @@
 .authForm {
   width: 43rem;
-  height: 42rem;
-  padding: 10px 0 5px 40px;
+  min-height: 42rem;
+  padding: 10px 0 10px 40px;
 }
 
 .authForm__title {
@@ -81,4 +81,41 @@
   color: #9ba0ae;
   display: flex;
   gap: 5px;
+}
+
+.authForm__loadingContainer {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2.5rem;
+}
+
+.authForm__loading {
+  border: 6px solid #ccc; /* Light gray border */
+  border-top: 6px solid #4e75eb; /* Blue border on top */
+  width: 40px;
+  height: 40px;
+}
+
+.authForm__errorMessageContainer {
+  margin-top: 4rem;
+  max-width: 90%;
+  margin-bottom: 20px;
+}
+
+.authForm__passwordFormGroup {
+  position: relative;
+}
+
+.authForm__passwordVisibilityIcon {
+  position: absolute;
+  top: 75%;
+  right: 20px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 2.5rem;
+  color: #ccc;
 }

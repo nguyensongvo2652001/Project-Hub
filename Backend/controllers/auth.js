@@ -18,6 +18,7 @@ const sendAuthResponse = (res, { user, statusCode, message }) => {
 
   user.password = undefined;
   res.status(statusCode).json({
+    status: "success",
     data: {
       message,
       user,
