@@ -1,0 +1,84 @@
+.authForm {
+  width: 43rem;
+  height: 42rem;
+  padding: 10px 0 5px 40px;
+}
+
+.authForm__title {
+  color: #4e75eb;
+  font-weight: 700;
+  font-size: 3rem;
+  margin-bottom: 4rem;
+}
+
+.authForm__formGroups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.authForm__formGroup {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+
+.authForm__formGroup input {
+  font-family: inherit;
+  font-weight: inherit;
+  padding: 10px;
+  font-size: 1.5rem;
+  border-radius: 10px;
+  border: none;
+}
+
+.authForm__formGroupLabels {
+  display: flex;
+  justify-content: space-between;
+}
+
+.authForm__formGroup input::placeholder {
+  color: #c2c8da;
+  font-weight: 400;
+}
+
+.authForm__link {
+  color: #4e75eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.authForm__link:hover,
+.authForm__link:active {
+  text-decoration: underline;
+}
+
+.authForm__button {
+  width: 90%;
+  background-color: #4e75eb;
+  color: #000;
+  font-weight: 700;
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 2.5rem;
+}
+
+.authForm__button:hover,
+.authForm__button:active {
+  background-color: #7191ef;
+}
+
+.authForm__finalText {
+  font-size: 1.4rem;
+  color: #9ba0ae;
+  display: flex;
+  gap: 5px;
+}

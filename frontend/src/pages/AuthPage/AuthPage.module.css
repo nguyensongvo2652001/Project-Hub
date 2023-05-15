@@ -1,0 +1,12 @@
+.authPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.authPage__logo {
+  width: 30rem;
+  height: auto;
+  margin-bottom: 12px;
+}
