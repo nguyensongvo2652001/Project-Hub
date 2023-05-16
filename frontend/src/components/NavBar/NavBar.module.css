@@ -1,9 +1,10 @@
 .navbar {
   position: sticky;
-  height: 100%;
+  top: 0;
+  height: 100vh;
   background-color: #fff;
   border-top-right-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Box shadow properties */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   padding: 10px 0 0 4rem;
   display: flex;
   flex-direction: column;

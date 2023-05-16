@@ -1,0 +1,12 @@
+.notificationPage {
+  background-color: #f6f8fc;
+  min-height: 100vh;
+  padding: 10px 20px;
+}
+
+.notificationPage__title {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-bottom: 3rem;
+}

@@ -1,0 +1,34 @@
+.notification {
+  display: flex;
+  background-color: #fff;
+  align-items: center;
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+  gap: 10px;
+  width: 75%;
+}
+
+.notification__initiatorAvatar {
+  height: 5rem;
+  width: 5rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.notification__content {
+  font-size: 1.4rem;
+  font-weight: 500;
+  display: flex;
+  gap: 5px;
+}
+
+.notification__date {
+  color: #c2c8da;
+  font-size: 1.3rem;
+  font-weight: 700;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
