@@ -42,6 +42,6 @@
   .navItem:not(.navItem--active):hover::before {
     background-color: #dadee9;
     box-shadow: 0 0 0 5px #dadee9;
-    margin-left: -2px;
+    margin-left: -3px;
   }
 }

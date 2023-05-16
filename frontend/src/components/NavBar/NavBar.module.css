@@ -17,6 +17,9 @@
 .navbar__userInfo {
   display: flex;
   flex-direction: column;
+
+  width: fit-content;
+  align-items: center;
   margin-bottom: 4rem;
 }
 
@@ -35,8 +38,8 @@
 
 .navbar__jobTitle {
   color: #c2c8da;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 1.4rem;
+  font-weight: 700;
 }
 
 .navbar__logOutButton {
@@ -53,6 +56,53 @@
 
 .navbar__logOutButton ion-icon {
   font-size: 2.5rem;
+}
+
+.logOutModal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.logOutModal__logo {
+  width: 12rem;
+  margin-bottom: 5px;
+}
+
+.logOutModal__question {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 3rem;
+}
+
+.logOutModal__buttons {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.logOutModal__confirmButton,
+.logOutModal__cancelButton {
+  background: none;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 5px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.logOutModal__confirmButton {
+  background-color: #e03131;
+}
+
+.logOutModal__cancelButton {
+  background-color: #000;
+  color: #fff;
 }
 
 /* Tablets (768px to 991px) */

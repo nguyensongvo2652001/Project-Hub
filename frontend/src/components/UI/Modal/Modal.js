@@ -1,9 +1,4 @@
-import React, {
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import React, { forwardRef } from "react";
 import ReactDOM from "react-dom";
 
 import Card from "../Card/Card";
@@ -14,33 +9,24 @@ const Backdrop = (props) => {
 };
 
 const ModalOverlay = (props) => {
-  return <Card className={classes.modal}>{props.children}</Card>;
+  const allClasses = `${classes.modal} ${props.className}`;
+  return <Card className={allClasses}>{props.children}</Card>;
 };
 
 const Modal = forwardRef((props, ref) => {
-  const [showModal, setShowModal] = useState(true);
-
-  const toggleShowModal = () => {
-    setShowModal((prevShowModal) => !prevShowModal);
-  };
-
-  useImperativeHandle(ref, () => ({
-    toggleShowModal,
-  }));
-
   const backdrop = ReactDOM.createPortal(
-    <Backdrop onClick={toggleShowModal} />,
+    <Backdrop onClick={props.onClick} />,
     document.getElementById("backdrop-root")
   );
   const modalOverlay = ReactDOM.createPortal(
-    <ModalOverlay>{props.children} </ModalOverlay>,
+    <ModalOverlay className={props.className}>{props.children} </ModalOverlay>,
     document.getElementById("overlay-root")
   );
 
   return (
     <>
-      {showModal && backdrop}
-      {showModal && modalOverlay}
+      {backdrop}
+      {modalOverlay}
     </>
   );
 });

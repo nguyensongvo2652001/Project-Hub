@@ -74,7 +74,7 @@ const AuthForm = (props) => {
         setIsError(true);
         setIsErrorMessage(responseBody.message);
       } else {
-        authContext.logIn();
+        await authContext.logIn();
       }
     } catch (err) {
       console.log(err);

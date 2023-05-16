@@ -4,6 +4,7 @@ import useSendRequest from "../hooks/useSendRequest";
 
 const AuthContext = React.createContext({
   isLoggedIn: undefined,
+  currentUser: {},
   checkIfUserIsLoggedIn: async () => {},
   logIn: () => {},
   logOut: () => {},
@@ -11,9 +12,18 @@ const AuthContext = React.createContext({
 
 export const AuthContextProvider = function (props) {
   const [isLoggedIn, setIsLoggedIn] = useState(undefined);
+  const [currentUser, setCurrentUser] = useState({});
 
   const validateTokenURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/validateToken`;
+  const getCurrentUserInfoURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/me`;
   const { sendRequest } = useSendRequest();
+
+  const getUserInfo = async () => {
+    const responseBody = await sendRequest(getCurrentUserInfoURL);
+    const { user } = responseBody.data;
+    setCurrentUser(user);
+    return user;
+  };
 
   const checkIfUserIsLoggedIn = async () => {
     try {
@@ -21,6 +31,11 @@ export const AuthContextProvider = function (props) {
         method: "POST",
       });
       const { tokenIsValid } = responseBody.data;
+
+      if (tokenIsValid) {
+        await getUserInfo();
+      }
+
       setIsLoggedIn(tokenIsValid);
     } catch (err) {
       console.log(err);
@@ -28,17 +43,19 @@ export const AuthContextProvider = function (props) {
     }
   };
 
-  const logIn = () => {
+  const logIn = async () => {
+    await checkIfUserIsLoggedIn();
     setIsLoggedIn(true);
   };
 
   const logOut = () => {
     setIsLoggedIn(false);
+    setCurrentUser({});
   };
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, checkIfUserIsLoggedIn, logOut, logIn }}
+      value={{ isLoggedIn, checkIfUserIsLoggedIn, logOut, logIn, currentUser }}
     >
       {props.children}
     </AuthContext.Provider>
