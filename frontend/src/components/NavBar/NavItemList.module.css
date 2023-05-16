@@ -1,0 +1,13 @@
+.navItemList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+  margin-left: -4rem;
+}
+
+@media (max-width: 600px) {
+  .navItemList {
+    margin-right: -1rem;
+  }
+}

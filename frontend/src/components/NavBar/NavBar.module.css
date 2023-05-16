@@ -1,0 +1,105 @@
+.navbar {
+  position: sticky;
+  height: 100%;
+  background-color: #fff;
+  border-top-right-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Box shadow properties */
+  padding: 10px 0 0 4rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar__logo {
+  width: 12rem;
+  margin-bottom: 4rem;
+}
+
+.navbar__userInfo {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4rem;
+}
+
+.navbar__avatar {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 50%;
+  border: 4px solid #4e75eb;
+}
+
+.navbar__name {
+  color: #495057;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.navbar__jobTitle {
+  color: #c2c8da;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.navbar__logOutButton {
+  display: flex;
+  align-items: center;
+  font-size: 1.6rem;
+  gap: 10px;
+  font-weight: 800;
+  color: #e03131;
+  margin-top: auto;
+  margin-bottom: 6rem;
+  cursor: pointer;
+}
+
+.navbar__logOutButton ion-icon {
+  font-size: 2.5rem;
+}
+
+/* Tablets (768px to 991px) */
+@media (max-width: 991px) {
+  .navbar {
+    padding-left: 2.5rem;
+  }
+
+  .navbar__avatar {
+    width: 9rem;
+    height: 9rem;
+  }
+
+  .navbar__name {
+    font-size: 1.6rem;
+  }
+
+  .navbar__jobTitle {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    padding: 1rem;
+  }
+
+  .navbar__avatar {
+    width: 7rem;
+    height: 7rem;
+    margin-bottom: 10px;
+  }
+
+  .navbar__name {
+    font-size: 1.2rem;
+  }
+
+  .navbar__jobTitle {
+    display: none;
+  }
+
+  .navbar__logOutButton {
+    font-size: 1.4rem;
+  }
+
+  .navbar__logo {
+    width: 8rem;
+    margin-bottom: 2rem;
+  }
+}

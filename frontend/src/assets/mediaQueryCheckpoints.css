@@ -1,0 +1,32 @@
+/* Mobile (up to 480px) */
+@media (max-width: 480px) {
+  /* CSS rules specific to small mobile devices in portrait orientation */
+  /* ... */
+}
+
+/* Mobile (481px to 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  /* CSS rules specific to small mobile devices in landscape orientation */
+  /* ... */
+}
+
+/* Tablets (768px to 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  /* CSS rules specific to tablets in both portrait and landscape orientations */
+  /* ... */
+}
+
+/* Tablets (992px to 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+  /* CSS rules specific to tablets in both portrait and landscape orientations */
+  /* ... */
+}
+
+/* Small desktops (1200px to 1439px) */
+@media (min-width: 1200px) and (max-width: 1439px) {
+  /* CSS rules specific to small desktops */
+  /* ... */
+  .navbar {
+    /* background: red; */
+  }
+}

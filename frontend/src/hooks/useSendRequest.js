@@ -1,10 +1,10 @@
 const useSendRequest = () => {
   const sendRequest = async (url, options) => {
-    const method = options.method || "GET";
-    const headers = options.headers || {
+    const method = options?.method || "GET";
+    const headers = options?.headers || {
       "Content-Type": "application/json",
     };
-    const body = options.body;
+    const body = options?.body;
     const response = await fetch(url, {
       method,
       headers,
