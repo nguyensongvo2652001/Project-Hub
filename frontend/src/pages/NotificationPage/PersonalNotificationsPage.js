@@ -1,16 +1,19 @@
 import AuthPageLayout from "../../components/Layout/AuthPageLayout";
+import Loading from "../../components/UI/Loading/Loading";
 import notificationPageStyle from "./NotificationPage.module.css";
 import { useEffect, useState } from "react";
 import NotificationList from "../../components/NotificationList/NotificationList";
 import useSendRequest from "../../hooks/useSendRequest";
+import NoDocumentsFound from "../../components/UI/NoDocumentsFound/NoDocumentsFound";
 
 const PersonalNotificationsPage = (props) => {
-  const limit = 2;
+  const limit = 10;
+  const [isLoading, setIsLoading] = useState(false);
   const [isInitialRender, setIsInitialRender] = useState(true);
   const [lastNotification, setLastNotification] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [page, setPage] = useState(1);
-  const [noMoreNotifications, setNoMoreNotifications] = useState(false);
+  const [noMoreNotifications, setNoMoreNotifications] = useState(true);
   const { sendRequest } = useSendRequest();
 
   useEffect(() => {
@@ -21,7 +24,10 @@ const PersonalNotificationsPage = (props) => {
       }
 
       const url = `${process.env.REACT_APP_BACKEND_BASE_URL}/me/notification?limit=${limit}&page=${page}`;
+
+      setIsLoading(true);
       const responseBody = await sendRequest(url);
+      setIsLoading(false);
 
       const { data } = responseBody;
 
@@ -64,15 +70,30 @@ const PersonalNotificationsPage = (props) => {
 
   return (
     <AuthPageLayout>
-      <h1 className={notificationPageStyle.notificationPage__title}>
-        Your notifications
-      </h1>
-
       <div className={notificationPageStyle.notificationPage}>
-        <NotificationList
-          notifications={notifications}
-          lastNotificationRef={setLastNotification}
-        />
+        <h1 className={notificationPageStyle.notificationPage__title}>
+          Your notifications
+        </h1>
+
+        {notifications.length > 0 && (
+          <NotificationList
+            notifications={notifications}
+            lastNotificationRef={setLastNotification}
+          />
+        )}
+
+        {!isLoading && notifications.length === 0 && (
+          <NoDocumentsFound
+            message="Unfortunately, it looks like we can not find any notifications
+          about you in the database."
+          />
+        )}
+
+        {isLoading && (
+          <Loading
+            className={notificationPageStyle.notificationPage__loading}
+          />
+        )}
       </div>
     </AuthPageLayout>
   );

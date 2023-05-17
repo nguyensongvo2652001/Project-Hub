@@ -55,19 +55,20 @@ const Notification = (props) => {
         alt="Initiator avatar"
       />
       <div className={notificationStyles.notification__content}>
-        <div className={notificationStyles.notification__message}>
+        <p className={notificationStyles.notification__message}>
           <UserNameLink
             name={notification.initiator.name}
             id={notification.initiator._id}
           />
-          <p>{message}</p>
-        </div>
+          &nbsp;
+          <span>{message}</span>
+        </p>
         {link.length > 0 && (
           <Link
             to={link}
             className={notificationStyles.notification__moreInfoLink}
           >
-            Click here for more info{" "}
+            Click here for more info
           </Link>
         )}
       </div>

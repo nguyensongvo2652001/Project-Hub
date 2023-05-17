@@ -5,8 +5,18 @@
 }
 
 .notificationPage__title {
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: 800;
   letter-spacing: 0.5px;
   margin-bottom: 3rem;
+  color: #7191ef;
+}
+
+.notificationPage__loading {
+  border: 5px solid #ccc; /* Light gray border */
+  border-top: 5px solid #4e75eb; /* Blue border on top */
+  width: 5rem;
+  height: 5rem;
+  margin: auto;
+  margin-top: 5rem;
 }

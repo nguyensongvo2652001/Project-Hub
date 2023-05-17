@@ -1,0 +1,24 @@
+.noDocumentsFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.noDocumentsFound ion-icon {
+  font-size: 10rem;
+  color: #7191ef;
+}
+
+.noDocumentsFound h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #7191ef;
+  margin-bottom: 2rem;
+  margin-top: -2rem;
+}
+
+.noDocumentsFound p {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #3752a5;
+}

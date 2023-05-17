@@ -2,7 +2,7 @@ import Notification from "../Notification/Notification";
 import styles from "./NotificationList.module.css";
 
 const NotificationList = (props) => {
-  const { lastNotificationRef, notifications } = props;
+  let { lastNotificationRef, notifications } = props;
 
   const notificationList = notifications.map((notification, index) => {
     if (index === notifications.length - 1) {
@@ -14,6 +14,7 @@ const NotificationList = (props) => {
         />
       );
     }
+
     return <Notification notification={notification} key={notification._id} />;
   });
 
