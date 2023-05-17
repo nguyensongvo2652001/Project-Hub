@@ -122,7 +122,7 @@ const validateDevelopers = async (developers, projectId) => {
         throw new HandledError(`no users found with id = ${developerId}`, 400);
       }
 
-      const membership = await ProjectMember.findOne({
+      const membership = await mongoose.model("ProjectMember").findOne({
         projectId,
         memberId: developerId,
       });
@@ -151,7 +151,7 @@ const validateDevelopers = async (developers, projectId) => {
 taskSchema.pre("save", async function (next) {
   if (!this.isNew) return next();
 
-  const membership = await ProjectMember.findOne({
+  const membership = await mongoose.model("ProjectMember").findOne({
     projectId: this.projectId,
     memberId: this.creator,
   });

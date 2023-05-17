@@ -127,6 +127,7 @@ const updateProjectFinished = async (req, project) => {
     type: process.env.NOTIFICATION_UPDATE_PROJECT_TYPE,
     scope: "project",
     receiver: project._id,
+    detail: project._id,
   });
 
   project.lastChanged = Date.now();

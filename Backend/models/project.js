@@ -1,7 +1,16 @@
 const mongoose = require("mongoose");
 const ProjectMember = require("./projectMember");
 
-const projectTags = ["Website", "Mobile", "Software", "Other"];
+const projectTags = [
+  "Website",
+  "Mobile",
+  "Software",
+  "AI",
+  "CloudComputing",
+  "Security",
+  "Other",
+  "Data",
+];
 
 const projectSchema = new mongoose.Schema(
   {
@@ -84,7 +93,7 @@ const projectSchema = new mongoose.Schema(
 
 projectSchema.post("save", async function (doc, next) {
   try {
-    await ProjectMember.create({
+    await mongoose.model("ProjectMember").create({
       projectId: doc._id,
       memberId: doc.owner,
       role: "owner",

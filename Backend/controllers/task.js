@@ -29,6 +29,7 @@ const createTask = catchAsync(async (req, res, next) => {
     type: process.env.NOTIFICATION_NEW_TASK_TYPE,
     scope: "project",
     receiver: projectId,
+    detail: task._id,
   });
 
   res.status(201).json({
@@ -175,6 +176,7 @@ const prepareDeleteTaskOnFinishMiddleware = (req, res, next) => {
       type: process.env.NOTIFICATION_DELETE_TASK_TYPE,
       scope: "project",
       receiver: task.projectId,
+      detail: task.name,
     });
   };
 
