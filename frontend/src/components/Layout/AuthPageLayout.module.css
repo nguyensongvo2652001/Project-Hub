@@ -1,6 +1,6 @@
 .authPageLayout {
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 5fr;
   width: 100vw;
   min-height: 100vh;
 }

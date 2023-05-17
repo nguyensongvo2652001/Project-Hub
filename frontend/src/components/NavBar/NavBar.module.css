@@ -4,7 +4,7 @@
   height: 100vh;
   background-color: #fff;
   border-top-right-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   padding: 10px 0 0 4rem;
   display: flex;
   flex-direction: column;
@@ -19,34 +19,55 @@
   display: flex;
   flex-direction: column;
 
-  width: fit-content;
+  width: 100%;
   align-items: center;
-  margin-bottom: 4rem;
+  justify-content: center;
+  margin-bottom: 8rem;
+  margin-left: -4rem;
 }
 
 .navbar__avatar {
-  width: 10rem;
-  height: 10rem;
+  width: 6rem;
+  height: 6rem;
   border-radius: 50%;
-  border: 4px solid #4e75eb;
+}
+
+.navbar__avatarContainer {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  width: 9rem;
+  height: 9rem;
+
+  border-radius: 50%;
+
+  border-style: solid;
+  border-width: 6px;
+
+  border-bottom-color: #fff;
+  border-left-color: #fff;
+  border-right-color: #4e75eb;
+  border-top-color: #4e75eb;
 }
 
 .navbar__name {
-  color: #495057;
-  font-size: 2rem;
+  color: #4165b3;
+  font-size: 1.4rem;
   font-weight: 800;
 }
 
 .navbar__jobTitle {
-  color: #c2c8da;
-  font-size: 1.4rem;
+  color: #a8c1e5;
+  font-size: 1rem;
   font-weight: 700;
 }
 
 .navbar__logOutButton {
   display: flex;
   align-items: center;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   gap: 10px;
   font-weight: 800;
   color: #e03131;
@@ -113,8 +134,13 @@
   }
 
   .navbar__avatar {
-    width: 9rem;
-    height: 9rem;
+    width: 5rem;
+    height: 5rem;
+  }
+
+  .navbar__avatarContainer {
+    width: 7rem;
+    height: 7rem;
   }
 
   .navbar__name {
@@ -124,6 +150,10 @@
   .navbar__jobTitle {
     font-size: 1.2rem;
   }
+
+  .navbar__userInfo {
+    margin-left: -2rem;
+  }
 }
 
 @media (max-width: 600px) {
@@ -131,10 +161,15 @@
     padding: 1rem;
   }
 
-  .navbar__avatar {
-    width: 7rem;
-    height: 7rem;
+  .navbar__avatarContainer {
+    width: 0rem;
+    height: 0rem;
     margin-bottom: 10px;
+  }
+
+  .navbar__avatar {
+    width: 4rem;
+    height: 4rem;
   }
 
   .navbar__name {
@@ -146,11 +181,19 @@
   }
 
   .navbar__logOutButton {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
+  }
+
+  .navbar__logOutButton ion-icon {
+    font-size: 2rem;
   }
 
   .navbar__logo {
     width: 8rem;
     margin-bottom: 2rem;
+  }
+
+  .navbar__userInfo {
+    margin-left: 0rem;
   }
 }

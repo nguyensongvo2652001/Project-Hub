@@ -12,10 +12,15 @@ const MainNavBar = (props) => {
     {
       text: "Statistic",
       link: "/me/stat",
+      iconName: "bar-chart-outline",
     },
-    { text: "Project", link: "/projects" },
-    { text: "Profile", link: "/me" },
-    { text: "Notifications", link: "/me/notifications" },
+    { text: "Project", link: "/projects", iconName: "file-tray-full-outline" },
+    { text: "Profile", link: "/me", iconName: "person-outline" },
+    {
+      text: "Notifications",
+      link: "/me/notifications",
+      iconName: "megaphone-outline",
+    },
   ];
 
   const [showLogOutModal, setShowLogOutModal] = useState(false);
@@ -53,17 +58,21 @@ const MainNavBar = (props) => {
 
   return (
     <div className={navBarStyles.navbar}>
-      <img
-        src={logo}
-        alt="ProjectHub logo"
-        className={navBarStyles.navbar__logo}
-      />
-      <div className={navBarStyles.navbar__userInfo}>
+      <div className={navBarStyles.navbar__logoContainer}>
         <img
-          src={currentUser.avatar}
-          alt="user avatar"
-          className={navBarStyles.navbar__avatar}
+          src={logo}
+          alt="ProjectHub logo"
+          className={navBarStyles.navbar__logo}
         />
+      </div>
+      <div className={navBarStyles.navbar__userInfo}>
+        <div className={navBarStyles.navbar__avatarContainer}>
+          <img
+            src={currentUser.avatar}
+            alt="user avatar"
+            className={navBarStyles.navbar__avatar}
+          />
+        </div>
         <p className={navBarStyles.navbar__name}>{userNameDisplay}</p>
         <p className={navBarStyles.navbar__jobTitle}>{userJobTitleDisplay}</p>
       </div>

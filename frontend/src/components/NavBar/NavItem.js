@@ -5,8 +5,9 @@ import navItemStyles from "./NavItem.module.css";
 const NavItem = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { item } = props;
 
-  const { link } = props;
+  const { link } = item;
   const currentLink = location.pathname;
   const isActive = currentLink === link;
 
@@ -19,7 +20,8 @@ const NavItem = (props) => {
 
   return (
     <li className={classes} onClick={clickHandler}>
-      {props.text}
+      <ion-icon name={item.iconName}></ion-icon>
+      <p>{item.text}</p>
     </li>
   );
 };
