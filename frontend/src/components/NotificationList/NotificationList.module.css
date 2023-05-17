@@ -1,6 +1,6 @@
 .notificationList {
   display: flex;
   flex-direction: column;
-  gap: 200vh;
+  gap: 32px;
   list-style: none;
 }

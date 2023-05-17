@@ -1,4 +1,4 @@
-import Notification from "./Notification";
+import Notification from "../Notification/Notification";
 import styles from "./NotificationList.module.css";
 
 const NotificationList = (props) => {

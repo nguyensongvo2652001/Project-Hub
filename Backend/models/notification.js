@@ -64,7 +64,7 @@ const notificationSchema = new mongoose.Schema({
     },
   },
   detail: {
-    type: String,
+    type: mongoose.Schema.Types.Mixed,
   },
 });
 

@@ -10,8 +10,6 @@ const Task = require("../models/task");
 const Notification = require("../models/notification");
 
 const deleteAllData = async () => {
-  await User.deleteMany();
-  await Project.deleteMany();
   await Task.deleteMany();
   await Notification.deleteMany();
   await ProjectMember.deleteMany();
@@ -169,7 +167,7 @@ const createProjectMemberAndNotifications = async () => {
         type: process.env.NOTIFICATION_PROJECT_INVITATION_TYPE,
         scope: "personal",
         receiver: invitedUser._id,
-        detail: project._id,
+        detail: project,
       });
 
       await Notification.create({
@@ -395,7 +393,7 @@ const createTaskAndNotifications = async () => {
         type: process.env.NOTIFICATION_NEW_TASK_TYPE,
         scope: "project",
         receiver: project._id,
-        detail: task._id,
+        detail: task,
       });
 
       console.log("finish create task", j);
@@ -410,5 +408,7 @@ const createTaskAndNotifications = async () => {
   uri = uri.replace(/<password>/, process.env.DB_PASSWORD);
   uri = uri.replace(/<databaseName>/, process.env.DB_NAME);
   await connectDB(uri);
+  await deleteAllData();
+  await createProjectMemberAndNotifications();
   await createTaskAndNotifications();
 })();

@@ -62,7 +62,7 @@ const inviteMemberToProject = catchAsync(async (req, res, next) => {
       type: process.env.NOTIFICATION_PROJECT_INVITATION_TYPE,
       scope: "personal",
       receiver: newMember._id,
-      detail: newMemberMembership.projectId,
+      detail: project,
     });
   }
 

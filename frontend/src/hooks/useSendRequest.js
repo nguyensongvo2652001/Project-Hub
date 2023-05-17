@@ -1,5 +1,7 @@
+import { useCallback } from "react";
+
 const useSendRequest = () => {
-  const sendRequest = async (url, options) => {
+  const sendRequest = useCallback(async (url, options) => {
     const method = options?.method || "GET";
     const headers = options?.headers || {
       "Content-Type": "application/json",
@@ -13,7 +15,7 @@ const useSendRequest = () => {
     });
     const responseBody = await response.json();
     return responseBody;
-  };
+  }, []);
 
   return {
     sendRequest,
