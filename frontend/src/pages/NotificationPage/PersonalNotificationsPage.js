@@ -82,11 +82,8 @@ const PersonalNotificationsPage = (props) => {
           />
         )}
 
-        {!isLoading && notifications.length === 0 && (
-          <NoDocumentsFound
-            message="Unfortunately, it looks like we can not find any notifications
-          about you in the database."
-          />
+        {!isLoading && (
+          <NoDocumentsFound message="Unfortunately, it looks like we can not find any other notifications" />
         )}
 
         {isLoading && (
