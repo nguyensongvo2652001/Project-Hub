@@ -1,0 +1,58 @@
+.projectsPage {
+  background-color: #f6f8fc;
+  min-height: 100vh;
+  padding-top: 3rem;
+  padding-left: 5rem;
+}
+
+.projectsPage__projects {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 40px;
+
+  list-style: none;
+}
+
+.projectsPage__createProjectSection {
+  width: 25rem;
+  height: 25rem;
+  border-radius: 10px;
+  border: 2px dotted #c2c8da;
+  padding: 2rem 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.projectsPage__createProjectText {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #c2c8da;
+}
+
+.projectsPage__createProjectButton {
+  background-color: #a8c1e5;
+  color: #546173;
+  border: none;
+  font-family: inherit;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 5px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  max-width: 25rem;
+}
+
+.projectsPage__createProjectButton:hover {
+  background-color: #b9cdea;
+}
+
+@media (max-width: 600px) {
+  .projectsPage {
+    padding-left: 1.5rem;
+  }
+}
