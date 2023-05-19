@@ -4,7 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/AuthPage/LoginPage";
 import SignUpPage from "./pages/AuthPage/SignUpPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import ProjectsPage from "./pages/ProjectsPage";
+import ProjectsPage from "./pages/ProjectsPage/ProjectsPage";
 import PersonalNotificationsPage from "./pages/NotificationPage/PersonalNotificationsPage";
 
 function App() {

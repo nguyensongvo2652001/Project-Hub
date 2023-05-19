@@ -1,0 +1,36 @@
+.searchBar {
+  position: relative;
+  background-color: #dddfe3;
+  max-width: 35rem;
+  border-radius: 20px;
+}
+
+.searchBarInput {
+  resize: none;
+  font-family: inherit;
+  font-size: 1.4rem;
+  border: none;
+  outline: none;
+
+  padding-left: 30px;
+  padding-top: 10px;
+
+  max-height: 40px;
+  border-radius: 20px;
+  font-weight: 500;
+
+  word-break: break-all;
+  background-color: #dddfe3;
+  overflow-y: hidden;
+}
+
+.searchBarInput::placeholder {
+  color: #949597;
+}
+
+.searchBar ion-icon {
+  font-size: 2rem;
+  position: absolute;
+  left: 32rem;
+  top: 10px;
+}

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import NotificationList from "../../components/NotificationList/NotificationList";
 import useSendRequest from "../../hooks/useSendRequest";
 import NoDocumentsFound from "../../components/UI/NoDocumentsFound/NoDocumentsFound";
+import SearchBarContainer from "../../components/SearchBar/SearchBarContainer";
 
 const PersonalNotificationsPage = (props) => {
   const limit = 10;
@@ -70,6 +71,7 @@ const PersonalNotificationsPage = (props) => {
 
   return (
     <AuthPageLayout>
+      <SearchBarContainer />
       <div className={notificationPageStyle.notificationPage}>
         <h1 className={notificationPageStyle.notificationPage__title}>
           Your notifications
