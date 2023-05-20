@@ -4,8 +4,12 @@ import ReactDOM from "react-dom";
 import Card from "../Card/Card";
 import classes from "./Modal.module.css";
 
-const Backdrop = (props) => {
-  return <div className={classes.backdrop} onClick={props.onClick} />;
+export const Backdrop = (props) => {
+  const backdrop = ReactDOM.createPortal(
+    <div className={classes.backdrop} onClick={props.onClick} />,
+    document.getElementById("backdrop-root")
+  );
+  return backdrop;
 };
 
 const ModalOverlay = (props) => {
@@ -14,10 +18,7 @@ const ModalOverlay = (props) => {
 };
 
 const Modal = forwardRef((props, ref) => {
-  const backdrop = ReactDOM.createPortal(
-    <Backdrop onClick={props.onClick} />,
-    document.getElementById("backdrop-root")
-  );
+  const backdrop = <Backdrop onClick={props.onClick} />;
   const modalOverlay = ReactDOM.createPortal(
     <ModalOverlay className={props.className}>{props.children} </ModalOverlay>,
     document.getElementById("overlay-root")

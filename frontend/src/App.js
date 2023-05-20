@@ -6,6 +6,7 @@ import SignUpPage from "./pages/AuthPage/SignUpPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProjectsPage from "./pages/ProjectsPage/ProjectsPage";
 import PersonalNotificationsPage from "./pages/NotificationPage/PersonalNotificationsPage";
+import MyProfilePage from "./pages/MyProfilePage/MyProfilePage";
 
 function App() {
   return (
@@ -14,10 +15,12 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
-        <Route
-          path="/me/notifications"
-          element={<PersonalNotificationsPage />}
-        />
+
+        <Route path="/me">
+          <Route index element={<MyProfilePage />} />
+          <Route path="notifications" element={<PersonalNotificationsPage />} />
+        </Route>
+
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

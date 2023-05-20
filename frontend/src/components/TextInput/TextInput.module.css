@@ -1,0 +1,9 @@
+.textInput {
+  border: 1px solid #c2c8da;
+  border-radius: 5px;
+  padding: 10px 6px;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 1.4rem;
+  width: 50%;
+}
