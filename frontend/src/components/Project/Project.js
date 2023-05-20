@@ -1,3 +1,4 @@
+import ProjecTag from "../UI/ProjectTag/ProjectTag";
 import classes from "./Project.module.css";
 
 const Project = (props) => {
@@ -6,7 +7,6 @@ const Project = (props) => {
   const projectTagClass = `project__tag--${project.tag.toLowerCase()}`;
 
   let descriptionDisplay = project.description || "";
-  console.log(descriptionDisplay.length);
   if (descriptionDisplay.length > 120) {
     descriptionDisplay = descriptionDisplay.slice(0, 117) + "...";
   }
@@ -18,9 +18,8 @@ const Project = (props) => {
     <li className={classes.project}>
       <div className={classes.project__mainInfo}>
         <h2 className={classes.project__name}>{project.name}</h2>
-        <div className={`${classes.project__tag} ${classes[projectTagClass]}`}>
-          <p>{project.tag}</p>
-        </div>
+        <ProjecTag tag={project.tag} />
+
         <p className={classes.project__description}>{descriptionDisplay}</p>
       </div>
 

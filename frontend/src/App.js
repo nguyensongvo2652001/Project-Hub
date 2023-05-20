@@ -7,6 +7,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import ProjectsPage from "./pages/ProjectsPage/ProjectsPage";
 import PersonalNotificationsPage from "./pages/NotificationPage/PersonalNotificationsPage";
 import MyProfilePage from "./pages/MyProfilePage/MyProfilePage";
+import PersonalStatPage from "./pages/PersonalStatPage/PersonalStatPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/me">
           <Route index element={<MyProfilePage />} />
           <Route path="notifications" element={<PersonalNotificationsPage />} />
+          <Route path="stat" element={<PersonalStatPage />} />
         </Route>
 
         <Route path="/projects" element={<ProjectsPage />} />
