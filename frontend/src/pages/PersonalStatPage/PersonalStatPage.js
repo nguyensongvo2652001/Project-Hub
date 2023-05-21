@@ -25,6 +25,7 @@ import {
 import MyPieChart from "../../components/PieChart/MyPieChart";
 import MyLineChart from "../../components/MyLineChart/MyLineChart";
 import ProjecTag from "../../components/UI/ProjectTag/ProjectTag";
+import ProjectMainInfo from "../../components/Project/ProjectMainInfo";
 
 const PersonalStatPage = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -125,13 +126,38 @@ const PersonalStatPage = (props) => {
           </li>
 
           <li>
-            <Card>
-              <div>
+            <Card className={classes.highestCompletionRateProject}>
+              <div className={classes.highestCompletionRateProject__title}>
                 <ion-icon name="ribbon-outline"></ion-icon>
                 <p>Project with highest completion rate</p>
               </div>
-              <p>GeoMap</p>
-              <ProjecTag tag="Mobile" />
+              <ProjectMainInfo
+                mainInfo={{
+                  name: "GeoMap",
+                  tag: "Mobile",
+                  description: "An Android app that helps you with running.",
+                }}
+              />
+              <div
+                className={
+                  classes.highestCompletionRateProject__completionRateBarContainer
+                }
+              >
+                <p className={classes.highestCompletionRateProject__label}>
+                  Completion Rate
+                </p>
+                <div className={classes.completionRateChart}>
+                  <div className={classes.completionRateBar}>
+                    <div className={classes.emptyBar}></div>
+                    <div
+                      className={classes.fillBar}
+                      style={{ width: "80%" }}
+                    ></div>
+                  </div>
+
+                  <p className={classes.completionRateBarValue}>80%</p>
+                </div>
+              </div>
             </Card>
           </li>
         </ul>

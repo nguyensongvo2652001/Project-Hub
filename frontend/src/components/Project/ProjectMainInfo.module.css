@@ -1,0 +1,10 @@
+.mainInfo__name {
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.mainInfo__description {
+  font-size: 1.3rem;
+  font-weight: 500;
+  word-break: break-all;
+}
