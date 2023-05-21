@@ -21,11 +21,13 @@ import {
   Tooltip,
   Legend,
   Cell,
+  ResponsiveContainer,
 } from "recharts";
 import MyPieChart from "../../components/PieChart/MyPieChart";
 import MyLineChart from "../../components/MyLineChart/MyLineChart";
 import ProjecTag from "../../components/UI/ProjectTag/ProjectTag";
 import ProjectMainInfo from "../../components/Project/ProjectMainInfo";
+import MyBarChart from "../../components/MyBarChart/MyBartChart";
 
 const PersonalStatPage = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -82,6 +84,21 @@ const PersonalStatPage = (props) => {
     { name: "Dec", value: 90 },
   ];
 
+  const newlyCompletedTasksBarChartData = [
+    { name: "A", value: 100 },
+    { name: "B", value: 200 },
+    { name: "C", value: 150 },
+    { name: "D", value: 300 },
+    { name: "E", value: 400 },
+    { name: "A", value: 100 },
+    { name: "B", value: 200 },
+    { name: "C", value: 150 },
+    { name: "D", value: 300 },
+    { name: "E", value: 400 },
+    { name: "D", value: 300 },
+    { name: "E", value: 400 },
+  ];
+
   return (
     <AuthPageLayout>
       <SearchBarContainer />
@@ -108,14 +125,18 @@ const PersonalStatPage = (props) => {
             }
           >
             <MyPieChart
-              width={300}
-              height={400}
+              width={400}
+              height={300}
               data={completionRatePieChartData}
               className={classes.personalStatPage__completionRatePieChart}
             />
           </li>
 
-          <li>
+          <li
+            className={
+              classes.personalStatPage__completionRateLineChartContainer
+            }
+          >
             <MyLineChart
               data={completionRateLineChartData}
               width={500}
@@ -126,7 +147,7 @@ const PersonalStatPage = (props) => {
           </li>
 
           <li>
-            <Card className={classes.highestCompletionRateProject}>
+            <Card className={classes.mostCompletedTasksProject}>
               <div className={classes.highestCompletionRateProject__title}>
                 <ion-icon name="ribbon-outline"></ion-icon>
                 <p>Project with highest completion rate</p>
@@ -161,7 +182,51 @@ const PersonalStatPage = (props) => {
             </Card>
           </li>
         </ul>
-        <ul className={classes.personalStatPage__thirdRow}></ul>
+        <ul className={classes.personalStatPage__thirdRow}>
+          <li className={classes.personalStatPage__barChartContainer}>
+            <MyBarChart
+              data={newlyCompletedTasksBarChartData}
+              barColor="#4DABF7"
+              label="number of newly completed tasks"
+              width="100%"
+              height={300}
+            />
+          </li>
+
+          <li>
+            <Card className={classes.mostCompletedTasksProject}>
+              <div className={classes.mostCompletedTasksProject__title}>
+                <ion-icon name="trophy-outline"></ion-icon>
+                <p>Most completed tasks project</p>
+              </div>
+              <ProjectMainInfo
+                mainInfo={{
+                  name: "GeoMap",
+                  tag: "Mobile",
+                  description: "An Android app that helps you with running.",
+                }}
+              />
+              <div
+                className={
+                  classes.mostCompletedTasksProject__semiDonutContainer
+                }
+              >
+                <p className={classes.mostCompletedTasksProject__label}>
+                  Number of completed tasks
+                </p>
+                <div className={classes.completedTasksChart}>
+                  <div
+                    className={classes.semiDonut}
+                    style={{ "--percentage": 80 }}
+                  ></div>
+                  <p className={classes.semiDonut__value}>
+                    <span>75</span> of 120 assigned tasks
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </li>
+        </ul>
       </div>
     </AuthPageLayout>
   );
