@@ -48,8 +48,24 @@ const ProjectsPage = (props) => {
   };
 
   const createProject = async (data) => {
-    alert(data);
-    toggleShowNewProjectForm();
+    const createProjectURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/project`;
+    try {
+      const response = await sendRequest(createProjectURL, {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+
+      if (response.status !== "success") {
+        const errorMessage = response.message;
+        throw new Error(errorMessage);
+      }
+
+      if (response.status === "success") {
+        toggleShowNewProjectForm();
+      }
+    } catch (err) {
+      handleError(err);
+    }
   };
 
   useEffect(() => {
@@ -83,7 +99,6 @@ const ProjectsPage = (props) => {
         }
 
         const { projects } = data;
-        console.log(projects);
 
         setProjects((prev) => [...prev, ...projects]);
       } catch (err) {

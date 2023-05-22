@@ -9,7 +9,6 @@ const useIntersectionObserver = (
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          console.log("clgt");
           if (stopObservingConditionCallback()) {
             return observer.unobserve(observeElement);
           }
@@ -21,7 +20,6 @@ const useIntersectionObserver = (
     );
 
     if (observeElement) {
-      console.log("ahihi");
       observer.observe(observeElement);
     }
 
