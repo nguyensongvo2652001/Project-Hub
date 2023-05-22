@@ -47,6 +47,11 @@ const ProjectsPage = (props) => {
     setShowNewProjectForm((prev) => !prev);
   };
 
+  const createProject = async (data) => {
+    alert(data);
+    toggleShowNewProjectForm();
+  };
+
   useEffect(() => {
     if (noMoreProjects) {
       return;
@@ -124,7 +129,7 @@ const ProjectsPage = (props) => {
             className={classes.projectPage__newProjectFormModal}
             onClick={toggleShowNewProjectForm}
           >
-            <NewProjectForm />
+            <NewProjectForm onSubmit={createProject} />
           </Modal>
         )}
 

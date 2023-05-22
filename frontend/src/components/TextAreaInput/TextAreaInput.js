@@ -10,6 +10,7 @@ const TextAreaInput = (props) => {
       placeholder={props.placeholder}
       className={allClasses}
       value={props.value}
+      ref={props.inputRef}
     />
   );
 };

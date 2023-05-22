@@ -13,6 +13,7 @@ const TextInput = (props) => {
       value={value}
       id={id}
       className={allClasses}
+      ref={props.inputRef}
     />
   );
 };
