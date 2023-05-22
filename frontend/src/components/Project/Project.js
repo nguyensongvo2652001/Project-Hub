@@ -1,26 +1,28 @@
-import ProjecTag from "../UI/ProjectTag/ProjectTag";
 import classes from "./Project.module.css";
 import ProjectMainInfo from "./ProjectMainInfo";
 
+import { getDateDisplay } from "../../utils/date";
+
 const Project = (props) => {
-  const { project } = props;
+  const { project, lastProjectElement } = props; //lastProjectElement can be undefined if the project is not the last project for display
 
   let descriptionDisplay = project.description || "";
   if (descriptionDisplay.length > 120) {
     descriptionDisplay = descriptionDisplay.slice(0, 117) + "...";
   }
 
-  const lastChangeDisplayDate = project.lastChange;
-  const displayCreatedAtDate = project.createdAt;
+  const lastChangeDisplayDate = getDateDisplay(project.lastChanged);
+  const displayCreatedAtDate = getDateDisplay(project.dateCreated);
 
   const mainInfo = {
+    projectId: project._id,
     description: project.description,
     name: project.name,
     tag: project.tag,
   };
 
   return (
-    <li className={classes.project}>
+    <li className={classes.project} ref={lastProjectElement}>
       <ProjectMainInfo mainInfo={mainInfo} />
 
       <div className={classes.project__additionalInfoSection}>

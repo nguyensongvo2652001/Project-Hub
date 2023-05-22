@@ -1,22 +1,92 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import useSendRequest from "../../hooks/useSendRequest";
+import useErrorHandling from "../../hooks/useErrorHandling";
+import useIntersectionObserver from "../../hooks/useIntersectionObserver";
+
 import AuthPageLayout from "../../components/Layout/AuthPageLayout";
 import SearchBarContainer from "../../components/SearchBar/SearchBarContainer";
-
-import classes from "./ProjectsPage.module.css";
+import Loading from "../../components/UI/Loading/Loading";
 import NoDocumentsFound from "../../components/UI/NoDocumentsFound/NoDocumentsFound";
 import Project from "../../components/Project/Project";
 
+import classes from "./ProjectsPage.module.css";
+import ProjectList from "../../components/ProjectList/ProjectList";
+
 const ProjectsPage = (props) => {
+  const maxProjectsPerResponse = 10;
+  const [pageForGettingProjects, setPageForGettingProjects] = useState(1);
+  const [noMoreProjects, setNoMoreProjects] = useState(false);
+  const [lastProjectElement, setLastProjectElement] = useState(undefined);
+  const [isInitialRender, setIsIntialRender] = useState(true);
+  const [projects, setProjects] = useState([]);
+
+  const handleError = useErrorHandling();
+
+  const { sendRequest } = useSendRequest();
+
   const [isLoading, setIsLoading] = useState(false);
 
-  const twitterCloneProject = {
-    name: "Twitter Clone",
-    tag: "Website",
-    description:
-      "A twitter clone project for educational purpose. A twitter clone project for educational purpose. A twitter clone project for educational purpose. A twitter clone project for educational purpose.",
-    lastChange: "15/01/2023",
-    createdAt: "10/01/2023",
-  };
+  const setPageWhenLastProjectInViewport = useCallback(() => {
+    setPageForGettingProjects((prev) => prev + 1);
+  }, []);
+
+  const checkIfThereAreNoMoreProjects = useCallback(() => {
+    return noMoreProjects;
+  }, [noMoreProjects]);
+
+  useIntersectionObserver(
+    checkIfThereAreNoMoreProjects,
+    lastProjectElement,
+    setPageWhenLastProjectInViewport
+  );
+
+  useEffect(() => {
+    if (noMoreProjects) {
+      return;
+    }
+
+    const getMoreProjects = async () => {
+      if (isInitialRender) {
+        setIsIntialRender(false);
+        return;
+      }
+
+      try {
+        const getJoinedProjectsURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/me/project?page=${pageForGettingProjects}&limit=${maxProjectsPerResponse}`;
+
+        setIsLoading(true);
+        const response = await sendRequest(getJoinedProjectsURL);
+        setIsLoading(false);
+
+        if (response.status !== "success") {
+          throw Error(
+            "something went wrong when trying to get your joined projects"
+          );
+        }
+
+        const { data } = response;
+
+        if (data.length === 0) {
+          setNoMoreProjects(true);
+        }
+
+        const { projects } = data;
+        console.log(projects);
+
+        setProjects((prev) => [...prev, ...projects]);
+      } catch (err) {
+        handleError(err);
+      }
+    };
+
+    getMoreProjects();
+  }, [
+    noMoreProjects,
+    handleError,
+    sendRequest,
+    isInitialRender,
+    pageForGettingProjects,
+  ]);
 
   return (
     <AuthPageLayout>
@@ -28,10 +98,15 @@ const ProjectsPage = (props) => {
               Add a new project here
             </p>
             <button className={classes.projectsPage__createProjectButton}>
-              Click here to create a new project
+              Create a new project
             </button>
           </div>
-          <Project project={twitterCloneProject} />
+          <ProjectList
+            projects={projects}
+            lastProjectElement={setLastProjectElement}
+          />
+
+          {isLoading && <Loading className={classes.projectPage__loading} />}
         </ul>
         {!isLoading && (
           <NoDocumentsFound message="Unfortunately, it looks like we can not find any other projects" />

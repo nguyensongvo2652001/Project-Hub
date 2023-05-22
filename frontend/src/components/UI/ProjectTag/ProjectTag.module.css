@@ -16,3 +16,33 @@
   background-color: #cfe4c0;
   color: #687260;
 }
+
+.projectTag--software {
+  background-color: #a1c1d4;
+  color: #3c526d;
+}
+
+.projectTag--ai {
+  background-color: #d9c6e7;
+  color: #5f4b75;
+}
+
+.projectTag--cloudComputing {
+  background-color: #c5d6a4;
+  color: #57623b;
+}
+
+.projectTag--security {
+  background-color: #f7e8a4;
+  color: #7b7157;
+}
+
+.projectTag--other {
+  background-color: #e4e4e4;
+  color: #555555;
+}
+
+.projectTag--data {
+  background-color: #fadadd;
+  color: #7d474b;
+}

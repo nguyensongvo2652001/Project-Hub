@@ -1,3 +1,4 @@
+import ProjectNameLink from "../ProjectLink/ProjectNameLink";
 import ProjecTag from "../UI/ProjectTag/ProjectTag";
 import classes from "./ProjectMainInfo.module.css";
 
@@ -11,7 +12,7 @@ const ProjectMainInfo = (props) => {
 
   return (
     <div className={classes.mainInfo}>
-      <h2 className={classes.mainInfo__name}>{mainInfo.name}</h2>
+      <ProjectNameLink name={mainInfo.name} projectId={mainInfo.projectId} />
       <ProjecTag tag={mainInfo.tag} />
 
       <p className={classes.mainInfo__description}>{descriptionDisplay}</p>

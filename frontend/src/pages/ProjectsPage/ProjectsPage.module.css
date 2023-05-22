@@ -51,6 +51,14 @@
   background-color: #b9cdea;
 }
 
+.projectPage__loading {
+  border: 5px solid #ccc; /* Light gray border */
+  border-top: 5px solid #4e75eb; /* Blue border on top */
+  width: 5rem;
+  height: 5rem;
+  margin-top: 5rem;
+}
+
 @media (max-width: 600px) {
   .projectsPage {
     padding-left: 1.5rem;

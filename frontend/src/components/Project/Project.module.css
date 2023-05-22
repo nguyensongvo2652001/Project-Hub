@@ -9,14 +9,14 @@
   flex-direction: column;
   justify-content: space-between;
 
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 100px rgba(0, 0, 0, 0.2);
 
   transition: all 0.3s;
 }
 
 .project:hover {
   transform: translateY(-10px);
-  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .project__name {

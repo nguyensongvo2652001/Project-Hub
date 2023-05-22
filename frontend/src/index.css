@@ -9,7 +9,15 @@ html {
   /* 10px / 16px = 0.625 = 62.5% */
   /* Percentage of user's browser font-size setting */
   font-size: 62.5%;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Montserrat", sans-serif;
+}
+
+html.darkMode {
+  filter: invert(100%);
+}
+
+html.darkMode img {
+  filter: invert(100%);
 }
 
 /* Mobile (up to 480px) */
