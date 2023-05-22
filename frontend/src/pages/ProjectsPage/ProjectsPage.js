@@ -11,6 +11,8 @@ import Project from "../../components/Project/Project";
 
 import classes from "./ProjectsPage.module.css";
 import ProjectList from "../../components/ProjectList/ProjectList";
+import Modal from "../../components/UI/Modal/Modal";
+import NewProjectForm from "../../components/NewProjectForm/NewProjectForm";
 
 const ProjectsPage = (props) => {
   const maxProjectsPerResponse = 10;
@@ -39,6 +41,11 @@ const ProjectsPage = (props) => {
     lastProjectElement,
     setPageWhenLastProjectInViewport
   );
+
+  const [showNewProjectForm, setShowNewProjectForm] = useState(false);
+  const toggleShowNewProjectForm = () => {
+    setShowNewProjectForm((prev) => !prev);
+  };
 
   useEffect(() => {
     if (noMoreProjects) {
@@ -97,7 +104,10 @@ const ProjectsPage = (props) => {
             <p className={classes.projectsPage__createProjectText}>
               Add a new project here
             </p>
-            <button className={classes.projectsPage__createProjectButton}>
+            <button
+              className={classes.projectsPage__createProjectButton}
+              onClick={toggleShowNewProjectForm}
+            >
               Create a new project
             </button>
           </div>
@@ -108,6 +118,16 @@ const ProjectsPage = (props) => {
 
           {isLoading && <Loading className={classes.projectPage__loading} />}
         </ul>
+
+        {showNewProjectForm && (
+          <Modal
+            className={classes.projectPage__newProjectFormModal}
+            onClick={toggleShowNewProjectForm}
+          >
+            <NewProjectForm />
+          </Modal>
+        )}
+
         {!isLoading && (
           <NoDocumentsFound message="Unfortunately, it looks like we can not find any other projects" />
         )}

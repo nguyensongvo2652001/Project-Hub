@@ -59,8 +59,36 @@
   margin-top: 5rem;
 }
 
-@media (max-width: 600px) {
-  .projectsPage {
-    padding-left: 1.5rem;
+.projectPage__newProjectFormModal {
+  position: absolute;
+  padding: 3rem;
+  width: 80rem;
+  height: fit-content;
+  top: 40%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 1068px) {
+  .projectPage__newProjectFormModal {
+    /* margin-left: -20rem; */
+    /* margin-left: -6rem; */
+  }
+}
+
+@media (max-width: 800px) {
+  .projectPage__newProjectFormModal {
+    width: 70rem;
+    /* margin-left: -15rem; */
+    /* margin-left: -6rem; */
+  }
+}
+
+@media (max-width: 767px) {
+  .projectPage__newProjectFormModal {
+    width: 90%;
+    top: 30rem;
+    left: 50%;
+    /* margin-left: -10rem; */
   }
 }

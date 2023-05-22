@@ -1,0 +1,20 @@
+.radioButton {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50%;
+  border: 3px solid #c2c8da;
+  position: relative;
+  cursor: pointer;
+}
+
+.radioButton--active.radioButton::before {
+  display: inline-block;
+  content: "";
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  background-color: #4e75eb;
+  position: absolute;
+  top: 10%;
+  left: 9%;
+}

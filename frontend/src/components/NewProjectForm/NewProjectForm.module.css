@@ -1,0 +1,88 @@
+.newProjectForm {
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+  max-width: 60%;
+}
+
+.newProjectForm__title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 6rem;
+}
+
+.newProjectForm__descriptionControlGroup {
+  margin-bottom: 7rem;
+}
+
+.newProjectForm__controlGroup {
+  display: flex;
+  position: relative;
+}
+
+.newProjectForm__label {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.newProjectForm__input,
+.newProjectForm__tagDropdown,
+.newProjectForm__descriptionInput,
+.newProjectForm__statusRadioButtons {
+  position: absolute;
+  left: 50%;
+  height: 100%;
+}
+
+.newProjectForm__input {
+  padding: 1.6rem;
+  width: 100%;
+  text-align: left;
+}
+
+.newProjectForm__descriptionInput {
+  height: 10rem;
+}
+
+.newProjectForm__tagDropdown {
+  font-family: inherit;
+  font-weight: 600;
+  height: fit-content;
+  padding: 1rem;
+  border: 2px solid #000;
+  border-radius: 10px;
+}
+
+.newProjectForm__statusRadioButtons {
+  display: flex;
+  gap: 80%;
+}
+
+.newProjectForm__radioButtonContainer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.newProjectForm__radioButtonContainer p {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.newProjectForm__submitButton {
+  cursor: pointer;
+  border: none;
+  background-color: #4e75eb;
+  font-family: inherit;
+  font-weight: 700;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  width: fit-content;
+  align-self: center;
+  transform: translateX(50%);
+  transition: all 0.3s;
+}
+
+.newProjectForm__submitButton:hover {
+  background-color: #7191ef;
+}

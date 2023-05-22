@@ -1,63 +1,95 @@
+import { useState } from "react";
+
+import TextAreaInput from "../TextAreaInput/TextAreaInput";
 import TextInput from "../TextInput/TextInput";
 
 import classes from "./NewProjectForm.module.css";
+import RadioButton from "../RadioButton/RadioButton";
 
 const NewProjectForm = (props) => {
+  const [activeStatusOption, setActiveStatusOption] = useState("private");
+  const statusOptions = ["Private", "Public"];
+  const tagOptions = [
+    "Website",
+    "Mobile",
+    "Software",
+    "AI",
+    "CloudComputing",
+    "Security",
+    "Other",
+    "Data",
+  ];
+
   return (
-    <form className={classes.newProjectForm}>
-      <div className={classes.newProjectForm__controlGroup}>
-        <label className={classes.newProjectForm__label} id="name">
-          Name
-        </label>
-        <TextInput
-          id="name"
-          value=""
-          placeholder="your project name"
-          type="text"
-        />
-      </div>
+    <>
+      <h2 className={classes.newProjectForm__title}>Create a new project</h2>
+      <form className={classes.newProjectForm}>
+        <div className={classes.newProjectForm__controlGroup}>
+          <label className={classes.newProjectForm__label} id="name">
+            Name
+          </label>
+          <TextInput
+            id="name"
+            placeholder="your project name"
+            type="text"
+            className={classes.newProjectForm__input}
+          />
+        </div>
 
-      <div className={classes.newProjectForm__controlGroup}>
-        <label className={classes.newProjectForm__label} id="description">
-          Description
-        </label>
-        <TextInput
-          id="description"
-          value=""
-          placeholder="your project description"
-          type="text"
-        />
-      </div>
+        <div
+          className={`${classes.newProjectForm__controlGroup} ${classes.newProjectForm__descriptionControlGroup}`}
+        >
+          <label className={classes.newProjectForm__label} for="description">
+            Description
+          </label>
+          <TextAreaInput
+            cols="50"
+            id="description"
+            placeholder="your project description"
+            className={classes.newProjectForm__descriptionInput}
+          />
+        </div>
 
-      <div className={classes.newProjectForm__controlGroup}>
-        <label className={classes.newProjectForm__label} id="tag">
-          Tag
-        </label>
-        <select className={classes.newProjectForm__tagDropdown}>
-          <option value="Website">Website</option>
-          <option value="Mobile">Mobile</option>
-          <option value="Other">Other</option>
-          <option value="Software">Software</option>
-        </select>
-      </div>
+        <div className={classes.newProjectForm__controlGroup}>
+          <label className={classes.newProjectForm__label} id="tag">
+            Tag
+          </label>
+          <select className={classes.newProjectForm__tagDropdown}>
+            {tagOptions.map((tag, index) => {
+              return (
+                <option value={tag} key={index}>
+                  {tag}
+                </option>
+              );
+            })}
+          </select>
+        </div>
 
-      <div className={classes.newProjectForm__controlGroup}>
-        <label className={classes.newProjectForm__label} id="status">
-          Status
-        </label>
-        <div className={classes.newProjectForm__statusRadioButtons}>
-          <div className={classes.newProjectForm__radioButtonContainer}>
-            <div className={classes.radioButton}></div>
-            <p>Private</p>
-          </div>
-
-          <div className={classes.newProjectForm__radioButtonContainer}>
-            <div className={classes.radioButton}></div>
-            <p>Public</p>
+        <div className={classes.newProjectForm__controlGroup}>
+          <label className={classes.newProjectForm__label} id="status">
+            Status
+          </label>
+          <div className={classes.newProjectForm__statusRadioButtons}>
+            {statusOptions.map((status, index) => {
+              const isActive = activeStatusOption === status.toLowerCase();
+              return (
+                <div
+                  className={classes.newProjectForm__radioButtonContainer}
+                  key={index}
+                >
+                  <RadioButton active={isActive} />
+                  <p>{status}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
-      </div>
-    </form>
+
+        <button className={classes.newProjectForm__submitButton}>
+          Create a new project
+        </button>
+      </form>
+    </>
   );
 };
 
