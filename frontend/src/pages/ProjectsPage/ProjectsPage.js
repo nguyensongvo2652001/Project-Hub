@@ -7,7 +7,6 @@ import AuthPageLayout from "../../components/Layout/AuthPageLayout";
 import SearchBarContainer from "../../components/SearchBar/SearchBarContainer";
 import Loading from "../../components/UI/Loading/Loading";
 import NoDocumentsFound from "../../components/UI/NoDocumentsFound/NoDocumentsFound";
-import Project from "../../components/Project/Project";
 
 import classes from "./ProjectsPage.module.css";
 import ProjectList from "../../components/ProjectList/ProjectList";
@@ -61,6 +60,9 @@ const ProjectsPage = (props) => {
       }
 
       if (response.status === "success") {
+        const { data } = response;
+        const { project } = data;
+        setProjects((prev) => [project, ...prev]);
         toggleShowNewProjectForm();
       }
     } catch (err) {

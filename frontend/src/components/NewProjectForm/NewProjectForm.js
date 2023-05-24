@@ -6,8 +6,10 @@ import TextInput from "../TextInput/TextInput";
 import classes from "./NewProjectForm.module.css";
 import RadioButton from "../RadioButton/RadioButton";
 import useErrorHandling from "../../hooks/useErrorHandling";
+import Loading from "../UI/Loading/Loading";
 
 const NewProjectForm = (props) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeStatusOption, setActiveStatusOption] = useState("private");
   const nameRef = useRef();
   const descriptionRef = useRef();
@@ -44,7 +46,9 @@ const NewProjectForm = (props) => {
       status,
     };
 
-    props.onSubmit(data);
+    setIsSubmitting(true);
+    await props.onSubmit(data);
+    setIsSubmitting(false);
   };
 
   return (
@@ -124,10 +128,14 @@ const NewProjectForm = (props) => {
             })}
           </div>
         </div>
-
-        <button className={classes.newProjectForm__submitButton}>
-          Create a new project
-        </button>
+        {!isSubmitting && (
+          <button className={classes.newProjectForm__submitButton}>
+            Create a new project
+          </button>
+        )}
+        {isSubmitting && (
+          <Loading className={classes.newProjectForm__loading} />
+        )}
       </form>
     </>
   );

@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const User = require("../models/user");
@@ -105,15 +106,46 @@ const uploadBackground = async (req, res, next) => {
 
 const updateUser = updateOne(User);
 
-const prepareGetAllJoinedProjectsMiddleware = catchAsync(
-  async (req, res, next) => {
-    const projectIds = await ProjectMember.find({
-      memberId: req.user._id,
-    }).distinct("projectId");
-    req.body = { _id: { $in: projectIds } };
-    next();
-  }
-);
+const getAllJoinedProjectsMiddleware = catchAsync(async (req, res, next) => {
+  const { limit, page } = req.query;
+  console.log(limit, page);
+  const skip = (page - 1) * limit;
+
+  const memberships = await ProjectMember.aggregate([
+    {
+      $match: { memberId: new mongoose.Types.ObjectId(req.user._id) },
+    },
+    {
+      $sort: { dateJoined: -1 },
+    },
+    {
+      $lookup: {
+        from: "projects",
+        localField: "projectId",
+        foreignField: "_id",
+        as: "project",
+      },
+    },
+    {
+      $unwind: "$project",
+    },
+    {
+      $skip: skip,
+    },
+    {
+      $limit: Number(limit),
+    },
+  ]);
+  const joinedProjects = memberships.map((membership) => membership.project);
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      length: joinedProjects.length,
+      projects: joinedProjects,
+    },
+  });
+});
 
 const prepareGetCurrentUserProfileMiddleware = (req, res, next) => {
   req.params.id = req.user._id;
@@ -159,7 +191,7 @@ const searchUsers = catchAsync(async (req, res, next) => {
 module.exports = {
   prepareUserSelectMiddleware,
   getUser,
-  prepareGetAllJoinedProjectsMiddleware,
+  getAllJoinedProjectsMiddleware,
   prepareGetCurrentUserProfileMiddleware,
   prepareUpdateUserRouteMiddleware,
   updateUser,

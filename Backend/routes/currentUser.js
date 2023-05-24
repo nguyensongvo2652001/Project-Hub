@@ -32,12 +32,7 @@ router.get(
   notificationController.getAllNotifications
 );
 
-router
-  .route("/project")
-  .get(
-    userController.prepareGetAllJoinedProjectsMiddleware,
-    projectController.getAllProjects
-  );
+router.route("/project").get(userController.getAllJoinedProjectsMiddleware);
 
 router.get("/stat", userStatController.getPersonalStat);
 module.exports = router;

@@ -77,12 +77,16 @@
   font-weight: 700;
   padding: 1rem 2rem;
   border-radius: 10px;
-  width: fit-content;
+  width: 100%;
   align-self: center;
-  transform: translateX(50%);
+  margin-left: 75%;
   transition: all 0.3s;
 }
 
 .newProjectForm__submitButton:hover {
   background-color: #7191ef;
+}
+
+.newProjectForm__loading {
+  margin-left: 75%;
 }
