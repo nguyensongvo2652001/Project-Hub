@@ -131,7 +131,8 @@
   cursor: pointer;
 }
 
-.formControlGroup input:focus {
+.formControlGroup input:focus,
+.formControlGroup textarea:focus {
   outline: none;
 }
 
@@ -151,9 +152,16 @@
   position: relative;
 }
 
-.formControlGroup input {
+.formControlGroup input,
+.formControlGroup textarea {
   position: absolute;
   left: 30%;
+  width: 80%;
+}
+
+.formControlGroup textarea {
+  margin-top: 100px;
+  min-height: 15rem;
 }
 
 .formControlGroup label {

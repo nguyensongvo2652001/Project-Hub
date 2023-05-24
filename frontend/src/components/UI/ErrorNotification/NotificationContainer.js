@@ -1,9 +1,9 @@
 import React from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import classes from "./ErrorNotificationContainer.module.css";
+import classes from "./NotificationContainer.module.css";
 
-const ErrorNotificationContainer = ({ errorMessage }) => {
+const NotificationContainer = ({ errorMessage }) => {
   return (
     <ToastContainer
       position="top-center"
@@ -16,9 +16,9 @@ const ErrorNotificationContainer = ({ errorMessage }) => {
       draggable
       pauseOnHover
       theme="colored"
-      className={classes.errorNotificationContainer}
+      className={classes.notificationContainer}
     />
   );
 };
 
-export default ErrorNotificationContainer;
+export default NotificationContainer;

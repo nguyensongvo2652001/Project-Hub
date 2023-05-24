@@ -9,7 +9,7 @@ const TextAreaInput = (props) => {
       id={props.id}
       placeholder={props.placeholder}
       className={allClasses}
-      value={props.value}
+      defaultValue={props.defaultValue}
       ref={props.inputRef}
     />
   );

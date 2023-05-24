@@ -1,7 +1,7 @@
 import styles from "./AuthPageLayout.module.css";
 import MainNavBar from "../NavBar/MainNavBar";
 import RequiredAuthComponent from "../RequiredAuthComponent/RequiredAuthComponent";
-import ErrorNotificationContainer from "../UI/ErrorNotification/ErrorNotificationContainer";
+import NotificationContainer from "../UI/ErrorNotification/NotificationContainer";
 
 const AuthPageLayout = (props) => {
   return (
@@ -10,7 +10,7 @@ const AuthPageLayout = (props) => {
         <MainNavBar />
         <div>{props.children}</div>
       </div>
-      <ErrorNotificationContainer />
+      <NotificationContainer />
     </RequiredAuthComponent>
   );
 };

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import AuthContext from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +9,7 @@ const RequiredAuthComponent = (props) => {
 
   useEffect(() => {
     const checkLoginStatus = async () => {
+      setIsLoading(true);
       await authContext.checkIfUserIsLoggedIn();
       setIsLoading(false);
     };
@@ -22,12 +23,11 @@ const RequiredAuthComponent = (props) => {
     }
   }, [authContext, navigate]);
 
-  return (
-    <>
-      {isLoading && <p>IS LOADING</p>}
-      {!isLoading && authContext.isLoggedIn && props.children}
-    </>
-  );
+  if (isLoading) {
+    return <p>IS LOADING</p>;
+  }
+
+  return <>{props.children}</>;
 };
 
 export default RequiredAuthComponent;
