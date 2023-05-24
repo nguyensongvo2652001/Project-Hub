@@ -2,18 +2,19 @@ import AuthPageLayout from "../../components/Layout/AuthPageLayout";
 import SearchBarContainer from "../../components/SearchBar/SearchBarContainer";
 import MyPieChart from "../../components/PieChart/MyPieChart";
 import MyLineChart from "../../components/MyLineChart/MyLineChart";
-import ProjectMainInfo from "../../components/Project/ProjectMainInfo";
 import MyBarChart from "../../components/MyBarChart/MyBartChart";
-import Card from "../../components/UI/Card/Card";
 import StatBox from "../../components/StatBox/StatBox";
 import Loading from "../../components/UI/Loading/Loading";
+import HighestCompletionRateProject from "./HighestCompletionRateProject";
+import MostCompletedTasksProject from "./MostCompletedTasksProject";
 
 import { useEffect, useState } from "react";
 import useSendRequest from "../../hooks/useSendRequest";
 import useErrorHandling from "../../hooks/useErrorHandling";
 
-import classes from "./PersonalStatPage.module.css";
 import { convertNumberToMonthName } from "../../utils/date";
+
+import classes from "./PersonalStatPage.module.css";
 
 const getFirstRowStatInfo = (tasksCountByStatus, totalProjectsJoined) => {
   return [
@@ -50,6 +51,25 @@ const getFirstRowStatInfo = (tasksCountByStatus, totalProjectsJoined) => {
   ];
 };
 
+const convertResponseDataToChartData = (data) => {
+  // The data: {"2025 5": 10, "2025 6": 12}
+  // The converted data: [{ name: "May 2025", value: 10 }, { name: "June 2025", value: 12 }]
+  const keys = Object.keys(data);
+  const convertedData = [];
+  keys.map((key) => {
+    const [year, monthNumber] = key.split(" ");
+    const monthName = convertNumberToMonthName(monthNumber);
+    const name = `${monthName} ${year}`;
+    convertedData.push({
+      name,
+      value: data[key],
+    });
+
+    return null;
+  });
+  return convertedData;
+};
+
 const PersonalStatPage = (props) => {
   const { sendRequest } = useSendRequest();
   const handleError = useErrorHandling();
@@ -61,35 +81,12 @@ const PersonalStatPage = (props) => {
   );
   const [completionRateLineChartData, setCompletionRateLineChartData] =
     useState([]);
-
-  // let completionRateLineChartData = [
-  //   { name: "Jan", value: 10 },
-  //   { name: "Feb", value: 20 },
-  //   { name: "Mar", value: 15 },
-  //   { name: "Apr", value: 30 },
-  //   { name: "May", value: 40 },
-  //   { name: "June", value: 100 },
-  //   { name: "Jul", value: 20 },
-  //   { name: "Sep", value: 15 },
-  //   { name: "Oct", value: 35 },
-  //   { name: "Nov", value: 72 },
-  //   { name: "Dec", value: 90 },
-  // ];
-
-  let newlyCompletedTasksBarChartData = [
-    { name: "A", value: 100 },
-    { name: "B", value: 200 },
-    { name: "C", value: 150 },
-    { name: "D", value: 300 },
-    { name: "E", value: 400 },
-    { name: "A", value: 100 },
-    { name: "B", value: 200 },
-    { name: "C", value: 150 },
-    { name: "D", value: 300 },
-    { name: "E", value: 400 },
-    { name: "D", value: 300 },
-    { name: "E", value: 400 },
-  ];
+  const [newlyCompletedTasksBarChartData, setNewlyCompletedTasksBarChartData] =
+    useState([]);
+  const [projectWithBestCompletionRate, setProjectWithBestCompletionRate] =
+    useState(undefined);
+  const [projectWithMostCompletedTasks, setProjectWithMostCompletedTasks] =
+    useState(undefined);
 
   useEffect(() => {
     const getPersonalStat = async () => {
@@ -102,14 +99,20 @@ const PersonalStatPage = (props) => {
         if (response.status !== "success")
           throw new Error("something went wrong");
 
-        const { data } = response;
-        const { stat } = data;
+        const { stat } = response.data;
+
         const {
           tasksCountByStatus,
           projectStat,
           completionRateByMonthAndYear,
+          newlyCompletedTasksByMonthAndYear,
         } = stat;
-        const { totalProjectsJoined } = projectStat;
+
+        const {
+          totalProjectsJoined,
+          projectWithBestCompletionRateInfo,
+          projectWithMostCompletedTasksInfo,
+        } = projectStat;
 
         const firstRowStatInfo = getFirstRowStatInfo(
           tasksCountByStatus,
@@ -130,21 +133,18 @@ const PersonalStatPage = (props) => {
           },
         ]);
 
-        let tempCompletionRateLineChartData = [];
-        const monthAndYear = Object.keys(completionRateByMonthAndYear);
-        monthAndYear.map((key) => {
-          const [year, monthNumber] = key.split(" ");
-          const monthName = convertNumberToMonthName(monthNumber);
-          const name = `${monthName} ${year}`;
-          tempCompletionRateLineChartData.push({
-            name,
-            value: completionRateByMonthAndYear[key],
-          });
-
-          return null;
-        });
-
+        let tempCompletionRateLineChartData = convertResponseDataToChartData(
+          completionRateByMonthAndYear
+        );
         setCompletionRateLineChartData(tempCompletionRateLineChartData);
+
+        let tempNewlyCompletedTasksBarChartData =
+          convertResponseDataToChartData(newlyCompletedTasksByMonthAndYear);
+
+        setNewlyCompletedTasksBarChartData(tempNewlyCompletedTasksBarChartData);
+
+        setProjectWithBestCompletionRate(projectWithBestCompletionRateInfo);
+        setProjectWithMostCompletedTasks(projectWithMostCompletedTasksInfo);
 
         setIsLoading(false);
       } catch (err) {
@@ -187,79 +187,15 @@ const PersonalStatPage = (props) => {
               </li>
 
               <li>
-                <Card className={classes.highestCompletionRateProject}>
-                  <div>
-                    <div
-                      className={classes.highestCompletionRateProject__title}
-                    >
-                      <ion-icon name="ribbon-outline"></ion-icon>
-                      <p>Project with highest completion rate</p>
-                    </div>
-                    <ProjectMainInfo
-                      mainInfo={{
-                        name: "GeoMap",
-                        tag: "Mobile",
-                        description:
-                          "An Android app that helps you with running.",
-                      }}
-                    />
-                  </div>
-                  <div
-                    className={
-                      classes.highestCompletionRateProject__completionRateBarContainer
-                    }
-                  >
-                    <p className={classes.highestCompletionRateProject__label}>
-                      Completion Rate
-                    </p>
-                    <div className={classes.completionRateChart}>
-                      <div className={classes.completionRateBar}>
-                        <div className={classes.emptyBar}></div>
-                        <div
-                          className={classes.fillBar}
-                          style={{ width: "80%" }}
-                        ></div>
-                      </div>
-
-                      <p className={classes.completionRateBarValue}>80%</p>
-                    </div>
-                  </div>
-                </Card>
+                <HighestCompletionRateProject
+                  info={projectWithBestCompletionRate}
+                />
               </li>
 
               <li>
-                <Card className={classes.mostCompletedTasksProject}>
-                  <div className={classes.mostCompletedTasksProject__title}>
-                    <ion-icon name="trophy-outline"></ion-icon>
-                    <p>Most completed tasks project</p>
-                  </div>
-                  <ProjectMainInfo
-                    mainInfo={{
-                      name: "GeoMap",
-                      tag: "Mobile",
-                      description:
-                        "An Android app that helps you with running.",
-                    }}
-                  />
-                  <div
-                    className={
-                      classes.mostCompletedTasksProject__semiDonutContainer
-                    }
-                  >
-                    <p className={classes.mostCompletedTasksProject__label}>
-                      Number of completed tasks
-                    </p>
-                    <div className={classes.completedTasksChart}>
-                      <div
-                        className={classes.semiDonut}
-                        style={{ "--percentage": 80 }}
-                      ></div>
-                      <p className={classes.semiDonut__value}>
-                        <span>75</span> of 120 assigned tasks
-                      </p>
-                    </div>
-                  </div>
-                </Card>
+                <MostCompletedTasksProject
+                  info={projectWithMostCompletedTasks}
+                />
               </li>
             </ul>
 

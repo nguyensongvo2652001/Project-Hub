@@ -1,0 +1,9 @@
+.projectNotFound__image {
+  width: 100%;
+}
+
+.projectNotFound__text {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #4dabf7;
+}

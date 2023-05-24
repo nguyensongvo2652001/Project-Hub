@@ -1,0 +1,82 @@
+.highestCompletionRateProject {
+  width: 30rem;
+  height: 30rem;
+  background-color: #fff;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 2rem 1rem;
+
+  transition: all 0.3s;
+
+  margin-left: 5rem;
+}
+
+.highestCompletionRateProject:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.highestCompletionRateProject__title {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #4dabf7;
+  font-size: 1.2rem;
+  font-weight: 700;
+
+  margin-bottom: 1rem;
+}
+
+.highestCompletionRateProject__completionRateBarContainer {
+  margin-top: 40px;
+}
+
+.highestCompletionRateProject__title ion-icon {
+  font-size: 2rem;
+}
+
+.highestCompletionRateProject__label {
+  color: #c2c8da;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.completionRateChart {
+  display: flex;
+  align-items: center;
+}
+
+.completionRateBar {
+  width: 80%;
+  position: relative;
+}
+
+.emptyBar {
+  width: 100%;
+  height: 8px;
+  border-radius: 10px;
+  background-color: #c2c8da;
+
+  position: absolute;
+  top: -3px;
+}
+
+.fillBar {
+  height: 8px;
+  border-radius: 10px;
+  background-color: #4dabf7;
+
+  position: absolute;
+  top: -3px;
+}
+
+.completionRateBarValue {
+  color: #4dabf7;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-left: 15px;
+}
