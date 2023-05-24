@@ -32,16 +32,19 @@
   margin-bottom: 10rem;
 }
 
-.personalStatPage__completionRatePieChartContainer,
-.personalStatPage__completionRateLineChartContainer {
+.personalStatPage__completionRatePieChartContainer {
   margin-left: -5rem;
 }
 
 .highestCompletionRateProject {
   width: 30rem;
-  height: 23rem;
+  height: 30rem;
   background-color: #fff;
   box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   padding: 2rem 1rem;
 
@@ -64,6 +67,11 @@
   font-weight: 700;
 
   margin-bottom: 1rem;
+}
+
+.personalStatPage__completionRateLineChartContainer {
+  width: 100%;
+  margin-bottom: 6rem;
 }
 
 .highestCompletionRateProject__completionRateBarContainer {
@@ -116,23 +124,13 @@
   margin-left: 15px;
 }
 
-.personalStatPage__thirdRow {
-  list-style: none;
-
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-
-  width: 100%;
-}
-
 .personalStatPage__barChartContainer {
-  width: 60%;
+  width: 100%;
 }
 
 .mostCompletedTasksProject {
   width: 30rem;
-  height: fit-content;
+  height: 30rem;
   background-color: #fff;
   box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
 

@@ -13,13 +13,36 @@ const MyBarChart = (props) => {
   return (
     <ResponsiveContainer width={props.width} height={props.height}>
       <BarChart data={props.data}>
+        <text
+          x="50%"
+          y="20"
+          textAnchor="middle"
+          dominantBaseline="middle"
+          style={{
+            fontSize: "2rem",
+            fontWeight: "700",
+            fill: props.barColor,
+          }}
+        >
+          {props.title}{" "}
+        </text>
         <XAxis dataKey="name" />
-        <YAxis />
+
+        <YAxis padding={{ top: 50 }} />
         <CartesianGrid stroke="#ccc" />
         <Bar dataKey="value" fill={props.barColor} />
         <Legend
           formatter={(_) => {
-            return props.label;
+            return (
+              <span
+                style={{
+                  fontSize: "1.3rem",
+                  fontWeight: "700",
+                }}
+              >
+                {props.label}
+              </span>
+            );
           }}
         />
         <Tooltip />

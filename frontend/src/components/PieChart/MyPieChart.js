@@ -21,7 +21,20 @@ const MyPieChart = (props) => {
             <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
         </Pie>
-        <Legend />
+        <Legend
+          formatter={(label) => {
+            return (
+              <span
+                style={{
+                  fontSize: "1.3rem",
+                  fontWeight: "700",
+                }}
+              >
+                {label}
+              </span>
+            );
+          }}
+        />
         <Tooltip />
       </PieChart>
     </ResponsiveContainer>

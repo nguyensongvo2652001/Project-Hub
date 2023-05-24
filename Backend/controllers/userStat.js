@@ -19,7 +19,14 @@ const getTasksCountByStatus = async (userId) => {
     },
   ]);
 
-  const tasksCountByStatus = { total: 0 };
+  const tasksCountByStatus = {
+    total: 0,
+    closed: 0,
+    overdue: 0,
+    testing: 0,
+    doing: 0,
+    open: 0,
+  };
   for (let stat of result) {
     const status = stat._id;
     const value = stat.count;
@@ -137,6 +144,8 @@ const getTotalAssignedTasksCountInOneProject = async (memberId, projectId) => {
     },
   ]);
 
+  if (result.length === 0) return 0;
+
   return result[0].tasksCount;
 };
 
@@ -159,6 +168,8 @@ const getTotalCompletedTasksCountInOneProject = async (memberId, projectId) => {
     },
   ]);
 
+  if (result.length === 0) return 0;
+
   return result[0].tasksCount;
 };
 
@@ -171,9 +182,10 @@ const getPerformanceInOneProject = async (memberId, projectId) => {
   const results = await Promise.all(promises);
 
   const totalTasksCount = results[0];
+  const completedTasksCount = results[1];
   let completionRate = 0;
   if (totalTasksCount !== 0) {
-    completionRate = Math.round((results[1] / results[0]) * 100);
+    completionRate = Math.round((completedTasksCount / totalTasksCount) * 100);
   }
 
   return {
@@ -211,23 +223,23 @@ const getPersonalProjectStat = async (userId) => {
     Promise.all(getCompletedTasksCountPromises),
   ]);
 
-  let membershipWithBestCompletionRateInfo = {
-    membership: undefined,
+  let projectWithBestCompletionRateInfo = {
+    project: undefined,
     completionRate: -1,
   };
   const membershipCompletionRateResult = results[0];
   for (const stat of membershipCompletionRateResult) {
     const { membership, completionRate } = stat;
-    if (completionRate > membershipWithBestCompletionRateInfo.completionRate) {
-      membershipWithBestCompletionRateInfo = {
-        membership,
+    if (completionRate > projectWithBestCompletionRateInfo.completionRate) {
+      projectWithBestCompletionRateInfo = {
+        project: membership.projectId,
         completionRate,
       };
     }
   }
 
-  let membershipWithMostCompletedTasksInfo = {
-    membership: undefined,
+  let projectWithMostCompletedTasksInfo = {
+    project: undefined,
     completedTasksCount: -1,
   };
   const membershipCompletedTasksResult = results[1];
@@ -235,10 +247,10 @@ const getPersonalProjectStat = async (userId) => {
     const { membership, completedTasksCount } = stat;
     if (
       completedTasksCount >
-      membershipWithMostCompletedTasksInfo.completedTasksCount
+      projectWithMostCompletedTasksInfo.completedTasksCount
     ) {
-      membershipWithMostCompletedTasksInfo = {
-        membership,
+      projectWithMostCompletedTasksInfo = {
+        project: membership.projectId,
         completedTasksCount,
       };
     }
@@ -246,8 +258,8 @@ const getPersonalProjectStat = async (userId) => {
 
   return {
     totalProjectsJoined: memberships.length,
-    membershipWithBestCompletionRateInfo,
-    membershipWithMostCompletedTasksInfo,
+    projectWithBestCompletionRateInfo,
+    projectWithMostCompletedTasksInfo,
   };
 };
 
@@ -302,11 +314,21 @@ const getPersonalStat = catchAsync(async (req, res, next) => {
   ];
   const results = await Promise.all(promises);
 
+  let currentCompletionRate = 0;
+  const totalTasksAssigned = results[0].total;
+  const totalTasksFinished = results[0].closed;
+  if (totalTasksAssigned !== 0) {
+    currentCompletionRate = Math.round(
+      (totalTasksFinished / totalTasksAssigned) * 100
+    );
+  }
+
   const stat = {
     tasksCountByStatus: results[0],
     projectStat: results[1],
     newlyCompletedTasksByMonthAndYear: results[2],
     completionRateByMonthAndYear: results[3],
+    currentCompletionRate,
   };
   res.status(200).json({
     status: "success",
