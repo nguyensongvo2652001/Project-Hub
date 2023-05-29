@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import NavItem from "../MainNavBar/NavItem";
+import NavItem from "../NavItem/NavItem";
 import classes from "./InProjectNavbar.module.css";
 
 const InProjectNavbar = (props) => {

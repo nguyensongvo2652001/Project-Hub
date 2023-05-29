@@ -1,5 +1,5 @@
-.projectNameLink:link,
-.projectNameLink:visited {
+.link:link,
+.link:visited {
   font-size: 2rem;
   font-weight: 800;
   text-decoration: none;
@@ -7,7 +7,7 @@
   transition: all 0.2s;
 }
 
-.projectNameLink:hover,
-.projectNameLink:active {
+.link:hover,
+.link:active {
   color: #4165b3;
 }

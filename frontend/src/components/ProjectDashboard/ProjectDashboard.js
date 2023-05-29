@@ -1,10 +1,17 @@
+import ConstantContext from "../../contexts/ConstantContext.js";
+import Dropdown from "../UI/Dropdown/Dropdown.js";
+import CardMainInfo from "../UI/CardMainInfo/CardMainInfo.js";
+import CardMetaInfo from "../UI/CardMetaInfo/CardMetaInfo.js";
+import Card from "../UI/Card/Card.js";
+
 import { useParams } from "react-router-dom";
+import { useContext, useState } from "react";
 
 import classes from "./ProjectDashboard.module.css";
-import Dropdown from "../UI/Dropdown/Dropdown";
-import { useContext, useState } from "react";
-import ConstantContext from "../../contexts/ConstantContext";
+
 import { capitalizeFirstLetter } from "../../utils/string";
+import TaskCard from "../UI/TaskCard/TaskCard.js";
+import Task from "../Task/Task.js";
 
 const ProjectDashboard = (props) => {
   const constantContext = useContext(ConstantContext);
@@ -28,6 +35,17 @@ const ProjectDashboard = (props) => {
   const statusDropdownOptions = [
     "All",
     ...taskStatusOptions.map((status) => capitalizeFirstLetter(status)),
+  ];
+
+  const taskDisplayMetaInfo = [
+    {
+      title: "Start date: ",
+      value: "24/12/2023",
+    },
+    {
+      title: "Deadline: ",
+      value: "1/1/2024",
+    },
   ];
 
   return (
@@ -61,6 +79,41 @@ const ProjectDashboard = (props) => {
             </li>
           );
         })}
+      </ul>
+
+      <ul className={classes.projectDashboard__tasks}>
+        <Task
+          task={{
+            name: "Fix followers count",
+            tag: "Testing",
+            description:
+              "The followers count is not updated properly after the users press the follow button. Plrease check this",
+          }}
+          taskDisplayMetaInfo={taskDisplayMetaInfo}
+          className={classes.projectDashboard__task}
+        />
+
+        <Task
+          task={{
+            name: "Fix followers count",
+            tag: "Testing",
+            description:
+              "The followers count is not updated properly after the users press the follow button. Plrease check this",
+          }}
+          taskDisplayMetaInfo={taskDisplayMetaInfo}
+          className={classes.projectDashboard__task}
+        />
+
+        <Task
+          task={{
+            name: "Fix followers count",
+            tag: "Testing",
+            description:
+              "The followers count is not updated properly after the users press the follow button. Plrease check this",
+          }}
+          taskDisplayMetaInfo={taskDisplayMetaInfo}
+          className={classes.projectDashboard__task}
+        />
       </ul>
     </div>
   );

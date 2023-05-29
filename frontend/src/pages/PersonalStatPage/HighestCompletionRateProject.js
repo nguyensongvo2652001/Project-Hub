@@ -1,11 +1,12 @@
-import ProjectMainInfo from "../../components/Project/ProjectMainInfo";
-import Card from "../../components/UI/Card/Card";
+import ProjectNotFound from "./ProjectNotFound";
+import ProjectMainInfo from "../../components/UI/ProjectMainInfo/ProjectMainInfo.js";
+import Card from "../../components/UI/Card/Card.js";
 
 import classes from "./HighestCompletionRateProject.module.css";
-import ProjectNotFound from "./ProjectNotFound";
 
 const HighestCompletionRateProject = (props) => {
   const { info } = props;
+  console.log(info);
 
   return (
     <Card className={classes.highestCompletionRateProject}>
@@ -14,15 +15,7 @@ const HighestCompletionRateProject = (props) => {
           <ion-icon name="ribbon-outline"></ion-icon>
           <p>Project with highest completion rate</p>
         </div>
-        {info && (
-          <ProjectMainInfo
-            mainInfo={{
-              name: info.project.name,
-              tag: info.project.tag,
-              description: info.project.description,
-            }}
-          />
-        )}
+        {info && <ProjectMainInfo project={info.project} />}
       </div>
       {info && (
         <div

@@ -1,4 +1,4 @@
-import NavItem from "./NavItem";
+import NavItem from "../NavItem/NavItem";
 import styles from "./NavItemList.module.css";
 
 const NavItemList = (props) => {

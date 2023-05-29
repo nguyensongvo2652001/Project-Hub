@@ -1,7 +1,10 @@
+import CardMetaInfo from "../UI/CardMetaInfo/CardMetaInfo.js";
+import ProjectMainInfo from "../UI/ProjectMainInfo/ProjectMainInfo.js";
+
 import classes from "./Project.module.css";
-import ProjectMainInfo from "./ProjectMainInfo";
 
 import { getDateDisplay } from "../../utils/date";
+import Card from "../UI/Card/Card.js";
 
 const Project = (props) => {
   const { project, lastProjectElement } = props; //lastProjectElement can be undefined if the project is not the last project for display
@@ -14,28 +17,24 @@ const Project = (props) => {
   const lastChangeDisplayDate = getDateDisplay(project.lastChanged);
   const displayCreatedAtDate = getDateDisplay(project.dateCreated);
 
-  const mainInfo = {
-    projectId: project._id,
-    description: project.description,
-    name: project.name,
-    tag: project.tag,
-  };
+  const metaInfoList = [
+    {
+      title: "Last change: ",
+      value: lastChangeDisplayDate,
+    },
+    {
+      title: "Created at",
+      value: displayCreatedAtDate,
+    },
+  ];
 
   return (
-    <li className={classes.project} ref={lastProjectElement}>
-      <ProjectMainInfo mainInfo={mainInfo} />
+    <li ref={lastProjectElement}>
+      <Card className={classes.project}>
+        <ProjectMainInfo project={project} />
 
-      <div className={classes.project__additionalInfoSection}>
-        <div className={classes.project__additionalInfo}>
-          <h3>Last change: </h3>
-          <p>{lastChangeDisplayDate}</p>
-        </div>
-
-        <div className={classes.project__additionalInfo}>
-          <h3>Created at: </h3>
-          <p>{displayCreatedAtDate}</p>
-        </div>
-      </div>
+        <CardMetaInfo metaInfoList={metaInfoList} />
+      </Card>
     </li>
   );
 };

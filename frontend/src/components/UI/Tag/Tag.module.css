@@ -1,4 +1,4 @@
-.projectTag {
+.tag {
   padding: 5px;
   width: fit-content;
   border-radius: 7px;
@@ -7,42 +7,67 @@
   margin-bottom: 12px;
 }
 
-.projectTag--website {
+.tag--website {
   background-color: #e8b0b1;
   color: #5d4647;
 }
 
-.projectTag--mobile {
+.tag--mobile {
   background-color: #cfe4c0;
   color: #687260;
 }
 
-.projectTag--software {
+.tag--software {
   background-color: #a1c1d4;
   color: #3c526d;
 }
 
-.projectTag--ai {
+.tag--ai {
   background-color: #d9c6e7;
   color: #5f4b75;
 }
 
-.projectTag--cloudComputing {
+.tag--cloudComputing {
   background-color: #c5d6a4;
   color: #57623b;
 }
 
-.projectTag--security {
+.tag--security {
   background-color: #f7e8a4;
   color: #7b7157;
 }
 
-.projectTag--other {
+.tag--other {
   background-color: #e4e4e4;
   color: #555555;
 }
 
-.projectTag--data {
+.tag--data {
   background-color: #fadadd;
   color: #7d474b;
+}
+
+.tag--testing {
+  background-color: #fcc419;
+  color: #654e0a;
+}
+
+.tag--open {
+  background-color: #a8c1e5;
+  color: #434d5c;
+}
+
+.tag--doing {
+  background-color: #faefd0;
+  color: #7d7868;
+}
+
+.tag--overdue {
+  background-color: #e8b0b1;
+  color: #745859;
+}
+
+.tag--closed {
+  background-color: #cfe4c0;
+  color: #687260;
 }

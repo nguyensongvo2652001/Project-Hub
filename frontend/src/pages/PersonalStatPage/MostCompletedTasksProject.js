@@ -1,8 +1,8 @@
 import Card from "../../components/UI/Card/Card";
 import ProjectNotFound from "./ProjectNotFound";
+import ProjectMainInfo from "../../components/UI/ProjectMainInfo/ProjectMainInfo.js";
 
 import classes from "./MostCompletedTasksProject.module.css";
-import ProjectMainInfo from "../../components/Project/ProjectMainInfo";
 
 const MostCompletedTasksProject = (props) => {
   const { info } = props;
@@ -14,16 +14,7 @@ const MostCompletedTasksProject = (props) => {
           <ion-icon name="trophy-outline"></ion-icon>
           <p>Most completed tasks project</p>
         </div>
-
-        {info && (
-          <ProjectMainInfo
-            mainInfo={{
-              name: info.project.name,
-              tag: info.project.tag,
-              description: info.project.description,
-            }}
-          />
-        )}
+        {info && <ProjectMainInfo project={info.project} />}
       </div>
 
       {info && (
