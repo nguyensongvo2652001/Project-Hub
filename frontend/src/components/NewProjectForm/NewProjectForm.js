@@ -7,6 +7,7 @@ import classes from "./NewProjectForm.module.css";
 import RadioButton from "../RadioButton/RadioButton";
 import useErrorHandling from "../../hooks/useErrorHandling";
 import Loading from "../UI/Loading/Loading";
+import Dropdown from "../UI/Dropdown/Dropdown";
 
 const NewProjectForm = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -90,18 +91,11 @@ const NewProjectForm = (props) => {
           <label className={classes.newProjectForm__label} id="tag">
             Tag
           </label>
-          <select
+          <Dropdown
+            inputRef={tagOptionsRef}
+            options={tagOptions}
             className={classes.newProjectForm__tagDropdown}
-            ref={tagOptionsRef}
-          >
-            {tagOptions.map((tag, index) => {
-              return (
-                <option value={tag} key={index}>
-                  {tag}
-                </option>
-              );
-            })}
-          </select>
+          />
         </div>
 
         <div className={classes.newProjectForm__controlGroup}>

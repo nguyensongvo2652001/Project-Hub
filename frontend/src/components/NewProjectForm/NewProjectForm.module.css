@@ -44,15 +44,6 @@
   height: 10rem;
 }
 
-.newProjectForm__tagDropdown {
-  font-family: inherit;
-  font-weight: 600;
-  height: fit-content;
-  padding: 1rem;
-  border: 2px solid #000;
-  border-radius: 10px;
-}
-
 .newProjectForm__statusRadioButtons {
   display: flex;
   gap: 80%;

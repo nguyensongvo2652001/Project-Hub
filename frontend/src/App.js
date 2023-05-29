@@ -8,6 +8,7 @@ import ProjectsPage from "./pages/ProjectsPage/ProjectsPage";
 import PersonalNotificationsPage from "./pages/NotificationPage/PersonalNotificationsPage";
 import MyProfilePage from "./pages/MyProfilePage/MyProfilePage";
 import PersonalStatPage from "./pages/PersonalStatPage/PersonalStatPage";
+import ProjectDashboardPage from "./pages/ProjectDashboardPage/ProjectDashboardPage";
 
 function App() {
   return (
@@ -23,7 +24,11 @@ function App() {
           <Route path="stat" element={<PersonalStatPage />} />
         </Route>
 
-        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/projects">
+          <Route index element={<ProjectsPage />} />
+          <Route path=":id" element={<ProjectDashboardPage />} />
+        </Route>
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>

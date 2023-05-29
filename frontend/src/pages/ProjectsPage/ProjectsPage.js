@@ -3,7 +3,7 @@ import useSendRequest from "../../hooks/useSendRequest";
 import useErrorHandling from "../../hooks/useErrorHandling";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 
-import AuthPageLayout from "../../components/Layout/AuthPageLayout";
+import AuthPageLayout from "../../components/Layout/AuthPageLayout/AuthPageLayout.js";
 import SearchBarContainer from "../../components/SearchBar/SearchBarContainer";
 import Loading from "../../components/UI/Loading/Loading";
 import NoDocumentsFound from "../../components/UI/NoDocumentsFound/NoDocumentsFound";

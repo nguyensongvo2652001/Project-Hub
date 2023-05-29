@@ -1,0 +1,162 @@
+.projectDashboard {
+  width: 100%;
+}
+
+.projectDashboard__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  margin-bottom: 4rem;
+  padding: 2rem;
+}
+
+.projectDashboard__projectName {
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: #4e75eb;
+}
+
+.projectDashboard__header__buttonAndDropdown {
+  display: flex;
+  align-items: center;
+  margin-right: 5%;
+}
+
+.projectDashboard__newTaskButton {
+  border: none;
+  color: #546173;
+  background-color: #a8c1e5;
+  cursor: pointer;
+  font-weight: 800;
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  margin-right: 3rem;
+  transition: all 0.3s;
+}
+
+.projectDashboard__newTaskButton:hover {
+  background-color: #97aece;
+}
+
+.projectDashboard__taskStatRow {
+  background-color: #9ba0ae;
+  width: 100%;
+  height: 11rem;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+  justify-content: space-between;
+}
+
+.projectDashboard__taskStatBox {
+  height: 9rem;
+  width: 16%;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  transition: all 0.3s;
+}
+
+.projectDashboard__taskStatBox:hover {
+  transform: translateY(-15px);
+}
+
+.projectDashboard__taskStatBox--open {
+  background-color: #a8c1e5;
+  color: #434d5c;
+}
+
+.projectDashboard__taskStatBox--doing {
+  background-color: #faefd0;
+  color: #7d7868;
+}
+
+.projectDashboard__taskStatBox--testing {
+  background-color: #fcc419;
+  color: #654e0a;
+}
+
+.projectDashboard__taskStatBox--overdue {
+  background-color: #e8b0b1;
+  color: #745859;
+}
+
+.projectDashboard__taskStatBox--closed {
+  background-color: #cfe4c0;
+  color: #687260;
+}
+
+.projectDashboard__taskStatValue {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.projectDashboard__taskStatLabel {
+  font-size: 1.2rem;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+@media (max-width: 900px) {
+  .projectDashboard__taskStatValue {
+    font-size: 2rem;
+  }
+
+  .projectDashboard__taskStatLabel {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .projectDashboard__projectName {
+    font-size: 2.5rem;
+  }
+
+  .projectDashboard__newTaskButton {
+    padding: 1.2rem;
+    font-size: 1.2rem;
+  }
+
+  .projectDashboard__statusDropdown {
+    font-size: 1.2rem;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 750px) {
+  .projectDashboard__taskStatRow {
+    padding: 0;
+  }
+
+  .projectDashboard__taskStatBox {
+    width: 18%;
+  }
+
+  .projectDashboard__taskStatLabel {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .projectDashboard__projectName {
+    font-size: 2rem;
+  }
+
+  .projectDashboard__newTaskButton {
+    padding: 5px 30px;
+    font-size: 1rem;
+  }
+
+  .projectDashboard__statusDropdown {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+}

@@ -6,6 +6,7 @@ const AuthContext = React.createContext({
   isLoggedIn: undefined,
   currentUser: {},
   checkIfUserIsLoggedIn: async () => {},
+  getUserInfo: async () => {},
   logIn: () => {},
   logOut: () => {},
 });
@@ -55,7 +56,14 @@ export const AuthContextProvider = function (props) {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, checkIfUserIsLoggedIn, logOut, logIn, currentUser }}
+      value={{
+        isLoggedIn,
+        checkIfUserIsLoggedIn,
+        logOut,
+        logIn,
+        currentUser,
+        getUserInfo,
+      }}
     >
       {props.children}
     </AuthContext.Provider>

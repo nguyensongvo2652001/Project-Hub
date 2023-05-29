@@ -1,7 +1,7 @@
 import styles from "./AuthPageLayout.module.css";
-import MainNavBar from "../NavBar/MainNavBar";
-import RequiredAuthComponent from "../RequiredAuthComponent/RequiredAuthComponent";
-import NotificationContainer from "../UI/ErrorNotification/NotificationContainer";
+import MainNavBar from "../../Navbars/MainNavBar/MainNavBar.js";
+import RequiredAuthComponent from "../../RequiredAuthComponent/RequiredAuthComponent";
+import NotificationContainer from "../../UI/ErrorNotification/NotificationContainer";
 
 const AuthPageLayout = (props) => {
   return (

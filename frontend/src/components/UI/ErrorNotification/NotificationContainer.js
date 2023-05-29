@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import classes from "./NotificationContainer.module.css";
 
+//Toast needs a ToastContainer to show the alert.
 const NotificationContainer = ({ errorMessage }) => {
   return (
     <ToastContainer

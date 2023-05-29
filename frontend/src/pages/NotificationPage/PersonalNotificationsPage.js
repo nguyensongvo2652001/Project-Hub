@@ -1,4 +1,4 @@
-import AuthPageLayout from "../../components/Layout/AuthPageLayout";
+import AuthPageLayout from "../../components/Layout/AuthPageLayout/AuthPageLayout.js";
 import Loading from "../../components/UI/Loading/Loading";
 import notificationPageStyle from "./NotificationPage.module.css";
 import { useCallback, useEffect, useState } from "react";

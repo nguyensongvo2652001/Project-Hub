@@ -1,11 +1,10 @@
 import navBarStyles from "./NavBar.module.css";
-import logo from "../../assets/logo.png";
-import avatar1 from "../../assets/avatar1.jpg";
+import logo from "../../../assets/logo.png";
 import NavItemList from "./NavItemList";
 import { useContext, useState } from "react";
-import useSendRequest from "../../hooks/useSendRequest";
-import AuthContext from "../../contexts/AuthContext";
-import Modal from "../UI/Modal/Modal";
+import useSendRequest from "../../../hooks/useSendRequest";
+import AuthContext from "../../../contexts/AuthContext";
+import Modal from "../../UI/Modal/Modal";
 
 const MainNavBar = (props) => {
   const navItems = [

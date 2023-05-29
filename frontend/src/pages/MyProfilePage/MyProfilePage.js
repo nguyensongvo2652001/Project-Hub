@@ -1,4 +1,4 @@
-import AuthPageLayout from "../../components/Layout/AuthPageLayout";
+import AuthPageLayout from "../../components/Layout/AuthPageLayout/AuthPageLayout.js";
 import SearchBarContainer from "../../components/SearchBar/SearchBarContainer";
 import TextAreaInput from "../../components/TextAreaInput/TextAreaInput";
 import TextInput from "../../components/TextInput/TextInput";
@@ -41,11 +41,13 @@ const MyProfilePage = (props) => {
   }, [authContext]);
 
   const imageInputOnChange = (setImageSourceFunc, setImageFile, event) => {
+    //Save the recently uploaded file to send it in a request later.
     const file = event.target.files[0];
     setImageFile(file);
 
     const reader = new FileReader();
 
+    // Replace the current image src with the recently uploaded image.
     reader.onload = async function (event) {
       const imageData = event.target.result;
 
@@ -61,8 +63,8 @@ const MyProfilePage = (props) => {
     const nameInput = nameRef.current.value;
     const jobTitleInput = jobTitleRef.current.value;
     const descriptionInput = descriptionRef.current.value;
-    const formData = new FormData();
 
+    const formData = new FormData();
     formData.append("name", nameInput);
     formData.append("jobTitle", jobTitleInput);
     formData.append("description", descriptionInput);

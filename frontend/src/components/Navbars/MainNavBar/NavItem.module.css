@@ -1,4 +1,5 @@
 .navItem {
+  display: inline-block;
   font-size: 1.2rem;
   font-weight: 600;
   transition: all 0.3s;
@@ -9,6 +10,7 @@
   gap: 8px;
   align-items: center;
   color: #c2c8da;
+  width: 100%;
 }
 
 .navItem ion-icon {
@@ -17,13 +19,14 @@
 
 .navItem::before {
   content: "";
+  display: inline-block;
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
   height: 100%;
   transition: all 0.3s;
   z-index: -1;
+  width: 100%;
 }
 
 .navItem:not(.navItem--active):hover {
@@ -61,6 +64,6 @@
   .navItem:not(.navItem--active):hover::before {
     background-color: #dadee9;
     box-shadow: 0 0 0 5px #dadee9;
-    margin-left: -3px;
+    margin-left: -4px;
   }
 }

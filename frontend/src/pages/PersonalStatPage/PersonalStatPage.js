@@ -1,4 +1,4 @@
-import AuthPageLayout from "../../components/Layout/AuthPageLayout";
+import AuthPageLayout from "../../components/Layout/AuthPageLayout/AuthPageLayout.js";
 import SearchBarContainer from "../../components/SearchBar/SearchBarContainer";
 import MyPieChart from "../../components/PieChart/MyPieChart";
 import MyLineChart from "../../components/MyLineChart/MyLineChart";

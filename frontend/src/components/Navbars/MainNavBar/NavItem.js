@@ -20,7 +20,7 @@ const NavItem = (props) => {
 
   return (
     <li className={classes} onClick={clickHandler}>
-      <ion-icon name={item.iconName}></ion-icon>
+      {item.iconName && <ion-icon name={item.iconName}></ion-icon>}
       <p>{item.text}</p>
     </li>
   );
