@@ -1,0 +1,57 @@
+.projectSetting {
+  width: 100%;
+  padding: 2rem 4rem 2rem 2rem;
+}
+
+.projectSetting__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4rem;
+}
+
+.projectSetting__projectName {
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: #4e75eb;
+}
+
+.projectSetting__saveButton {
+  border: none;
+  color: #546173;
+  background-color: #a8c1e5;
+  cursor: pointer;
+  font-weight: 800;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  margin-right: 3rem;
+  transition: all 0.3s;
+  font-size: 1.2rem;
+}
+
+.projectSetting__saveButton:hover {
+  background-color: #97aece;
+}
+
+.projectSetting__form {
+  display: flex;
+  flex-direction: column;
+  gap: 8rem;
+}
+
+.projectSetting__formControlGroup {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.projectSetting__formControlGroup label {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.projectSetting__formInput {
+  position: absolute;
+  height: fit-content;
+  left: 30%;
+  width: 50%;
+}

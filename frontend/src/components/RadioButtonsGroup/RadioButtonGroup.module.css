@@ -1,0 +1,15 @@
+.radioButtonGroup {
+  display: flex;
+  gap: 80%;
+}
+
+.radioButtonContainer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.radioButtonContainer p {
+  font-size: 1.2rem;
+  font-weight: 600;
+}

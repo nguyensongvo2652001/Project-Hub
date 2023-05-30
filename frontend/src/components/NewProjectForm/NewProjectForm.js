@@ -1,13 +1,12 @@
-import { useRef, useState } from "react";
-
 import TextAreaInput from "../TextAreaInput/TextAreaInput";
 import TextInput from "../TextInput/TextInput";
+import Loading from "../UI/Loading/Loading";
+import ProjectTagDropdown from "../UI/ProjectTagDropdown/ProjectTagDropdown";
+import RadioButtonGroup from "../RadioButtonsGroup/RadioButtonGroup";
+
+import { useRef, useState } from "react";
 
 import classes from "./NewProjectForm.module.css";
-import RadioButton from "../RadioButton/RadioButton";
-import useErrorHandling from "../../hooks/useErrorHandling";
-import Loading from "../UI/Loading/Loading";
-import Dropdown from "../UI/Dropdown/Dropdown";
 
 const NewProjectForm = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,20 +16,6 @@ const NewProjectForm = (props) => {
   const tagOptionsRef = useRef();
 
   const statusOptions = ["Private", "Public"];
-  const tagOptions = [
-    "Website",
-    "Mobile",
-    "Software",
-    "AI",
-    "CloudComputing",
-    "Security",
-    "Other",
-    "Data",
-  ];
-
-  const onRadioButtonClick = (value) => {
-    setActiveStatusOption(value);
-  };
 
   const onSubmitForm = async (event) => {
     event.preventDefault();
@@ -91,9 +76,8 @@ const NewProjectForm = (props) => {
           <label className={classes.newProjectForm__label} id="tag">
             Tag
           </label>
-          <Dropdown
+          <ProjectTagDropdown
             inputRef={tagOptionsRef}
-            options={tagOptions}
             className={classes.newProjectForm__tagDropdown}
           />
         </div>
@@ -102,25 +86,13 @@ const NewProjectForm = (props) => {
           <label className={classes.newProjectForm__label} id="status">
             Status
           </label>
-          <div
+          <RadioButtonGroup
+            options={statusOptions}
             className={classes.newProjectForm__statusRadioButtons}
-            value={activeStatusOption}
-          >
-            {statusOptions.map((status, index) => {
-              const isActive = activeStatusOption === status.toLowerCase();
-              return (
-                <div
-                  className={classes.newProjectForm__radioButtonContainer}
-                  key={index}
-                  value={status.toLowerCase()}
-                  onClick={() => onRadioButtonClick(status.toLowerCase())}
-                >
-                  <RadioButton active={isActive} />
-                  <p>{status}</p>
-                </div>
-              );
-            })}
-          </div>
+            handleNewActiveValue={(activeValue) =>
+              setActiveStatusOption(activeValue)
+            }
+          />
         </div>
         {!isSubmitting && (
           <button className={classes.newProjectForm__submitButton}>

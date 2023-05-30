@@ -14,7 +14,11 @@ export const Backdrop = (props) => {
 
 const ModalOverlay = (props) => {
   const allClasses = `${classes.modal} ${props.className}`;
-  return <Card className={allClasses}>{props.children}</Card>;
+  return (
+    <Card className={allClasses} noHoverStyle={true}>
+      {props.children}
+    </Card>
+  );
 };
 
 const Modal = forwardRef((props, ref) => {

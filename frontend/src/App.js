@@ -11,6 +11,7 @@ import PersonalStatPage from "./pages/PersonalStatPage/PersonalStatPage";
 import ProjectDashboardPage from "./pages/ProjectDashboardPage/ProjectDashboardPage";
 import ProjectMemberPage from "./pages/ProjectMembersPage/ProjectMemberPage";
 import ProjectNotificationPage from "./pages/ProjectNotificationPage/ProjectNotificationPage";
+import ProjectSettingsPage from "./pages/ProjectSettingsPage/ProjectSettingsPage";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route index element={<ProjectDashboardPage />} />
             <Route path="members" element={<ProjectMemberPage />} />
             <Route path="notifications" element={<ProjectNotificationPage />} />
+            <Route path="settings" element={<ProjectSettingsPage />} />
           </Route>
         </Route>
 
