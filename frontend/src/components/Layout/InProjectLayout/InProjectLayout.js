@@ -10,7 +10,7 @@ const InProjectLayout = (props) => {
 
   return (
     <AuthPageLayout>
-      <div className={classes.projectDashboard}>
+      <div className={classes.inProjectLayout}>
         <InProjectNavbar props={projectId} />
         {props.children}
       </div>

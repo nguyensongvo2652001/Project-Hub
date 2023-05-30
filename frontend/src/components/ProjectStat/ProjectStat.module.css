@@ -1,0 +1,50 @@
+.projectStat {
+  background-color: #f6f8fc;
+  min-height: 100vh;
+
+  padding: 30px 50px;
+
+  flex-grow: 1;
+  max-width: 100%;
+
+}
+
+.projectStat__firstRow {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4.5rem;
+
+  width: 100%;
+
+  margin-bottom: 10rem;
+}
+
+.projectStat__firstRow li {
+  width: 19rem;
+}
+
+.projectStat__secondRow {
+  list-style: none;
+
+  display: flex;
+  justify-content: center;
+
+  flex-wrap: wrap;
+
+  margin-bottom: 10rem;
+}
+
+.projectStat__completionRatePieChartContainer {
+  margin-left: -5rem;
+}
+
+.projectStat__completionRateLineChartContainer {
+  width: 100%;
+  margin-bottom: 6rem;
+}
+
+.projectStat__barChartContainer {
+  width: 100%;
+}

@@ -11,6 +11,19 @@ const MyPieChart = (props) => {
   return (
     <ResponsiveContainer width={props.width} height={props.height}>
       <PieChart className={props.className}>
+        <text
+          x="50%"
+          y="20"
+          textAnchor="middle"
+          dominantBaseline="middle"
+          style={{
+            fontSize: "2rem",
+            fontWeight: "700",
+            fill: props.titleColor,
+          }}
+        >
+          {props.title}
+        </text>
         <Pie
           dataKey="value"
           data={props.data}

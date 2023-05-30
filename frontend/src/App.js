@@ -12,6 +12,7 @@ import ProjectDashboardPage from "./pages/ProjectDashboardPage/ProjectDashboardP
 import ProjectMemberPage from "./pages/ProjectMembersPage/ProjectMemberPage";
 import ProjectNotificationPage from "./pages/ProjectNotificationPage/ProjectNotificationPage";
 import ProjectSettingsPage from "./pages/ProjectSettingsPage/ProjectSettingsPage";
+import ProjectStatPage from "./pages/ProjectStatPage/ProjectStatPage";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <Route path="members" element={<ProjectMemberPage />} />
             <Route path="notifications" element={<ProjectNotificationPage />} />
             <Route path="settings" element={<ProjectSettingsPage />} />
+            <Route path="stat" element={<ProjectStatPage />} />
           </Route>
         </Route>
 
