@@ -13,20 +13,9 @@ import { capitalizeFirstLetter } from "../../utils/string";
 import TaskCard from "../UI/TaskCard/TaskCard.js";
 import Task from "../Task/Task.js";
 import HeaderAndTaskStatRowSection from "../HeaderAndTaskStatRowSection/HeaderAndTaskStatRowSection.js";
+import InProjectWithHeaderAndTaskStatRowLayout from "../Layout/InProjectWithHeaderAndTaskStatRowLayout/InProjectWithHeaderAndTaskStatRowLayout.js";
 
 const ProjectDashboard = (props) => {
-  const project = {
-    name: "Twitter Clone",
-  };
-
-  const [tasksCountBasedOnStatus, setTasksCountBasedOnStatus] = useState({
-    open: 48,
-    doing: 12,
-    closed: 0,
-    testing: 0,
-    overdue: 52,
-  });
-
   const taskDisplayMetaInfo = [
     {
       title: "Start date: ",
@@ -39,12 +28,7 @@ const ProjectDashboard = (props) => {
   ];
 
   return (
-    <div className={classes.projectDashboard}>
-      <HeaderAndTaskStatRowSection
-        project={project}
-        tasksCountBasedOnStatus={tasksCountBasedOnStatus}
-      />
-
+    <InProjectWithHeaderAndTaskStatRowLayout>
       <ul className={classes.projectDashboard__tasks}>
         <Task
           task={{
@@ -79,7 +63,7 @@ const ProjectDashboard = (props) => {
           className={classes.projectDashboard__task}
         />
       </ul>
-    </div>
+    </InProjectWithHeaderAndTaskStatRowLayout>
   );
 };
 

@@ -37,7 +37,8 @@
   color: #7b7157;
 }
 
-.tag--other {
+.tag--other,
+.tag--pending {
   background-color: #e4e4e4;
   color: #555555;
 }
@@ -47,17 +48,20 @@
   color: #7d474b;
 }
 
-.tag--testing {
+.tag--testing,
+.tag--developer {
   background-color: #fcc419;
   color: #654e0a;
 }
 
-.tag--open {
+.tag--open,
+.tag--owner {
   background-color: #a8c1e5;
   color: #434d5c;
 }
 
-.tag--doing {
+.tag--doing,
+.tag--admin {
   background-color: #faefd0;
   color: #7d7868;
 }

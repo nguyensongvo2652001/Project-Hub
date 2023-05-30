@@ -9,6 +9,7 @@ import PersonalNotificationsPage from "./pages/NotificationPage/PersonalNotifica
 import MyProfilePage from "./pages/MyProfilePage/MyProfilePage";
 import PersonalStatPage from "./pages/PersonalStatPage/PersonalStatPage";
 import ProjectDashboardPage from "./pages/ProjectDashboardPage/ProjectDashboardPage";
+import ProjectMemberPage from "./pages/ProjectMembersPage/ProjectMemberPage";
 
 function App() {
   return (
@@ -26,7 +27,10 @@ function App() {
 
         <Route path="/projects">
           <Route index element={<ProjectsPage />} />
-          <Route path=":id" element={<ProjectDashboardPage />} />
+          <Route path=":id">
+            <Route index element={<ProjectDashboardPage />} />
+            <Route path="members" element={<ProjectMemberPage />} />
+          </Route>
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />
