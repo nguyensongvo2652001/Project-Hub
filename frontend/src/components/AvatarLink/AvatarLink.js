@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import styles from "./AvatarLink.module.css";
+import classes from "./AvatarLink.module.css";
 
 const AvatarLink = (props) => {
   const { src, alt, id } = props;
@@ -9,13 +9,10 @@ const AvatarLink = (props) => {
     navigate(`/users/${id}`);
   };
 
+  const allClasses = `${classes.avatarLink} ${props.className}`;
+
   return (
-    <img
-      className={props.className}
-      src={src}
-      alt={alt}
-      onClick={clickHandler}
-    />
+    <img className={allClasses} src={src} alt={alt} onClick={clickHandler} />
   );
 };
 

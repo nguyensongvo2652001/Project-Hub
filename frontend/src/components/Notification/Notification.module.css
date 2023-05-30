@@ -24,6 +24,17 @@
   cursor: pointer;
 }
 
+.notification__initiatorName {
+  font-size: 1.4rem;
+  color: red;
+}
+
+.notification__initiatorName:link,
+.notification__initiatorName:visited {
+  font-size: 1.4rem;
+  margin-right: 4px;
+}
+
 .notification__content {
   font-size: 1.4rem;
   font-weight: 500;

@@ -53,7 +53,7 @@ const ProjectSettings = (props) => {
               handleNewActiveValue={(activeValue) => {
                 setActiveVisibilityOption(activeValue);
               }}
-              className={classes.projectSetting__formInput}
+              className={`${classes.projectSetting__formInput} ${classes.projectSetting__radioButtonGroup}`}
             />
           </div>
         </form>

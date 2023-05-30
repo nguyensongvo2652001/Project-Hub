@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import AvatarLink from "../AvatarLink/AvatarLink";
-import UserNameLink from "../UserNameLink/UserNameLink";
-import notificationStyles from "./Notification.module.css";
+import classes from "./Notification.module.css";
+import MyLink from "../MyLink/MyLink.js";
 
 const Notification = (props) => {
   // project_invitation
@@ -18,70 +18,67 @@ const Notification = (props) => {
   );
 
   const { type, detail } = notification;
-  let message = "just triggers a notification";
+  console.log(notification);
+  const notificationLinkAndMessageBasedOnType = {
+    project_invitation: {
+      message: `just invited you to project ${detail?.name}. Please check your email for more information.`,
+      link: `/projects/${detail?._id}`,
+    },
+    project_invitation_confirm: {
+      message: "just confirm to join the project",
+      link: ``,
+    },
+    project_new_task: {
+      message: `just created a new task ${detail?.name}.`,
+      link: `/tasks/${detail?._id}`,
+    },
+    project_update_task: {
+      message: `just updated task ${detail?.name} info.`,
+      link: `/tasks/${detail?._id}`,
+    },
+    project_delete_task: {
+      message: `jest deleted task ${detail?.name}`,
+      link: `/tasks/${detail?._id}`,
+    },
+    project_update: {
+      message: "just updated project info.",
+      link: `/projects/${detail?._id}`,
+    },
+  };
+
+  let message = "just triggered a notification";
   let link = "";
-  if (type === "project_invitation") {
-    // In this case detail is the project info
-    message = `just invited you to project ${detail.name}. Please check your email for more information.`;
-    link = `/projects/${detail._id}`;
-  }
 
-  if (type === "project_invitation_confirm") {
-    message = `just confirm to join the project`;
-    link = "";
-  }
-
-  if (type === "project_update") {
-    // In this case detail is the project info
-    message = `just updated project info`;
-    link = `/projects/${detail._id}`;
-  }
-
-  // For below cases, detail is the task info
-  if (type.includes("task") && type !== "project_delete_task") {
-    if (type === "project_new_task")
-      message = `just created a new task ${detail.name}.`;
-    if (type === "project_update_task")
-      message = `just updated task ${detail.name} info.`;
-    link = `/tasks/${detail._id}`;
-  }
-
-  // For this case, the detail is just the name of the deleted task.
-  if (type === "project_delete_task") {
-    message = `jest deleted task ${detail.name}`;
-  }
-
-  if (message === "just triggers a notification") {
-    console.log(type);
+  const messageAndLink = notificationLinkAndMessageBasedOnType[type];
+  if (messageAndLink) {
+    message = messageAndLink.message;
+    link = messageAndLink.link;
   }
 
   return (
-    <li className={notificationStyles.notification} ref={lastNotificationRef}>
+    <li className={classes.notification} ref={lastNotificationRef}>
       <AvatarLink
-        className={notificationStyles.notification__initiatorAvatar}
+        className={classes.notification__initiatorAvatar}
         src={notification.initiator.avatar}
         id={notification.initiator._id}
         alt="Initiator avatar"
       />
-      <div className={notificationStyles.notification__content}>
-        <p className={notificationStyles.notification__message}>
-          <UserNameLink
-            name={notification.initiator.name}
-            id={notification.initiator._id}
+      <div className={classes.notification__content}>
+        <p className={classes.notification__message}>
+          <MyLink
+            text={notification.initiator.name}
+            link={`users/${notification.initiator._id}`}
+            className={classes.notification__initiatorName}
           />
-          &nbsp;
           <span>{message}</span>
         </p>
         {link.length > 0 && (
-          <Link
-            to={link}
-            className={notificationStyles.notification__moreInfoLink}
-          >
+          <Link to={link} className={classes.notification__moreInfoLink}>
             Click here for more info
           </Link>
         )}
       </div>
-      <p className={notificationStyles.notification__date}>{dateDisplay}</p>
+      <p className={classes.notification__date}>{dateDisplay}</p>
     </li>
   );
 };

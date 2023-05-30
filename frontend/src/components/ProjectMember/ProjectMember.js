@@ -2,6 +2,8 @@ import MyLink from "../MyLink/MyLink";
 import Card from "../UI/Card/Card";
 import CardMetaInfo from "../UI/CardMetaInfo/CardMetaInfo";
 import Tag from "../UI/Tag/Tag";
+import AvatarLink from "../AvatarLink/AvatarLink.js";
+
 import classes from "./ProjectMember.module.css";
 
 const ProjectMember = (props) => {
@@ -25,10 +27,11 @@ const ProjectMember = (props) => {
           <Tag tag={member.role} />
         </header>
 
-        <img
+        <AvatarLink
           src={member.avatar}
           alt="member avatar"
           className={classes.member__avatar}
+          id="123"
         />
 
         <CardMetaInfo
