@@ -1,10 +1,10 @@
-.notificationPage {
+.notificationContainer {
   background-color: #f6f8fc;
   min-height: 100vh;
   padding: 10px 20px;
 }
 
-.notificationPage__title {
+.notificationContainer__title {
   font-size: 4rem;
   font-weight: 800;
   letter-spacing: 0.5px;
@@ -12,7 +12,7 @@
   color: #7191ef;
 }
 
-.notificationPage__loading {
+.notificationContainer__loading {
   border: 5px solid #ccc; /* Light gray border */
   border-top: 5px solid #4e75eb; /* Blue border on top */
   width: 5rem;
