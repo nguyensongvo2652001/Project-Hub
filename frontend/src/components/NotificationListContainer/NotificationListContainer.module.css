@@ -2,6 +2,7 @@
   background-color: #f6f8fc;
   min-height: 100vh;
   padding: 10px 20px;
+  width: 100%;
 }
 
 .notificationContainer__title {

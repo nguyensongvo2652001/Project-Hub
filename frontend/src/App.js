@@ -10,6 +10,7 @@ import MyProfilePage from "./pages/MyProfilePage/MyProfilePage";
 import PersonalStatPage from "./pages/PersonalStatPage/PersonalStatPage";
 import ProjectDashboardPage from "./pages/ProjectDashboardPage/ProjectDashboardPage";
 import ProjectMemberPage from "./pages/ProjectMembersPage/ProjectMemberPage";
+import ProjectNotificationPage from "./pages/ProjectNotificationPage/ProjectNotificationPage";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path=":id">
             <Route index element={<ProjectDashboardPage />} />
             <Route path="members" element={<ProjectMemberPage />} />
+            <Route path="notifications" element={<ProjectNotificationPage />} />
           </Route>
         </Route>
 

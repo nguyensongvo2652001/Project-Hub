@@ -18,6 +18,12 @@ const InProjectNavbar = (props) => {
         <NavItem
           item={{ text: "Statistic", link: `/projects/${projectId}/stat` }}
         />
+        <NavItem
+          item={{
+            text: "Notifications",
+            link: `/projects/${projectId}/notifications`,
+          }}
+        />
       </ul>
     </div>
   );

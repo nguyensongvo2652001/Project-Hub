@@ -26,6 +26,11 @@ const Notification = (props) => {
     link = `/projects/${detail._id}`;
   }
 
+  if (type === "project_invitation_confirm") {
+    message = `just confirm to join the project`;
+    link = "";
+  }
+
   if (type === "project_update") {
     // In this case detail is the project info
     message = `just updated project info`;
@@ -44,6 +49,10 @@ const Notification = (props) => {
   // For this case, the detail is just the name of the deleted task.
   if (type === "project_delete_task") {
     message = `jest deleted task ${detail.name}`;
+  }
+
+  if (message === "just triggers a notification") {
+    console.log(type);
   }
 
   return (
