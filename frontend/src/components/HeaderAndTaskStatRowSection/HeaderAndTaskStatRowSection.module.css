@@ -1,0 +1,159 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  margin-bottom: 4rem;
+  padding: 2rem;
+}
+
+.header__projectName {
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: #4e75eb;
+}
+
+.header__buttonAndDropdown {
+  display: flex;
+  align-items: center;
+  margin-right: 5%;
+}
+
+.header__newTaskButton {
+  border: none;
+  color: #546173;
+  background-color: #a8c1e5;
+  cursor: pointer;
+  font-weight: 800;
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  margin-right: 3rem;
+  transition: all 0.3s;
+}
+
+.header__newTaskButton:hover {
+  background-color: #97aece;
+}
+
+.taskStatRow {
+  background-color: #9ba0ae;
+  width: 100%;
+  height: 11rem;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+  justify-content: space-between;
+}
+
+.taskStatBox {
+  height: 9rem;
+  width: 16%;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  transition: all 0.3s;
+}
+
+.taskStatBox:hover {
+  transform: translateY(-15px);
+}
+
+.taskStatBox--open {
+  background-color: #a8c1e5;
+  color: #434d5c;
+}
+
+.taskStatBox--doing {
+  background-color: #faefd0;
+  color: #7d7868;
+}
+
+.taskStatBox--testing {
+  background-color: #fcc419;
+  color: #654e0a;
+}
+
+.taskStatBox--overdue {
+  background-color: #e8b0b1;
+  color: #745859;
+}
+
+.taskStatBox--closed {
+  background-color: #cfe4c0;
+  color: #687260;
+}
+
+.taskStatValue {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.taskStatLabel {
+  font-size: 1.2rem;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+@media (max-width: 900px) {
+  .taskStatValue {
+    font-size: 2rem;
+  }
+
+  .taskStatLabel {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .header__projectName {
+    font-size: 2.5rem;
+  }
+
+  .header__newTaskButton {
+    padding: 1.2rem;
+    font-size: 1.2rem;
+  }
+
+  .header__statusDropdown {
+    font-size: 1.2rem;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 750px) {
+  .taskStatRow {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+
+  .taskStatBox {
+    width: 18%;
+  }
+
+  .taskStatLabel {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .header__projectName {
+    font-size: 2rem;
+  }
+
+  .header__newTaskButton {
+    padding: 5px 30px;
+    font-size: 1rem;
+  }
+
+  .header__statusDropdown {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+}
