@@ -1,30 +1,33 @@
 const express = require("express");
+
 const taskController = require("../controllers/task");
-const authController = require("../controllers/auth");
+
+const authMiddleware = require("../middlewares/authMiddleware");
+const taskMiddleware = require("../middlewares/taskMiddleware");
 
 const router = express.Router({ mergeParams: true });
 
-router.use(authController.checkAuthentication);
+router.use(authMiddleware.validateIfUserLoggedIn);
+
+router.route("/").post(taskController.createTask);
+
 router
-  .route("/")
-  .get(taskController.prepareGetAllTasksQuery, taskController.getAllTasks)
-  .post(taskController.createTask);
-router
-  .route("/:id")
+  .route("/:taskId")
+  .all(
+    taskMiddleware.setRequestParamsIdMiddleware,
+    taskMiddleware.validateIfUserIsAllowedToViewTaskMiddleware
+  )
   .patch(
-    taskController.validateIfUserIsAllowedToMofidyTaskMiddleware,
-    taskController.filterRequestBodyBeforeUpdateTaskMiddleware,
-    taskController.prepareUpdateTaskOnFinishMiddleware,
+    taskMiddleware.validateIfUserIsAllowedToMofidyTaskMiddleware,
+    taskMiddleware.filterRequestBodyBeforeUpdateTaskMiddleware,
+    taskMiddleware.prepareUpdateTaskOnFinishMiddleware,
     taskController.updateTask
   )
   .delete(
-    taskController.validateIfUserIsAllowedToMofidyTaskMiddleware,
-    taskController.prepareDeleteTaskOnFinishMiddleware,
+    taskMiddleware.validateIfUserIsAllowedToMofidyTaskMiddleware,
+    taskMiddleware.prepareDeleteTaskOnFinishMiddleware,
     taskController.deleteTask
   )
-  .get(
-    taskController.validateIfUserIsAllowedToGetTaskDetailMiddleware,
-    taskController.getTask
-  );
+  .get(taskController.getTask);
 
 module.exports = router;

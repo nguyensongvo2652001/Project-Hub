@@ -1,34 +1,47 @@
 const express = require("express");
+
 const projectController = require("../controllers/project");
-const authController = require("../controllers/auth");
 const taskController = require("../controllers/task");
 const projectMemberController = require("../controllers/projectMember");
 const projectStatController = require("../controllers/projectStat");
 const notificationController = require("../controllers/notification");
+
+const authMiddleware = require("../middlewares/authMiddleware");
+const notificationMiddleware = require("../middlewares/notificationMiddleware");
+const projectMiddelware = require("../middlewares/projectMiddleware");
+const taskMiddleware = require("../middlewares/taskMiddleware");
+
 const router = express.Router();
 
-router.use(authController.checkAuthentication);
+router.use(authMiddleware.validateIfUserLoggedIn);
+
 router.get("/search", projectController.searchProjects);
 router
   .route("/")
   .get(
-    projectController.filterOnlyPublicProjectsMiddleware,
-    projectController.sortProjectsByDateCreatedMiddleware,
+    projectMiddelware.filterOnlyPublicProjectsMiddleware,
+    projectMiddelware.sortProjectsByDateCreatedMiddleware,
     projectController.getAllProjects
   )
-  .post(projectController.setOwnerId, projectController.createProject);
+  .post(
+    projectMiddelware.setProjectOwnerFieldBeforeCreateProjectMiddleware,
+    projectController.createProject
+  );
 
 router
-  .route("/:id")
+  .route("/:projectId")
   .get(projectController.getProject)
   .patch(
-    projectController.checkUserIsOwner,
-    projectController.filterProjectData,
-    projectController.prepareUpdateProjectMiddleware,
+    projectMiddelware.validateIfUserIsOwnerOfTheProjectMiddleware,
+    projectMiddelware.filterProjectDataMiddleware,
+    projectMiddelware.prepareUpdateProjectMiddleware,
     projectController.updateProject
   );
 
-router.use("/:projectId", projectController.checkUserIsMemberOfProject);
+router.use(
+  "/:projectId",
+  projectMiddelware.validateIfUserIsMemberOfProjectMiddleware
+);
 router.get("/:projectId/stat", projectStatController.getProjectStat);
 
 router.get("/:projectId/member", projectMemberController.getAllProjectMembers);
@@ -39,11 +52,16 @@ router.get(
 
 router.get(
   "/:projectId/notification",
-  notificationController.prepareGetProjectNotificationsRoute,
-  notificationController.prepareProjectNotificationPopulateOptions,
+  notificationMiddleware.prepareGetProjectNotificationsRouteMiddleware,
+  notificationMiddleware.prepareProjectNotificationPopulateOptionsMiddleware,
   notificationController.getAllNotifications
 );
 
+router.get(
+  "/:projectId/task/",
+  taskMiddleware.prepareGetAllTasksMiddleware,
+  taskController.getAllTasks
+);
 router.get("/:projectId/task/search", taskController.searchTasks);
 
 module.exports = router;

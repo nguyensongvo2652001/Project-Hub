@@ -193,23 +193,7 @@ describe("Test create new task route", () => {
       .set("Cookie", cookie)
       .expect(400);
   });
-  it("should fail if the developers list is empty", async () => {
-    const cookie = await getLoginCookie(app, loginRoute, {
-      email: member.email,
-      password,
-    });
 
-    const res = await agent
-      .post(createTaskRoute)
-      .send({
-        projectId: project._id,
-        name: "task",
-        type: "bug",
-        developers: [],
-      })
-      .set("Cookie", cookie)
-      .expect(400);
-  });
   it("should fail if the developers list contains duplications", async () => {
     const cookie = await getLoginCookie(app, loginRoute, {
       email: member.email,

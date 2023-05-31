@@ -1,9 +1,14 @@
 const express = require("express");
+
 const projectMemberController = require("../controllers/projectMember");
 const authController = require("../controllers/auth");
+
+const authMiddleware = require("../middlewares/authMiddleware");
+const projectMemberMiddleware = require("../middlewares/projectMemberMiddleware");
+
 const router = express.Router();
 
-router.use(authController.checkAuthentication);
+router.use(authMiddleware.validateIfUserLoggedIn);
 
 router.post("/inviteMember", projectMemberController.inviteMemberToProject);
 
@@ -13,9 +18,9 @@ router.patch(
 );
 
 router
-  .route("/:id")
+  .route("/:membershipId")
   .patch(
-    projectMemberController.validateIfUserIsAllowToEditRole,
+    projectMemberMiddleware.validateIfUserIsAllowToEditRoleMiddleware,
     projectMemberController.editMemberRole
   );
 

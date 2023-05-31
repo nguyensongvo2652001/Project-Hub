@@ -126,6 +126,7 @@ projectSchema.virtual("tasksCount").set(function (value) {
 });
 
 projectSchema.methods.countTasksByType = async function () {
+  //Task will have a projectId field to identify which project that task belongs to so we use that to find all the tasks that belonged to the current projects and count the number of tasks for each types.
   const result = await mongoose.model("Task").aggregate([
     {
       $lookup: {

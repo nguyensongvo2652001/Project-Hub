@@ -1,116 +1,22 @@
 const mongoose = require("mongoose");
-const AWS = require("aws-sdk");
-const multer = require("multer");
+
 const User = require("../models/user");
 const ProjectMember = require("../models/projectMember");
 const { catchAsync, HandledError } = require("../utils/errorHandling");
 const { getOne, updateOne, getAll } = require("./crud");
 const APIFeatures = require("../utils/apiFeatures");
 
-const allowedUpdateFieldsForUsers = [
-  "name",
-  "jobTitle",
-  "description",
-  "avatar",
-  "background",
-];
-
-const prepareUserSelectMiddleware = (req, res, next) => {
-  req.selectOptions = "name jobTitle description email avatar background";
-
-  next();
-};
 const getUser = getOne(User);
-
-const prepareUpdateUserRouteMiddleware = (req, res, next) => {
-  Object.keys(req.body).forEach((key) => {
-    if (!allowedUpdateFieldsForUsers.includes(key)) delete req.body[key];
-  });
-
-  req.params.id = req.user._id;
-
-  next();
-};
-
-const imageUpload = multer({
-  storage: multer.memoryStorage(),
-  fileFilter: function (req, file, cb) {
-    const { mimetype } = file;
-    if (!mimetype) return cb(null, false);
-    if (!mimetype.startsWith("image"))
-      return cb(new HandledError("invalid image", 400), false);
-
-    cb(null, true);
-  },
-});
-
-const getImageData = imageUpload.fields([
-  { name: "avatar", maxCount: 1 },
-  { name: "background", maxCount: 1 },
-]);
-
-const checkForImagesUpload = (req, res, next) => {
-  console.log(req.files.avatar);
-};
-
-const s3 = new AWS.S3({
-  accessKeyId: process.env.B2_KEY_ID,
-  secretAccessKey: process.env.B2_APPLICATION_KEY,
-  endpoint: process.env.B2_BUCKET_ENDPOINT,
-});
-
-const uploadFile = async (file, fileName, folder) => {
-  const { buffer } = file;
-
-  const params = {
-    Bucket: process.env.B2_BUCKET_NAME,
-    Key: `${folder}/${fileName}`,
-    Body: buffer,
-    ACL: "public-read",
-  };
-
-  const result = await s3.upload(params).promise();
-
-  return result.Location;
-};
-
-const uploadAvatar = catchAsync(async (req, res, next) => {
-  const { avatar } = req.files;
-  if (!avatar) return next();
-
-  const avatarFileName = `${req.user._id}.jpg`;
-
-  const imageUrl = await uploadFile(avatar[0], avatarFileName, "users/avatar");
-
-  req.body.avatar = imageUrl;
-
-  next();
-});
-
-const uploadBackground = async (req, res, next) => {
-  const { background } = req.files;
-  if (!background) return next();
-
-  const backgroundFileName = `${req.user._id}.jpg`;
-
-  const imageUrl = await uploadFile(
-    background[0],
-    backgroundFileName,
-    "users/background"
-  );
-
-  req.body.background = imageUrl;
-
-  next();
-};
 
 const updateUser = updateOne(User);
 
-const getAllJoinedProjectsMiddleware = catchAsync(async (req, res, next) => {
-  const { limit, page } = req.query;
-  console.log(limit, page);
+const getAllJoinedProjects = catchAsync(async (req, res, next) => {
+  const limit = req.query.limit || 10;
+  const page = req.query.page || 1;
+
   const skip = (page - 1) * limit;
 
+  //The idea is that we find all membership with memberId = req.user._id (current user id) and then just populate the projectId field of the membership
   const memberships = await ProjectMember.aggregate([
     {
       $match: { memberId: new mongoose.Types.ObjectId(req.user._id) },
@@ -146,11 +52,6 @@ const getAllJoinedProjectsMiddleware = catchAsync(async (req, res, next) => {
     },
   });
 });
-
-const prepareGetCurrentUserProfileMiddleware = (req, res, next) => {
-  req.params.id = req.user._id;
-  next();
-};
 
 const searchUsers = catchAsync(async (req, res, next) => {
   let { q } = req.query;
@@ -189,15 +90,8 @@ const searchUsers = catchAsync(async (req, res, next) => {
 });
 
 module.exports = {
-  prepareUserSelectMiddleware,
   getUser,
-  getAllJoinedProjectsMiddleware,
-  prepareGetCurrentUserProfileMiddleware,
-  prepareUpdateUserRouteMiddleware,
+  getAllJoinedProjects,
   updateUser,
-  checkForImagesUpload,
   searchUsers,
-  getImageData,
-  uploadAvatar,
-  uploadBackground,
 };

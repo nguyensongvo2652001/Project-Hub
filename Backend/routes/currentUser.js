@@ -1,38 +1,41 @@
 const express = require("express");
+
 const userController = require("../controllers/user");
-const authController = require("../controllers/auth");
-const projectController = require("../controllers/project");
 const notificationController = require("../controllers/notification");
 const userStatController = require("../controllers/userStat");
 
+const authMiddleware = require("../middlewares/authMiddleware");
+const notificationMiddleware = require("../middlewares/notificationMiddleware");
+const userMiddleware = require("../middlewares/userMiddleware");
+
 const router = express.Router();
 
-router.use(authController.checkAuthentication);
+router.use(authMiddleware.validateIfUserLoggedIn);
 
 router
   .route("/")
   .get(
-    userController.prepareGetCurrentUserProfileMiddleware,
-    userController.prepareUserSelectMiddleware,
+    userMiddleware.prepareGetCurrentUserProfileMiddleware,
+    userMiddleware.prepareUserSelectOptionsMiddleware,
     userController.getUser
   )
   .patch(
-    userController.prepareUpdateUserRouteMiddleware,
-    userController.getImageData,
-    userController.prepareUserSelectMiddleware,
-    userController.uploadAvatar,
-    userController.uploadBackground,
+    userMiddleware.prepareUpdateUserRouteMiddleware,
+    userMiddleware.getImageDataMiddleware,
+    userMiddleware.prepareUserSelectOptionsMiddleware,
+    userMiddleware.uploadAvatarMiddleware,
+    userMiddleware.uploadBackgroundMiddleware,
     userController.updateUser
   );
 
 router.get(
   "/notification",
-  notificationController.prepareGetPersonalNotificationsRoute,
-  notificationController.preparePersonalNotificationPopulateOptions,
+  notificationMiddleware.prepareGetPersonalNotificationsRouteMiddleware,
+  notificationMiddleware.preparePersonalNotificationPopulateOptionsMiddleware,
   notificationController.getAllNotifications
 );
 
-router.route("/project").get(userController.getAllJoinedProjectsMiddleware);
+router.route("/project").get(userController.getAllJoinedProjects);
 
 router.get("/stat", userStatController.getPersonalStat);
 module.exports = router;

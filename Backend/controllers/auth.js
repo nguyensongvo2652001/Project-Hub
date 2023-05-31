@@ -9,9 +9,11 @@ const sendAuthResponse = (res, { user, statusCode, message }) => {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
+  const cookieExpirationTimeInMiliseconds =
+    Number(process.env.JWT_EXPIRES_IN_SECONDS) * 1000;
   res.cookie("token", token, {
     httpOnly: true,
-    maxAge: Number(process.env.JWT_EXPIRES_IN_SECONDS) * 1000,
+    maxAge: cookieExpirationTimeInMiliseconds,
     secure: true,
     sameSite: "none",
   });
@@ -28,13 +30,9 @@ const sendAuthResponse = (res, { user, statusCode, message }) => {
 };
 
 const signUp = catchAsync(async (req, res, next) => {
-  // const { email, password } = req.body;
+  const { email, password } = req.body;
 
-  const newUser = await User.create(req.body);
-
-  const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
+  const newUser = await User.create({ email, password });
 
   sendAuthResponse(res, {
     user: newUser,
@@ -45,17 +43,19 @@ const signUp = catchAsync(async (req, res, next) => {
 
 const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
+  const INVALID_EMAIL_OR_PASSWORD_ERROR = new HandledError(
+    "Invalid email or password",
+    400
+  );
 
   const user = await User.findOne({ email });
-
   if (!user) {
-    return next(new HandledError("Invalid email or password", 400));
+    return next(INVALID_EMAIL_OR_PASSWORD_ERROR);
   }
 
   const isCorrectPassword = await user.checkPassword(password);
-
   if (!isCorrectPassword) {
-    return next(new HandledError("Invalid email or password", 400));
+    return next(INVALID_EMAIL_OR_PASSWORD_ERROR);
   }
 
   sendAuthResponse(res, {
@@ -109,54 +109,18 @@ const validateTokenController = catchAsync(async (req, res, next) => {
   });
 });
 
-const checkAuthentication = catchAsync(async (req, res, next) => {
-  let token;
-  if (req.cookies && req.cookies.token) {
-    token = req.cookies.token;
-  } else if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
-  }
-
-  if (!token) {
-    return next(
-      new HandledError("you are not logged in, please log in first", 401)
-    );
-  }
-
-  const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
-
-  const user = await User.findById(decodedToken.userId);
-  if (!user) {
-    return next(
-      new HandledError("the user belonged to this token no longer exists", 401)
-    );
-  }
-
-  if (user.passwordChangedAfter(decodedToken.iat)) {
-    return next(
-      new HandledError(
-        "the user belonged to this token has changed the password, please log in again",
-        401
-      )
-    );
-  }
-
-  req.user = user._id;
-
-  next();
-});
-
 const forgotPassword = catchAsync(async (req, res, next) => {
-  if (!req.body.email) {
+  const { email } = req.body;
+
+  if (!email) {
     return next(new HandledError("Email address can not be empty.", 400));
   }
 
-  const user = await User.findOne({ email: req.body.email });
+  const user = await User.findOne({ email });
   if (!user) {
-    return next(new HandledError("There is no user with email address.", 404));
+    return next(
+      new HandledError("There is no user with specified email address.", 404)
+    );
   }
 
   const resetToken = user.createPasswordResetToken();
@@ -187,13 +151,15 @@ const forgotPassword = catchAsync(async (req, res, next) => {
 });
 
 const resetPassword = catchAsync(async (req, res, next) => {
-  const { token: encryptedToken } = req.params;
-  const token = crypto
+  const { token: rawToken } = req.params;
+  const { password } = req.body;
+
+  const encryptedToken = crypto
     .createHash("sha256")
-    .update(encryptedToken)
+    .update(rawToken)
     .digest("hex");
 
-  const user = await User.findOne({ passwordResetToken: token });
+  const user = await User.findOne({ passwordResetToken: encryptedToken });
   if (!user) {
     return next(new HandledError("no users found with provided token", 404));
   }
@@ -204,11 +170,11 @@ const resetPassword = catchAsync(async (req, res, next) => {
     );
   }
 
-  const { password } = req.body;
   user.password = password;
   user.passwordChangedAt = new Date();
   user.passwordResetToken = undefined;
   user.passwordResetExpires = undefined;
+
   await user.save();
 
   sendAuthResponse(res, {
@@ -222,7 +188,6 @@ module.exports = {
   signUp,
   login,
   logout,
-  checkAuthentication,
   forgotPassword,
   resetPassword,
   validateTokenController,

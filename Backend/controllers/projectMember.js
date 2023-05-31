@@ -3,8 +3,6 @@ const User = require("../models/user");
 const Project = require("../models/project");
 const Notification = require("../models/notification");
 const { catchAsync, HandledError } = require("../utils/errorHandling");
-const { findUserByEmail } = require("../utils/helpers/user");
-const { findDocumentById } = require("../utils/helpers/general");
 const userStatController = require("./userStat");
 const APIFeatures = require("../utils/apiFeatures");
 const Email = require("../utils/email");
@@ -20,7 +18,7 @@ const inviteMemberToProject = catchAsync(async (req, res, next) => {
 
   const currentLoggedInUserMembership = await ProjectMember.findOne({
     projectId,
-    memberId: req.user._id,
+    memberId: req.user,
   });
   if (!currentLoggedInUserMembership) {
     return next(
@@ -31,11 +29,20 @@ const inviteMemberToProject = catchAsync(async (req, res, next) => {
     );
   }
 
+  //Only owner or admin is allowed to invite users.
   currentLoggedInUserMembership.checkRoles("owner", "admin");
 
-  const newMember = await findUserByEmail(email);
+  const newMember = await User.findOne({ email });
+  if (!newMember) {
+    return next(new HandledError(`No users found with email ${email}`, 404));
+  }
 
-  const project = await findDocumentById(Project, projectId);
+  const project = await Project.findById(projectId);
+  if (!project) {
+    return next(
+      new HandledError(`No projects found with id ${projectId}`, 404)
+    );
+  }
 
   let newMemberMembership = await ProjectMember.findOne({
     projectId,
@@ -100,7 +107,8 @@ const confirmMembership = catchAsync(async (req, res, next) => {
     );
   }
 
-  const isEqualObjectId = membership.memberId.equals(req.user._id);
+  // If the current logged in user is not the invited user (according to the membership) then they are not allowed to perform this action
+  const isEqualObjectId = membership.memberId.equals(req.user);
   if (!isEqualObjectId) {
     return next(
       new HandledError("You are not allowed to perform this action", 403)
@@ -127,12 +135,14 @@ const confirmMembership = catchAsync(async (req, res, next) => {
 });
 
 const getAllProjectMembers = catchAsync(async (req, res, next) => {
-  if (!req.params.projectId) {
+  const { projectId } = req.params;
+
+  if (!projectId) {
     return next(new HandledError("you must specify the project id", 400));
   }
 
   const memberships = await ProjectMember.find({
-    projectId: req.params.projectId,
+    projectId,
   }).populate({
     path: "memberId",
     select: "name email",
@@ -158,15 +168,19 @@ const getAllProjectMembers = catchAsync(async (req, res, next) => {
 });
 
 const searchProjectMembers = catchAsync(async (req, res, next) => {
-  let { q } = req.query;
-
-  if (!q) {
-    q = "";
-  }
+  const { projectId } = req.params;
+  const q = req.query.q || "";
 
   const searchQuery = { $regex: q, $options: "i" };
 
-  const possibleUsers = await User.find({
+  const allMemberships = await ProjectMember.find({ projectId });
+  // We have to call memberId._id because ProjectMember will populate the memberId field after we use find query.
+  const allMembersIds = allMemberships.map(
+    (membership) => membership.memberId._id
+  );
+
+  const memberIdsBasedOnQuery = await User.find({
+    _id: { $in: allMembersIds },
     $or: [
       { name: searchQuery },
       { email: searchQuery },
@@ -174,11 +188,9 @@ const searchProjectMembers = catchAsync(async (req, res, next) => {
       { description: searchQuery },
     ],
   }).select("_id");
-  const possibleMemberIds = possibleUsers.map((user) => user._id);
 
-  const { projectId } = req.params;
   const query = ProjectMember.find({
-    memberId: { $in: possibleMemberIds },
+    memberId: { $in: memberIdsBasedOnQuery },
     projectId,
   });
 
@@ -203,52 +215,21 @@ const searchProjectMembers = catchAsync(async (req, res, next) => {
   });
 });
 
-const validateIfUserIsAllowToEditRole = catchAsync(async (req, res, next) => {
-  const updateMembershipId = req.params.id;
-  const needToUpdateMembership = await ProjectMember.findById(
-    updateMembershipId
-  );
-  const currentUserMembership = await ProjectMember.findOne({
-    projectId: needToUpdateMembership.projectId,
-    memberId: req.user._id,
-  });
-
-  if (!needToUpdateMembership) {
-    return next(
-      new HandledError(
-        `no membership found with this id = ${updateMembershipId}`,
-        404
-      )
-    );
-  }
-
-  if (needToUpdateMembership.memberId.equals(req.user._id)) {
-    return next(new HandledError(`you can not edit your own role`, 400));
-  }
-
-  if (currentUserMembership.role !== "owner") {
-    return next(
-      new HandledError(`you are not allowed to perform this action`, 403)
-    );
-  }
-
-  req.currentUserMembership = currentUserMembership;
-  req.needToUpdateMembership = needToUpdateMembership;
-
-  next();
-});
-
 const editMemberRole = catchAsync(async (req, res, next) => {
+  const { membershipId } = req.params;
+
   const newRole = req.body.role;
   if (!newRole) {
     return next(new HandledError("role can not be empty", 400));
   }
 
   const newMembership = await ProjectMember.findByIdAndUpdate(
-    req.params.id,
+    membershipId,
     { role: newRole },
     { runValidators: true, new: true }
   );
+
+  // If the new role is owner then demote the current owner to admin
   if (newRole === "owner") {
     req.currentUserMembership.role = "admin";
     await req.currentUserMembership.save();
@@ -266,7 +247,6 @@ module.exports = {
   inviteMemberToProject,
   confirmMembership,
   getAllProjectMembers,
-  validateIfUserIsAllowToEditRole,
   editMemberRole,
   searchProjectMembers,
 };

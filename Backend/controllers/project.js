@@ -1,4 +1,3 @@
-const Notification = require("../models/notification");
 const Project = require("../models/project");
 const ProjectMember = require("../models/projectMember");
 const User = require("../models/user");
@@ -6,15 +5,12 @@ const APIFeatures = require("../utils/apiFeatures");
 const { catchAsync, HandledError } = require("../utils/errorHandling");
 const crud = require("./crud");
 
-const setOwnerId = (req, res, next) => {
-  req.body.owner = req.user._id;
-  next();
-};
-
 const createProject = crud.createOne(Project);
 
 const getProject = catchAsync(async (req, res, next) => {
-  const project = await Project.findById(req.params.id)
+  const { projectId } = req.params;
+
+  const project = await Project.findById(projectId)
     .populate({
       path: "owner",
       select: "name",
@@ -23,18 +19,19 @@ const getProject = catchAsync(async (req, res, next) => {
 
   if (!project) {
     return next(
-      new HandledError(`No projects found with id = ${req.params.id}`, 404)
+      new HandledError(`No projects found with id = ${projectId}`, 404)
     );
   }
 
   const membership = await ProjectMember.findOne({
-    projectId: project._id,
-    memberId: req.user._id,
+    projectId,
+    memberId: req.user,
   });
 
+  // For private project, only members of those project can view the project's info.
   if (project.status === "private" && !membership) {
     return next(
-      new HandledError(`No projects found with id = ${req.params.id}`, 404)
+      new HandledError(`No projects found with id = ${projectId}`, 404)
     );
   }
 
@@ -43,115 +40,22 @@ const getProject = catchAsync(async (req, res, next) => {
     project.tasksCount = tasksCountByType;
   }
 
-  project.status = undefined;
   res.status(200).json({
     status: "success",
     data: { project },
   });
 });
 
-const checkUserIsOwner = catchAsync(async (req, res, next) => {
-  const membership = await ProjectMember.findOne({
-    memberId: req.user._id,
-    projectId: req.params.id,
-  });
-
-  if (!membership) {
-    return next(
-      new HandledError(
-        "can not find any membership with the provided data",
-        404
-      )
-    );
-  }
-
-  if (membership.role !== "owner") {
-    return next(
-      new HandledError("only owner is allowed to update the project info", 403)
-    );
-  }
-
-  next();
-});
-
-const checkUserIsMemberOfProject = catchAsync(async (req, res, next) => {
-  const projectMember = await ProjectMember.findOne({
-    memberId: req.user._id,
-    projectId: req.params.projectId,
-  });
-
-  if (!projectMember) {
-    return next(
-      new HandledError(
-        `you are not a member of project (id = ${req.params.projectId}) or project id is invalid`,
-        400
-      )
-    );
-  }
-
-  next();
-});
-
-const filterProjectData = (req, res, next) => {
-  const acceptedFields = ["name", "description", "tag", "status"];
-  const filteredProjectData = {};
-
-  Object.keys(req.body).forEach((key) => {
-    if (acceptedFields.includes(key)) {
-      filteredProjectData[key] = req.body[key];
-    }
-  });
-
-  req.body = filteredProjectData;
-
-  next();
-};
-
-const filterOnlyPublicProjectsMiddleware = (req, res, next) => {
-  req.body = { status: "public" };
-
-  next();
-};
-
-const sortProjectsByDateCreatedMiddleware = (req, res, next) => {
-  req.query.sort = "-dateCreated";
-
-  next();
-};
-
 const getAllProjects = crud.getAll(Project);
-
-const updateProjectFinished = async (req, project) => {
-  await Notification.create({
-    initiator: req.user._id,
-    type: process.env.NOTIFICATION_UPDATE_PROJECT_TYPE,
-    scope: "project",
-    receiver: project._id,
-    detail: project,
-  });
-
-  project.lastChanged = Date.now();
-  await project.save();
-};
-
-const prepareUpdateProjectMiddleware = (req, res, next) => {
-  req.onFinish = updateProjectFinished;
-
-  next();
-};
 
 const updateProject = crud.updateOne(Project);
 
 const searchProjects = catchAsync(async (req, res, next) => {
-  let { q } = req.query;
-
-  if (!q) {
-    q = "";
-  }
+  const q = req.query.q || "";
 
   const searchQuery = { $regex: q, $options: "i" };
 
-  const possibleOwners = await User.find({
+  const possibleProjectOwners = await User.find({
     $or: [
       { name: searchQuery },
       { email: searchQuery },
@@ -160,14 +64,16 @@ const searchProjects = catchAsync(async (req, res, next) => {
     ],
   });
 
-  const possibleOwnersId = possibleOwners.map((owner) => owner._id);
+  const possibleProjectOwnersId = possibleProjectOwners.map(
+    (owner) => owner._id
+  );
 
   const query = Project.find({
     $or: [
       { name: searchQuery },
       { tag: searchQuery },
       { description: searchQuery },
-      { owner: { $in: possibleOwnersId } },
+      { owner: { $in: possibleProjectOwnersId } },
     ],
     status: "public",
   }).populate({
@@ -199,15 +105,8 @@ const searchProjects = catchAsync(async (req, res, next) => {
 
 module.exports = {
   createProject,
-  setOwnerId,
   getProject,
-  checkUserIsOwner,
-  checkUserIsMemberOfProject,
   updateProject,
-  filterProjectData,
   getAllProjects,
-  filterOnlyPublicProjectsMiddleware,
-  sortProjectsByDateCreatedMiddleware,
   searchProjects,
-  prepareUpdateProjectMiddleware,
 };

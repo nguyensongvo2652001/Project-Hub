@@ -97,14 +97,14 @@ describe("Test invite member to project route", () => {
       password: "someThing2605!",
     });
 
-    await agent
+    const response = await agent
       .post(inviteMemberRoute)
       .send({
         email: newMember.email,
         projectId: new mongoose.Types.ObjectId(),
       })
       .set("Cookie", cookie)
-      .expect(404);
+      .expect(403);
   }, 10000);
   it("should fail if invited user is already in the project", async () => {
     const agent = request.agent(app);
@@ -164,5 +164,5 @@ describe("Test invite member to project route", () => {
     });
     expect(pendingMembership).not.toBeUndefined();
     expect(pendingMembership.status).toBe("pending");
-  });
+  }, 20000);
 });

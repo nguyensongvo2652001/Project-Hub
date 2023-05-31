@@ -23,7 +23,7 @@ const taskSchema = new mongoose.Schema({
     required: [true, "A task must belong to a project"],
     validate: {
       validator: async function (v) {
-        const project = await Project.findById(v);
+        const project = await mongoose.model("Project").findById(v);
         return project !== null;
       },
       message: (props) => `Project with id ${props.value} does not exist`,

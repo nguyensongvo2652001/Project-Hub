@@ -1,15 +1,21 @@
 const express = require("express");
+
 const userController = require("../controllers/user");
-const authController = require("../controllers/auth");
+
+const authMiddleware = require("../middlewares/authMiddleware");
+const userMiddleware = require("../middlewares/userMiddleware");
 
 const router = express.Router();
 
-router.use(authController.checkAuthentication);
+router.use(authMiddleware.validateIfUserLoggedIn);
 
 router.get("/search", userController.searchUsers);
 
 router
   .route("/:id")
-  .get(userController.prepareUserSelectMiddleware, userController.getUser);
+  .get(
+    userMiddleware.prepareUserSelectOptionsMiddleware,
+    userController.getUser
+  );
 
 module.exports = router;

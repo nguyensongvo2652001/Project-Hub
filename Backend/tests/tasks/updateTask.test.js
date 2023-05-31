@@ -133,7 +133,7 @@ describe("Test update task route", () => {
       .expect(403);
   });
 
-  it("should be successful", async () => {
+  it("should be successful if the user is not the admin or owner but the creator of the task", async () => {
     const loginCookie = await getLoginCookie(app, loginRoute, {
       email: developer.email,
       password: rawPassword,
