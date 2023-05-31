@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
-const Project = require("./project");
 const User = require("./user");
 const { HandledError } = require("../utils/errorHandling");
-const ProjectMember = require("./projectMember");
 
 const taskTypeOptions = [
   "feature",

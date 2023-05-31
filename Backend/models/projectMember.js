@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { HandledError } = require("../utils/errorHandling");
-const Task = require("./task");
-const userStatController = require("../controllers/userStat");
 
 const projectMemberSchema = new mongoose.Schema(
   {
