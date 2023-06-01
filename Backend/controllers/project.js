@@ -26,9 +26,10 @@ const getProject = catchAsync(async (req, res, next) => {
   const membership = await ProjectMember.findOne({
     projectId,
     memberId: req.user,
+    status: "done",
   });
 
-  // For private project, only members of those project can view the project's info.
+  // For private project, only members of those project  can view the project's info.
   if (project.status === "private" && !membership) {
     return next(
       new HandledError(`No projects found with id = ${projectId}`, 404)

@@ -113,15 +113,15 @@ const validateIfUserIsAllowedToViewTaskMiddleware = catchAsync(
     const membership = await ProjectMember.findOne({
       projectId: task.projectId,
       memberId: req.user,
+      status: "done",
     });
 
-    if (!membership || membership.status !== "done") {
+    if (!membership) {
       return next(
         new HandledError(`You are not allowed to view this task`, 403)
       );
     }
 
-    console.log(req.params.id);
     next();
   }
 );

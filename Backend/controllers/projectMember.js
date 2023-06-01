@@ -173,44 +173,90 @@ const searchProjectMembers = catchAsync(async (req, res, next) => {
 
   const searchQuery = { $regex: q, $options: "i" };
 
-  const allMemberships = await ProjectMember.find({ projectId });
-  // We have to call memberId._id because ProjectMember will populate the memberId field after we use find query.
-  const allMembersIds = allMemberships.map(
-    (membership) => membership.memberId._id
-  );
-
-  const memberIdsBasedOnQuery = await User.find({
-    _id: { $in: allMembersIds },
-    $or: [
-      { name: searchQuery },
-      { email: searchQuery },
-      { jobTitle: searchQuery },
-      { description: searchQuery },
-    ],
-  }).select("_id");
-
   const query = ProjectMember.find({
-    memberId: { $in: memberIdsBasedOnQuery },
     projectId,
+    status: "done",
+  }).populate({
+    path: "memberId",
+    select: "name email jobTitle description avatar",
+    match: {
+      $or: [
+        { name: searchQuery },
+        { email: searchQuery },
+        { jobTitle: searchQuery },
+        { description: searchQuery },
+      ],
+    },
   });
+
+  //We have to do this because ProjectMember will populate memberId field (WITHOUT matching) automatically if we don't set skipPopulate
+  query.skipPopulate = true;
 
   const queryString = req.query;
   if (!queryString.sort) {
     queryString.sort = "-dateJoined";
   }
 
-  const features = new APIFeatures(query, queryString)
-    .sort()
-    .limitFields()
-    .paginate();
+  const features = new APIFeatures(query, queryString).sort();
 
-  const members = await features.query;
+  let members = await features.query;
+
+  // The match query in populate does NOT exclude documents that do not match the query, they simply set memberId to null so we need to filter them out.
+  members = members.filter((member) => member.memberId != null);
+
+  const limit = req.query.limit || 10;
+  const page = req.query.page || 1;
+
+  const skip = (page - 1) * limit;
+
+  members = members.slice(skip, skip + limit);
 
   res.status(200).json({
     status: "success",
     data: {
       length: members.length,
       members,
+    },
+  });
+});
+
+const searchNonProjectMembers = catchAsync(async (req, res, next) => {
+  // Basically we use this controller when we want to find users that are not members of our projects to add to the project.
+
+  const { projectId } = req.params;
+  const q = req.query.q || "";
+
+  const searchQuery = { $regex: q, $options: "i" };
+
+  const allMemberships = await ProjectMember.find({ projectId });
+  // We have to call memberId._id because ProjectMember will populate the memberId field after we use find query.
+  const allMembersIds = allMemberships.map(
+    (membership) => membership.memberId._id
+  );
+
+  const nonMembersQuery = User.find({
+    _id: { $not: { $in: allMembersIds } },
+    $or: [
+      { name: searchQuery },
+      { email: searchQuery },
+      { jobTitle: searchQuery },
+      { description: searchQuery },
+    ],
+  });
+
+  const queryString = req.query;
+  const features = new APIFeatures(nonMembersQuery, queryString)
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const nonMembers = await features.query;
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      length: nonMembers.length,
+      nonMembers,
     },
   });
 });
@@ -249,4 +295,5 @@ module.exports = {
   getAllProjectMembers,
   editMemberRole,
   searchProjectMembers,
+  searchNonProjectMembers,
 };

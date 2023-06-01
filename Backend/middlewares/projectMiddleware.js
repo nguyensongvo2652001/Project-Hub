@@ -42,10 +42,11 @@ const validateIfUserIsMemberOfProjectMiddleware = catchAsync(
     const projectMember = await ProjectMember.findOne({
       memberId: req.user,
       projectId: projectId,
+      status: "done",
     });
 
     // Here we do NOT count users that are invited but have NOT confirmed their membership (status === "pending")
-    if (!projectMember || projectMember.status !== "done") {
+    if (!projectMember) {
       return next(
         new HandledError(
           `you are not a member of project (id = ${projectId}) or project id is invalid`,

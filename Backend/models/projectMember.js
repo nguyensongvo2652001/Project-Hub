@@ -72,12 +72,31 @@ const projectMemberSchema = new mongoose.Schema(
   }
 );
 
+projectMemberSchema.index({ projectId: 1 });
+projectMemberSchema.index({ memberId: 1 });
+projectMemberSchema.index({ role: 1 });
+projectMemberSchema.index({ invitationToken: 1 });
+projectMemberSchema.index({ status: 1 });
+
 projectMemberSchema.pre(/^find/, function (next) {
+  if (this.skipPopulate) {
+    return next();
+  }
+
   this.populate({
     path: "memberId",
     select: "name email avatar jobTitle",
   });
   next();
+});
+
+//We will need this field when we want provide information about whether a member is responsible for certain tasks for or not.
+projectMemberSchema.virtual("isTaskDeveloper").get(function () {
+  return this._isTaskDeveloper;
+});
+
+projectMemberSchema.virtual("isTaskDeveloper").set(function (value) {
+  this._isTaskDeveloper = value;
 });
 
 projectMemberSchema.virtual("performance").get(function () {
@@ -87,12 +106,6 @@ projectMemberSchema.virtual("performance").get(function () {
 projectMemberSchema.virtual("performance").set(function (value) {
   this._performance = value;
 });
-
-projectMemberSchema.index({ projectId: 1 });
-projectMemberSchema.index({ memberId: 1 });
-projectMemberSchema.index({ role: 1 });
-projectMemberSchema.index({ invitationToken: 1 });
-projectMemberSchema.index({ status: 1 });
 
 projectMemberSchema.methods.createInvitationToken = function () {
   const token = crypto.randomBytes(32).toString("hex");

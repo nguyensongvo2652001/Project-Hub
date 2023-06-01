@@ -91,6 +91,10 @@ const projectSchema = new mongoose.Schema(
   }
 );
 
+projectSchema.index({ owner: 1 });
+projectSchema.index({ name: 1 });
+projectSchema.index({ status: 1 });
+
 projectSchema.post("save", async function (doc, next) {
   try {
     await mongoose.model("ProjectMember").create({
@@ -112,10 +116,6 @@ projectSchema.virtual("numberOfMembers", {
   match: { status: "done" },
   count: true,
 });
-
-projectSchema.index({ owner: 1 });
-projectSchema.index({ name: 1 });
-projectSchema.index({ status: 1 });
 
 projectSchema.virtual("tasksCount").get(function () {
   return this._tasksCount;

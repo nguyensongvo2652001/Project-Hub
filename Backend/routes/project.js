@@ -49,6 +49,10 @@ router.get(
   "/:projectId/member/search",
   projectMemberController.searchProjectMembers
 );
+router.get(
+  "/:projectId/nonMember/search",
+  projectMemberController.searchNonProjectMembers
+);
 
 router.get(
   "/:projectId/notification",
