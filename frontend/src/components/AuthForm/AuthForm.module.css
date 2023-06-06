@@ -1,3 +1,9 @@
+.authFormContainer {
+  width: 43rem;
+  min-height: 42rem;
+  height: fit-content;
+}
+
 .authForm {
   width: 43rem;
   min-height: 42rem;

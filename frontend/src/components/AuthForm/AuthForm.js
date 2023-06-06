@@ -95,7 +95,7 @@ const AuthForm = (props) => {
   const finalLink = isSignIn ? "/signUp" : "/login";
   const finalLinkText = isSignIn ? "Create an account" : "Log in";
   return (
-    <Card>
+    <Card className={authFormStyles.authFormContainer}>
       <form className={authFormStyles.authForm}>
         <h1 className={authFormStyles["authForm__title"]}>{formTitle}</h1>
 

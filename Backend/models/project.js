@@ -125,6 +125,14 @@ projectSchema.virtual("tasksCount").set(function (value) {
   this._tasksCount = value;
 });
 
+projectSchema.virtual("membersCount").get(function () {
+  return this._membersCount;
+});
+
+projectSchema.virtual("membersCount").set(function (value) {
+  this._membersCount = value;
+});
+
 projectSchema.methods.countTasksByType = async function () {
   //Task will have a projectId field to identify which project that task belongs to so we use that to find all the tasks that belonged to the current projects and count the number of tasks for each types.
   const result = await mongoose.model("Task").aggregate([
@@ -138,8 +146,26 @@ projectSchema.methods.countTasksByType = async function () {
     },
     { $unwind: "$project" },
     { $match: { "project._id": this._id } },
-    { $group: { _id: "$type", count: { $sum: 1 } } },
+    { $group: { _id: "$status", count: { $sum: 1 } } },
   ]);
+  return result;
+};
+
+projectSchema.methods.countMembersByRole = async function () {
+  const result = await mongoose.model("ProjectMember").aggregate([
+    {
+      $lookup: {
+        from: "projects",
+        localField: "projectId",
+        foreignField: "_id",
+        as: "project",
+      },
+    },
+    { $unwind: "$project" },
+    { $match: { "project._id": this._id } },
+    { $group: { _id: "$role", count: { $sum: 1 } } },
+  ]);
+
   return result;
 };
 

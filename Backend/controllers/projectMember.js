@@ -141,12 +141,25 @@ const getAllProjectMembers = catchAsync(async (req, res, next) => {
     return next(new HandledError("you must specify the project id", 400));
   }
 
-  const memberships = await ProjectMember.find({
+  const membershipsQuery = ProjectMember.find({
     projectId,
   }).populate({
     path: "memberId",
     select: "name email",
   });
+
+  const queryString = req.query;
+  if (!queryString.sort) {
+    queryString.sort = "dateJoined";
+  }
+
+  const features = new APIFeatures(membershipsQuery, queryString)
+    .filter()
+    .limitFields()
+    .sort()
+    .paginate();
+
+  const memberships = await features.query;
 
   const promises = memberships.map(async (membership) => {
     membership.performance =
@@ -194,7 +207,7 @@ const searchProjectMembers = catchAsync(async (req, res, next) => {
 
   const queryString = req.query;
   if (!queryString.sort) {
-    queryString.sort = "-dateJoined";
+    queryString.sort = "dateJoined";
   }
 
   const features = new APIFeatures(query, queryString).sort();

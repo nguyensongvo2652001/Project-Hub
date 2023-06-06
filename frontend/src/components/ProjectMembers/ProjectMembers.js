@@ -1,9 +1,7 @@
-import InProjectWithHeaderAndTaskStatRowLayout from "../Layout/InProjectWithHeaderAndTaskStatRowLayout/InProjectWithHeaderAndTaskStatRowLayout";
+import InProjectWithHeaderAndTaskStatRowLayout from "../Layout/InProjectWithHeaderAndStatRowLayout/InProjectWithHeaderAndStatRowLayout";
 import ProjectMember from "../ProjectMember/ProjectMember";
 
 import classes from "./ProjectMembers.module.css";
-
-import avatar from "../../assets/avatar1.jpg";
 
 import { useCallback, useContext, useEffect, useState } from "react";
 import ConstantContext from "../../contexts/ConstantContext";
@@ -13,10 +11,10 @@ import useSendRequest from "../../hooks/useSendRequest";
 import useErrorHandling from "../../hooks/useErrorHandling";
 import { getDateDisplay } from "../../utils/date";
 import Loading from "../UI/Loading/Loading";
+import NoDocumentsFound from "../UI/NoDocumentsFound/NoDocumentsFound";
 
 const ProjectMembers = (props) => {
   const { project } = props;
-  console.log(project._id);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialRender, setIsInitialRender] = useState(true);
@@ -24,6 +22,8 @@ const ProjectMembers = (props) => {
 
   const maxProjectMembersPerRequestLimit = 10;
   const [getProjectMembersPage, setGetProjectMembersPage] = useState(1);
+
+  const [currentMemberRole, setCurrentMemberRole] = useState("All");
 
   const [noMoreProjectMembers, setNoMoreProjectMembers] = useState(false);
   const [lastProjectMember, setLastProjectMember] = useState(null);
@@ -42,7 +42,11 @@ const ProjectMembers = (props) => {
         return;
       }
 
-      const getProjectMembersURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/project/${project._id}/member?limit=${maxProjectMembersPerRequestLimit}&page=${getProjectMembersPage}`;
+      let getProjectMembersURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/project/${project._id}/member?limit=${maxProjectMembersPerRequestLimit}&page=${getProjectMembersPage}`;
+
+      if (currentMemberRole !== "All") {
+        getProjectMembersURL += `&role=${currentMemberRole.toLowerCase()}`;
+      }
 
       setIsLoading(true);
       const response = await sendRequest(getProjectMembersURL);
@@ -74,6 +78,8 @@ const ProjectMembers = (props) => {
     handleError,
     project._id,
     sendRequest,
+    isInitialRender,
+    currentMemberRole,
   ]);
 
   const checkIfShouldStopObservingLastProjectMember = useCallback(() => {
@@ -90,6 +96,15 @@ const ProjectMembers = (props) => {
     actionWhenLastProjectMemberInViewport
   );
 
+  const onDropdownOptionChange = (event) => {
+    if (event.target.value === currentMemberRole) return;
+
+    setGetProjectMembersPage(1);
+    setNoMoreProjectMembers(false);
+    setCurrentMemberRole(event.target.value);
+    setMemberships([]);
+  };
+
   const constantContext = useContext(ConstantContext);
 
   const memberRolesOption = constantContext.MEMBER_ROLES;
@@ -99,12 +114,38 @@ const ProjectMembers = (props) => {
   );
   capitalizedMemberRolesOption.unshift("All");
 
+  const membersCountBasedOnRole = {
+    all: 0,
+    owner: 0,
+    admin: 0,
+    developer: 0,
+  };
+
+  const { membersCount } = project;
+
+  membersCount.map((membersCountInfo) => {
+    const role = membersCountInfo._id;
+    membersCountBasedOnRole[role] = membersCountInfo.count;
+    return null;
+  });
+
+  membersCountBasedOnRole.all = project.numberOfMembers;
+
+  const membersStatRowOptions = Object.keys(membersCountBasedOnRole).map(
+    (key) => {
+      return { label: key, value: membersCountBasedOnRole[key] };
+    }
+  );
+
   return (
     <InProjectWithHeaderAndTaskStatRowLayout
+      project={project}
+      shouldDisplayNewTaskButton={false}
       dropDownOptions={capitalizedMemberRolesOption}
+      dropDownOnChange={onDropdownOptionChange}
+      statRowOptions={membersStatRowOptions}
     >
-      {isLoading && <Loading />}
-      {!isLoading && (
+      {memberships.length > 0 && (
         <ul className={classes.members}>
           {memberships.map((membership, index) => {
             const {
@@ -151,6 +192,10 @@ const ProjectMembers = (props) => {
             );
           })}
         </ul>
+      )}
+      {isLoading && <Loading />}
+      {!isLoading && (
+        <NoDocumentsFound message="Unfortunately, it looks like we can not find any other members" />
       )}
     </InProjectWithHeaderAndTaskStatRowLayout>
   );

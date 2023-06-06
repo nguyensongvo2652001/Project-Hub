@@ -26,6 +26,9 @@ const getProject = catchAsync(async (req, res, next) => {
   const tasksCountByType = await project.countTasksByType();
   project.tasksCount = tasksCountByType;
 
+  const membersCountByRole = await project.countMembersByRole();
+  project.membersCount = membersCountByRole;
+
   res.status(200).json({
     status: "success",
     data: { project },

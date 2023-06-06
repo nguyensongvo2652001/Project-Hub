@@ -23,6 +23,7 @@ const InProjectLayout = (props) => {
     const getProjectDetailRequest = async () => {
       setIsLoading(true);
       const response = await sendRequest(getProjectDetailURL);
+      console.log(response);
 
       if (response.statusCode !== 200) {
         return navigate("/forbidden");

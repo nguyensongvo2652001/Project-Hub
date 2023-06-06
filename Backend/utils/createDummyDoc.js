@@ -10,6 +10,8 @@ const Task = require("../models/task");
 const Notification = require("../models/notification");
 
 const deleteAllData = async () => {
+  await User.deleteMany();
+  await Project.deleteMany();
   await Task.deleteMany();
   await Notification.deleteMany();
   await ProjectMember.deleteMany();
@@ -408,6 +410,8 @@ const createTaskAndNotifications = async () => {
   uri = uri.replace(/<databaseName>/, process.env.DB_NAME);
   await connectDB(uri);
   await deleteAllData();
+  await createDummyUsers();
+  await createDummyProjects();
   await createProjectMemberAndNotifications();
   await createTaskAndNotifications();
 })();

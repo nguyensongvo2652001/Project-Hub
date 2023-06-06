@@ -5,7 +5,7 @@ const TaskMainInfo = (props) => {
 
   const mainInfo = {
     name: task.name,
-    tag: task.tag,
+    tag: task.status,
     description: task.description,
     link: "tasks/123",
   };
