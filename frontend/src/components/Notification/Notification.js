@@ -18,7 +18,7 @@ const Notification = (props) => {
   );
 
   const { type, detail } = notification;
-  console.log(notification);
+
   const notificationLinkAndMessageBasedOnType = {
     project_invitation: {
       message: `just invited you to project ${detail?.name}. Please check your email for more information.`,

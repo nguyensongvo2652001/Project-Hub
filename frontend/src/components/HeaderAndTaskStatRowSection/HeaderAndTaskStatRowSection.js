@@ -8,14 +8,10 @@ import { capitalizeFirstLetter } from "../../utils/string";
 import classes from "./HeaderAndTaskStatRowSection.module.css";
 
 const HeaderAndTaskStatRowSection = (props) => {
-  const { project, tasksCountBasedOnStatus } = props;
+  const { project, tasksCountBasedOnStatus, dropDownOptions } = props;
   const constantContext = useContext(ConstantContext);
 
   const taskStatusOptions = constantContext.TASK_STATUS_CONSTANT;
-  const statusDropdownOptions = [
-    "All",
-    ...taskStatusOptions.map((status) => capitalizeFirstLetter(status)),
-  ];
 
   let displayProjectName = project.name;
   if (displayProjectName.length > 30) {
@@ -30,7 +26,7 @@ const HeaderAndTaskStatRowSection = (props) => {
           <button className={classes.header__newTaskButton}>New Task</button>
           <Dropdown
             className={classes.header__statusDropdown}
-            options={statusDropdownOptions}
+            options={dropDownOptions}
           />
         </div>
       </header>

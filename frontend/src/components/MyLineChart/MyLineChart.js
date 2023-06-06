@@ -27,7 +27,7 @@ const MyLineChart = (props) => {
           {props.title}
         </text>
         <XAxis dataKey="name" />
-        <YAxis />
+        <YAxis padding={{ top: 50 }} />
         <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
         <Line
           type="monotone"

@@ -19,8 +19,8 @@
 }
 
 .member__avatar {
-  width: 50%;
-  height: 50%;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   margin-bottom: 2.5rem;
 }

@@ -27,8 +27,18 @@ const ProjectDashboard = (props) => {
     },
   ];
 
+  const constantContext = useContext(ConstantContext);
+
+  const taskStatusOptions = constantContext.TASK_STATUS_CONSTANT;
+  const statusDropdownOptions = [
+    "All",
+    ...taskStatusOptions.map((status) => capitalizeFirstLetter(status)),
+  ];
+
   return (
-    <InProjectWithHeaderAndTaskStatRowLayout>
+    <InProjectWithHeaderAndTaskStatRowLayout
+      dropDownOptions={statusDropdownOptions}
+    >
       <ul className={classes.projectDashboard__tasks}>
         <Task
           task={{

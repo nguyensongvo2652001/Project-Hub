@@ -49,8 +49,8 @@ const validateIfUserIsMemberOfProjectMiddleware = catchAsync(
     if (!projectMember) {
       return next(
         new HandledError(
-          `you are not a member of project (id = ${projectId}) or project id is invalid`,
-          400
+          `you are not a member of project (id = ${projectId})`,
+          403
         )
       );
     }

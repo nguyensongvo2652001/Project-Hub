@@ -7,7 +7,7 @@ import AvatarLink from "../AvatarLink/AvatarLink.js";
 import classes from "./ProjectMember.module.css";
 
 const ProjectMember = (props) => {
-  const { member, memberMetaInfo } = props;
+  const { member, memberMetaInfo, lastProjectMemberRef } = props;
 
   let displayMemberName = member.name;
   if (displayMemberName.length > 20) {
@@ -15,7 +15,7 @@ const ProjectMember = (props) => {
   }
 
   return (
-    <li>
+    <li ref={lastProjectMemberRef}>
       <Card className={classes.member}>
         <header className={classes.member__header}>
           <MyLink

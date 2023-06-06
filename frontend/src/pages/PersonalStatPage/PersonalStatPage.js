@@ -12,8 +12,6 @@ import { useEffect, useState } from "react";
 import useSendRequest from "../../hooks/useSendRequest";
 import useErrorHandling from "../../hooks/useErrorHandling";
 
-import { convertNumberToMonthName } from "../../utils/date";
-
 import classes from "./PersonalStatPage.module.css";
 
 const getFirstRowStatInfo = (tasksCountByStatus, totalProjectsJoined) => {
@@ -58,8 +56,7 @@ const convertResponseDataToChartData = (data) => {
   const convertedData = [];
   keys.map((key) => {
     const [year, monthNumber] = key.split(" ");
-    const monthName = convertNumberToMonthName(monthNumber);
-    const name = `${monthName} ${year}`;
+    const name = `${monthNumber}/${year}`;
     convertedData.push({
       name,
       value: data[key],

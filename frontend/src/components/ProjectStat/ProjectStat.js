@@ -1,4 +1,3 @@
-import InProjectLayout from "../Layout/InProjectLayout/InProjectLayout";
 import MyPieChart from "../../components/PieChart/MyPieChart";
 import MyLineChart from "../../components/MyLineChart/MyLineChart";
 import MyBarChart from "../../components/MyBarChart/MyBartChart";
@@ -8,8 +7,6 @@ import Loading from "../../components/UI/Loading/Loading";
 import { useEffect, useState } from "react";
 import useSendRequest from "../../hooks/useSendRequest";
 import useErrorHandling from "../../hooks/useErrorHandling";
-
-import { convertNumberToMonthName } from "../../utils/date";
 
 import classes from "./ProjectStat.module.css";
 
@@ -49,8 +46,7 @@ const convertResponseDataToChartData = (data) => {
   const convertedData = [];
   keys.map((key) => {
     const [year, monthNumber] = key.split(" ");
-    const monthName = convertNumberToMonthName(monthNumber);
-    const name = `${monthName} ${year}`;
+    const name = `${monthNumber}/${year}`;
     convertedData.push({
       name,
       value: data[key],
@@ -62,6 +58,8 @@ const convertResponseDataToChartData = (data) => {
 };
 
 const ProjectStat = (props) => {
+  const { project } = props;
+
   const { sendRequest } = useSendRequest();
   const handleError = useErrorHandling();
 
@@ -77,7 +75,7 @@ const ProjectStat = (props) => {
 
   useEffect(() => {
     const getProjectStat = async () => {
-      const getProjectStatURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/project/64644f24d72808f7e85af670/stat`;
+      const getProjectStatURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/project/${project._id}/stat`;
 
       try {
         setIsLoading(true);
@@ -130,66 +128,64 @@ const ProjectStat = (props) => {
     };
 
     getProjectStat();
-  }, [handleError, sendRequest]);
+  }, [handleError, sendRequest, project._id]);
 
   return (
-    <InProjectLayout>
-      <div className={classes.projectStat}>
-        {isLoading && <Loading className={classes.myProfilePage__loading} />}
-        {!isLoading && (
-          <>
-            <ul className={classes.projectStat__firstRow}>
-              {firstRowStatInfo.map((statInfo, index) => {
-                return (
-                  <li key={index}>
-                    <StatBox statInfo={statInfo} />
-                  </li>
-                );
-              })}
-            </ul>
+    <div className={classes.projectStat}>
+      {isLoading && <Loading className={classes.myProfilePage__loading} />}
+      {!isLoading && (
+        <>
+          <ul className={classes.projectStat__firstRow}>
+            {firstRowStatInfo.map((statInfo, index) => {
+              return (
+                <li key={index}>
+                  <StatBox statInfo={statInfo} />
+                </li>
+              );
+            })}
+          </ul>
 
-            <ul className={classes.projectStat__secondRow}>
-              <li
-                className={classes.projectStat__completionRatePieChartContainer}
-              >
-                <MyPieChart
-                  width={400}
-                  height={300}
-                  data={completionRatePieChartData}
-                  className={classes.projectStat__completionRatePieChart}
-                  title="Completion rate pie chart"
-                  titleColor="#4DABF7"
-                />
-              </li>
-            </ul>
-
-            <div
-              className={classes.projectStat__completionRateLineChartContainer}
+          <ul className={classes.projectStat__secondRow}>
+            <li
+              className={classes.projectStat__completionRatePieChartContainer}
             >
-              <MyLineChart
-                data={completionRateLineChartData}
-                width="100%"
+              <MyPieChart
+                width={400}
                 height={300}
-                label="Completion rate (%)"
-                color="#4DABF7"
-                title="Project average completion rate in the last 12 months"
+                data={completionRatePieChartData}
+                className={classes.projectStat__completionRatePieChart}
+                title="Completion rate pie chart"
+                titleColor="#4DABF7"
               />
-            </div>
+            </li>
+          </ul>
 
-            <div className={classes.projectStat__barChartContainer}>
-              <MyBarChart
-                data={newlyCompletedTasksBarChartData}
-                barColor="#4DABF7"
-                label="number of newly completed tasks"
-                width="100%"
-                height={300}
-                title="Number of newly completed tasks in the last 12 months"
-              />
-            </div>
-          </>
-        )}
-      </div>
-    </InProjectLayout>
+          <div
+            className={classes.projectStat__completionRateLineChartContainer}
+          >
+            <MyLineChart
+              data={completionRateLineChartData}
+              width="100%"
+              height={300}
+              label="Completion rate (%)"
+              color="#4DABF7"
+              title="Project average completion rate in the last 12 months"
+            />
+          </div>
+
+          <div className={classes.projectStat__barChartContainer}>
+            <MyBarChart
+              data={newlyCompletedTasksBarChartData}
+              barColor="#4DABF7"
+              label="number of newly completed tasks"
+              width="100%"
+              height={300}
+              title="Number of newly completed tasks in the last 12 months"
+            />
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 

@@ -13,7 +13,6 @@ const deleteAllData = async () => {
   await Task.deleteMany();
   await Notification.deleteMany();
   await ProjectMember.deleteMany();
-  console.log("Finished");
 };
 
 const createDummyUsers = async () => {

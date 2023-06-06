@@ -14,6 +14,9 @@ const useSendRequest = () => {
       credentials: "include",
     });
     const responseBody = await response.json();
+
+    responseBody.statusCode = response.status;
+
     return responseBody;
   }, []);
 

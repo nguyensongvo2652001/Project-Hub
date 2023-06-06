@@ -5,6 +5,8 @@ import InProjectLayout from "../InProjectLayout/InProjectLayout";
 import classes from "./InProjectWithHeaderAndTaskStatRowLayout.module.css";
 
 const InProjectWithHeaderAndTaskStatRowLayout = (props) => {
+  const { dropDownOptions } = props;
+
   const project = {
     name: "Twitter Clone",
   };
@@ -18,15 +20,14 @@ const InProjectWithHeaderAndTaskStatRowLayout = (props) => {
   });
 
   return (
-    <InProjectLayout>
-      <div className={classes.container}>
-        <HeaderAndTaskStatRowSection
-          project={project}
-          tasksCountBasedOnStatus={tasksCountBasedOnStatus}
-        />
-        {props.children}
-      </div>
-    </InProjectLayout>
+    <div className={classes.container}>
+      <HeaderAndTaskStatRowSection
+        project={project}
+        tasksCountBasedOnStatus={tasksCountBasedOnStatus}
+        dropDownOptions={dropDownOptions}
+      />
+      {props.children}
+    </div>
   );
 };
 

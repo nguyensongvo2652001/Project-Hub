@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { HandledError } = require("../utils/errorHandling");
 
+const possibleProjectMembersRole = ["owner", "admin", "developer"];
+
 const projectMemberSchema = new mongoose.Schema(
   {
     projectId: {
@@ -34,11 +36,11 @@ const projectMemberSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["owner", "admin", "developer"],
+      enum: possibleProjectMembersRole,
       default: "developer",
       validate: {
         validator: function (v) {
-          return ["owner", "admin", "developer"].includes(v);
+          return possibleProjectMembersRole.includes(v);
         },
         message: (props) =>
           `${

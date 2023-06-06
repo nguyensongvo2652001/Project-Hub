@@ -30,6 +30,7 @@ router
 
 router
   .route("/:projectId")
+  .all(projectMiddelware.validateIfUserIsMemberOfProjectMiddleware)
   .get(projectController.getProject)
   .patch(
     projectMiddelware.validateIfUserIsOwnerOfTheProjectMiddleware,
