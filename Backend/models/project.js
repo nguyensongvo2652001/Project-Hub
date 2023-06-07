@@ -95,7 +95,20 @@ projectSchema.index({ owner: 1 });
 projectSchema.index({ name: 1 });
 projectSchema.index({ status: 1 });
 
+projectSchema
+  .virtual("skipCreatingOwnerMembership")
+  .get(function () {
+    return this._skipCreatingOwnerMembership;
+  })
+  .set(function (value) {
+    this._skipCreatingOwnerMembership = value;
+  });
+
 projectSchema.post("save", async function (doc, next) {
+  if (this.skipCreatingOwnerMembership) {
+    return next();
+  }
+
   try {
     await mongoose.model("ProjectMember").create({
       projectId: doc._id,

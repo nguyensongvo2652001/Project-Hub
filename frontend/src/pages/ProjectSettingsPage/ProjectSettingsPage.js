@@ -1,7 +1,12 @@
+import InProjectLayout from "../../components/Layout/InProjectLayout/InProjectLayout";
 import ProjectSettings from "../../components/ProjectSettings/ProjectSettings";
 
 const ProjectSettingsPage = () => {
-  return <ProjectSettings />;
+  return (
+    <InProjectLayout>
+      <ProjectSettings />
+    </InProjectLayout>
+  );
 };
 
 export default ProjectSettingsPage;

@@ -19,7 +19,7 @@ import debounce from "../../utils/debounce.js";
 
 const ProjectDashboard = (props) => {
   const { project } = props;
-  const getMoreTasksLimitPerRequest = 10;
+  const getMoreTasksLimitPerRequest = 3;
 
   const [taskStatus, setTaskStatus] = useState("All");
   const [isLoading, setIsLoading] = useState(true);
@@ -106,7 +106,6 @@ const ProjectDashboard = (props) => {
 
   useEffect(() => {
     const getMoreTasks = async () => {
-      console.log(getMoreTasksPage);
       if (isInitialRender) {
         setIsInitialRender(false);
         return;

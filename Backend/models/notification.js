@@ -2,13 +2,14 @@ const mongoose = require("mongoose");
 const { HandledError } = require("../utils/errorHandling");
 
 const notificationScopeOptions = ["personal", "project"];
+
 const notificationTypeOptions = [
-  process.env.NOTIFICATION_PROJECT_INVITATION_TYPE,
-  process.env.NOTIFICATION_PROJECT_INVITATION_CONFIRM_TYPE,
-  process.env.NOTIFICATION_NEW_TASK_TYPE,
-  process.env.NOTIFICATION_UPDATE_TASK_TYPE,
-  process.env.NOTIFICATION_DELETE_TASK_TYPE,
-  process.env.NOTIFICATION_UPDATE_PROJECT_TYPE,
+  "project_invitation",
+  "project_invitation_confirm",
+  "project_new_task",
+  "project_update_task",
+  "project_delete_task",
+  "project_update",
 ];
 
 const notificationSchema = new mongoose.Schema({

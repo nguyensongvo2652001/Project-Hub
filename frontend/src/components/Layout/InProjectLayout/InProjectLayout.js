@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 import InProjectNavbar from "../../Navbars/InProjectNavbar/InProjectNavbar.js";
 import AuthPageLayout from "../AuthPageLayout/AuthPageLayout";
@@ -19,23 +19,27 @@ const InProjectLayout = (props) => {
   const [project, setProject] = useState({});
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const loadProject = useCallback(async () => {
     const getProjectDetailURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/project/${projectId}`;
-    const getProjectDetailRequest = async () => {
-      setIsLoading(true);
-      const response = await sendRequest(getProjectDetailURL);
 
-      if (response.statusCode !== 200) {
-        return navigate("/forbidden");
-      }
+    const response = await sendRequest(getProjectDetailURL);
 
-      setProject(response.data.project);
+    if (response.statusCode !== 200) {
+      return navigate("/forbidden");
+    }
 
-      setIsLoading(false);
-    };
+    setProject(response.data.project);
+  }, [navigate, projectId, sendRequest]);
 
-    getProjectDetailRequest();
-  }, [sendRequest, projectId, navigate]);
+  const getProjectDetailBeforeLoadingPage = useCallback(async () => {
+    setIsLoading(true);
+    await loadProject();
+    setIsLoading(false);
+  }, [loadProject]);
+
+  useEffect(() => {
+    getProjectDetailBeforeLoadingPage();
+  }, [getProjectDetailBeforeLoadingPage]);
 
   return (
     <AuthPageLayout>
@@ -44,7 +48,10 @@ const InProjectLayout = (props) => {
         {isLoading && <Loading />}
         {!isLoading &&
           React.Children.map(props.children, (child) => {
-            return React.cloneElement(child, { project });
+            return React.cloneElement(child, {
+              project,
+              setProject,
+            });
           })}
       </div>
     </AuthPageLayout>

@@ -96,6 +96,10 @@ const updateProjectOnFinish = async (req, project) => {
   });
 
   project.lastChanged = Date.now();
+
+  //The default behaviour is that AFTER we save a project new info, it will create a new ProjectMember document for the owner so we need to set this to true so mongoose can skip that function.
+  project.skipCreatingOwnerMembership = true;
+
   await project.save();
 };
 

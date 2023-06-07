@@ -28,6 +28,10 @@
   font-size: 1.2rem;
 }
 
+.projectSetting__loadingWhenSendingRequest {
+  margin-right: 3rem;
+}
+
 .projectSetting__saveButton:hover {
   background-color: #97aece;
 }
@@ -54,6 +58,8 @@
   height: fit-content;
   left: 30%;
   width: 50%;
+
+  overflow-y: scroll;
 }
 
 .projectSetting__radioButtonGroup {

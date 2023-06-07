@@ -22,7 +22,7 @@ const ProjectMembers = (props) => {
   const [isInitialRender, setIsInitialRender] = useState(true);
   const handleError = useErrorHandling();
 
-  const maxProjectMembersPerRequestLimit = 10;
+  const maxProjectMembersPerRequestLimit = 3;
   const [getProjectMembersPage, setGetProjectMembersPage] = useState(1);
 
   const [currentMemberRole, setCurrentMemberRole] = useState("All");
