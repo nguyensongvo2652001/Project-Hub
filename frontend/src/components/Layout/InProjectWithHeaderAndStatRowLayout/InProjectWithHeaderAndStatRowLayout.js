@@ -11,7 +11,6 @@ const InProjectWithHeaderAndStatRowLayout = (props) => {
     statRowOptions,
   } = props;
 
-  console.log(project);
   return (
     <div className={classes.container}>
       <HeaderAndStatRowSection

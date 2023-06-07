@@ -72,6 +72,7 @@ const searchTasks = catchAsync(async (req, res, next) => {
   }
 
   const features = new APIFeatures(query, queryString)
+    .filter()
     .sort()
     .limitFields()
     .paginate();

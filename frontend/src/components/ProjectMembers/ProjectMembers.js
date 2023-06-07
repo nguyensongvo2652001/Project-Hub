@@ -12,6 +12,8 @@ import useErrorHandling from "../../hooks/useErrorHandling";
 import { getDateDisplay } from "../../utils/date";
 import Loading from "../UI/Loading/Loading";
 import NoDocumentsFound from "../UI/NoDocumentsFound/NoDocumentsFound";
+import SearchBar from "../SearchBar/SearchBar";
+import debounce from "../../utils/debounce";
 
 const ProjectMembers = (props) => {
   const { project } = props;
@@ -30,6 +32,35 @@ const ProjectMembers = (props) => {
   const { sendRequest } = useSendRequest();
 
   const [memberships, setMemberships] = useState([]);
+
+  const searchMembers = debounce(async (query) => {
+    let searchMembersURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/project/${project._id}/member/search?q=${query}`;
+
+    if (currentMemberRole !== "All") {
+      searchMembersURL += `&role=${currentMemberRole.toLowerCase()}`;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await sendRequest(searchMembersURL);
+      if (response.status !== "success") {
+        throw new Error(response.message);
+      }
+
+      const { memberships } = response.data;
+
+      setMemberships(memberships);
+
+      setIsLoading(false);
+    } catch (err) {
+      handleError(err);
+    }
+  }, 0.3);
+
+  const onSearchBarChange = (event) => {
+    const input = event.target.value;
+    searchMembers(input);
+  };
 
   useEffect(() => {
     if (noMoreProjectMembers) {
@@ -145,6 +176,9 @@ const ProjectMembers = (props) => {
       dropDownOnChange={onDropdownOptionChange}
       statRowOptions={membersStatRowOptions}
     >
+      <div className={classes.members__searchBarContainer}>
+        <SearchBar onChange={onSearchBarChange} />
+      </div>
       {memberships.length > 0 && (
         <ul className={classes.members}>
           {memberships.map((membership, index) => {

@@ -3,6 +3,7 @@ import Task from "../Task/Task.js";
 import Loading from "../UI/Loading/Loading.js";
 import NoDocumentsFound from "../UI/NoDocumentsFound/NoDocumentsFound.js";
 import InProjectWithHeaderAndStatRowLayout from "../Layout/InProjectWithHeaderAndStatRowLayout/InProjectWithHeaderAndStatRowLayout.js";
+import SearchBar from "../SearchBar/SearchBar.js";
 
 import { useCallback, useContext, useEffect, useState } from "react";
 import useSendRequest from "../../hooks/useSendRequest.js";
@@ -14,6 +15,7 @@ import classes from "./ProjectDashboard.module.css";
 import { capitalizeFirstLetter } from "../../utils/string";
 
 import { getDateDisplay } from "../../utils/date.js";
+import debounce from "../../utils/debounce.js";
 
 const ProjectDashboard = (props) => {
   const { project } = props;
@@ -28,6 +30,35 @@ const ProjectDashboard = (props) => {
   const { sendRequest } = useSendRequest();
   const [lastTaskRef, setLastTaskRef] = useState(null);
   const handleError = useErrorHandling();
+
+  const searchTasks = debounce(async (query) => {
+    let searchTasksURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/project/${project._id}/task/search?q=${query}`;
+
+    if (taskStatus !== "All") {
+      searchTasksURL += `&status=${taskStatus.toLowerCase()}`;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await sendRequest(searchTasksURL);
+      if (response.status !== "success") {
+        throw new Error(response.message);
+      }
+
+      const { tasks } = response.data;
+
+      setTasks(tasks);
+
+      setIsLoading(false);
+    } catch (err) {
+      handleError(err);
+    }
+  }, 0.3);
+
+  const onSearchBarChange = (event) => {
+    const input = event.target.value;
+    searchTasks(input);
+  };
 
   const onDropdownOptionChange = (event) => {
     if (event.target.value === taskStatus) return;
@@ -141,6 +172,13 @@ const ProjectDashboard = (props) => {
       shouldDisplayNewTaskButton={true}
       statRowOptions={tasksStatRowOptions}
     >
+      <div className={classes.projectDashboard__searchBarContainer}>
+        <SearchBar
+          className={classes.projectDashboard__searchBar}
+          onChange={onSearchBarChange}
+        />
+      </div>
+
       {tasks.length > 0 && (
         <ul className={classes.projectDashboard__tasks}>
           {tasks.map((task, index) => {

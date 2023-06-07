@@ -7,3 +7,7 @@
   flex-wrap: wrap;
   gap: 5rem;
 }
+
+.projectDashboard__searchBarContainer {
+  padding: 2rem;
+}

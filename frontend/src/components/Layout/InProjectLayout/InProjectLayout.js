@@ -8,6 +8,7 @@ import useSendRequest from "../../../hooks/useSendRequest.js";
 import { useEffect, useState } from "react";
 
 import classes from "./InProjectLayout.module.css";
+import Loading from "../../UI/Loading/Loading.js";
 
 const InProjectLayout = (props) => {
   const params = useParams();
@@ -23,7 +24,6 @@ const InProjectLayout = (props) => {
     const getProjectDetailRequest = async () => {
       setIsLoading(true);
       const response = await sendRequest(getProjectDetailURL);
-      console.log(response);
 
       if (response.statusCode !== 200) {
         return navigate("/forbidden");
@@ -39,15 +39,14 @@ const InProjectLayout = (props) => {
 
   return (
     <AuthPageLayout>
-      {isLoading && <p>Loading ...</p>}
-      {!isLoading && (
-        <div className={classes.inProjectLayout}>
-          <InProjectNavbar props={projectId} />
-          {React.Children.map(props.children, (child) => {
+      <div className={classes.inProjectLayout}>
+        <InProjectNavbar props={projectId} />
+        {isLoading && <Loading />}
+        {!isLoading &&
+          React.Children.map(props.children, (child) => {
             return React.cloneElement(child, { project });
           })}
-        </div>
-      )}
+      </div>
     </AuthPageLayout>
   );
 };

@@ -7,3 +7,7 @@
   flex-wrap: wrap;
   gap: 5rem;
 }
+
+.members__searchBarContainer {
+  padding: 2rem;
+}

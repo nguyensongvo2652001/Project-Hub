@@ -186,9 +186,14 @@ const searchProjectMembers = catchAsync(async (req, res, next) => {
 
   const searchQuery = { $regex: q, $options: "i" };
 
+  let newQueryString = { ...req.query };
+  const excludedFields = ["page", "sort", "limit", "q"];
+  excludedFields.forEach((el) => delete newQueryString[el]);
+
   const query = ProjectMember.find({
     projectId,
     status: "done",
+    ...newQueryString,
   }).populate({
     path: "memberId",
     select: "name email jobTitle description avatar",
@@ -212,23 +217,33 @@ const searchProjectMembers = catchAsync(async (req, res, next) => {
 
   const features = new APIFeatures(query, queryString).sort();
 
-  let members = await features.query;
+  let memberships = await features.query;
 
-  // The match query in populate does NOT exclude documents that do not match the query, they simply set memberId to null so we need to filter them out.
-  members = members.filter((member) => member.memberId != null);
+  // The match query in populate does NOT exclude documents that do NOT match the query, they simply set memberId to null so we need to filter them out.
+  memberships = memberships.filter((membership) => membership.memberId != null);
 
   const limit = req.query.limit || 10;
   const page = req.query.page || 1;
 
   const skip = (page - 1) * limit;
 
-  members = members.slice(skip, skip + limit);
+  memberships = memberships.slice(skip, skip + limit);
+
+  const promises = memberships.map(async (membership) => {
+    membership.performance =
+      await userStatController.getPerformanceInOneProject(
+        membership.memberId._id,
+        membership.projectId
+      );
+  });
+
+  await Promise.all(promises);
 
   res.status(200).json({
     status: "success",
     data: {
-      length: members.length,
-      members,
+      length: memberships.length,
+      memberships,
     },
   });
 });
