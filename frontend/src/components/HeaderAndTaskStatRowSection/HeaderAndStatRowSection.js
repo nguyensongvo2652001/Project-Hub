@@ -1,6 +1,8 @@
+import { useState } from "react";
 import Dropdown from "../UI/Dropdown/Dropdown";
 
 import classes from "./HeaderAndStatRowSection.module.css";
+import NewTaskForm from "../NewTaskForm/NewTaskForm";
 
 const HeaderAndStatRowSection = (props) => {
   const {
@@ -16,13 +18,29 @@ const HeaderAndStatRowSection = (props) => {
     displayProjectName = displayProjectName.slice(0, 27) + "...";
   }
 
+  const [showNewTaskFormModal, setShowNewTaskFormModal] = useState(false);
+  const onNewTaskButtonClick = () => {
+    setShowNewTaskFormModal(true);
+  };
+  const closeNewTaskFormmodal = () => {
+    setShowNewTaskFormModal(false);
+  };
+
   return (
     <>
       <header className={classes.header}>
         <h1 className={classes.header__projectName}>{displayProjectName}</h1>
         <div className={classes.header__buttonAndDropdown}>
+          {showNewTaskFormModal && (
+            <NewTaskForm onClick={closeNewTaskFormmodal} />
+          )}
           {shouldDisplayNewTaskButton && (
-            <button className={classes.header__newTaskButton}>New Task</button>
+            <button
+              className={classes.header__newTaskButton}
+              onClick={onNewTaskButtonClick}
+            >
+              New Task
+            </button>
           )}
 
           <Dropdown

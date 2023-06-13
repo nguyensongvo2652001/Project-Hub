@@ -58,17 +58,6 @@ const taskSchema = new mongoose.Schema({
     required: [true, "A task must have a name"],
     maxLength: [100, "Task name should not be more than 100 characters"],
   },
-  type: {
-    type: String,
-    enum: taskTypeOptions,
-    validate: {
-      validator: function (v) {
-        return taskTypeOptions.includes(v);
-      },
-      message: (props) => `${props.value} is not a valid task type`,
-    },
-    required: [true, "Task must have a type"],
-  },
   status: {
     type: String,
     enum: taskStatusOptions,

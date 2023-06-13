@@ -1,0 +1,76 @@
+.newTaskFormContainer {
+  position: absolute;
+  padding: 3rem;
+  width: 80rem;
+  height: fit-content;
+  top: 30rem;
+  left: 55%;
+  transform: translate(-50%, -50%);
+}
+
+.newTaskForm {
+  display: flex;
+  flex-direction: column;
+  gap: 7rem;
+  max-width: 60%;
+  height: 100%;
+}
+
+.newTaskForm__title {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.newTaskForm__descriptionControlGroup {
+  margin-bottom: 7rem;
+}
+
+.newTaskForm__controlGroup {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+
+.newTaskForm__label {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.newTaskForm__controlGroupInput {
+  position: absolute;
+  left: 50%;
+  height: fit-content;
+}
+
+.newTaskForm__input {
+  padding: 1.6rem;
+  width: 100%;
+  text-align: left;
+}
+
+.newTaskForm__descriptionInput {
+  height: 10rem;
+}
+
+.newTaskForm__submitButton {
+  cursor: pointer;
+  border: none;
+  background-color: #4e75eb;
+  font-family: inherit;
+  font-weight: 700;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  width: 100%;
+  align-self: center;
+  margin-left: 75%;
+  transition: all 0.3s;
+  margin-top: 2rem;
+}
+
+.newTaskForm__submitButton:hover {
+  background-color: #7191ef;
+}
+
+.newTaskForm__loading {
+  margin-left: 75%;
+}

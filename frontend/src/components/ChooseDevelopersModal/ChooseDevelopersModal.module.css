@@ -1,0 +1,60 @@
+.chooseDevelopersModal__modal {
+  z-index: 13;
+  padding-top: 1.6rem;
+  padding-left: 2.4rem;
+  height: 40rem;
+  overflow-y: scroll;
+}
+
+.chooseDevelopersModal__backdrop {
+  z-index: 12;
+}
+
+.chooseDevelopersModal__title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+}
+
+.chooseDevelopersModal__developersList {
+  margin-top: 4rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.chooseDevelopersModal__developer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chooseDevelopersModal__developerInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.chooseDevelopersModal__developerInfo img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+}
+
+.chooseDevelopersModal__developerMainInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.chooseDevelopersModal__developerName {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.chooseDevelopersModal__developerJobTitle {
+  font-size: 1rem;
+  color: #c2c8da;
+  font-weight: 800;
+}
