@@ -4,6 +4,15 @@
   padding-left: 2.4rem;
   height: 40rem;
   overflow-y: scroll;
+  width: 43rem;
+}
+
+.chooseDevelopersModal__content {
+  height: fit-content;
+}
+
+.chooseDevelopersModal__searchBar {
+  margin-top: 0;
 }
 
 .chooseDevelopersModal__backdrop {
@@ -28,6 +37,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-right: 3.2rem;
 }
 
 .chooseDevelopersModal__developerInfo {
@@ -57,4 +67,9 @@
   font-size: 1rem;
   color: #c2c8da;
   font-weight: 800;
+}
+
+.chooseDevelopersModal__noChosenDevelopers {
+  font-size: 1.4rem;
+  font-weight: 600;
 }

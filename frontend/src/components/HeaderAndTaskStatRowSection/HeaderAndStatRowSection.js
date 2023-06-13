@@ -32,7 +32,7 @@ const HeaderAndStatRowSection = (props) => {
         <h1 className={classes.header__projectName}>{displayProjectName}</h1>
         <div className={classes.header__buttonAndDropdown}>
           {showNewTaskFormModal && (
-            <NewTaskForm onClick={closeNewTaskFormmodal} />
+            <NewTaskForm onClick={closeNewTaskFormmodal} project={project} />
           )}
           {shouldDisplayNewTaskButton && (
             <button

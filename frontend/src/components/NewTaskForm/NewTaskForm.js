@@ -6,6 +6,8 @@ import classes from "./NewTaskForm.module.css";
 import ChosenDevelopersRow from "../ChosenDevelopersRow/ChosenDevelopersRow.js";
 
 const NewTaskForm = (props) => {
+  const { project } = props;
+
   const allClasses = `${props.className} ${classes.newTaskFormContainer}`;
 
   return (
@@ -29,7 +31,7 @@ const NewTaskForm = (props) => {
             Developers
           </label>
           <div className={classes.newTaskForm__controlGroupInput}>
-            <ChosenDevelopersRow />
+            <ChosenDevelopersRow project={project} />
           </div>
         </div>
 
