@@ -1,13 +1,11 @@
 import classes from "./ChosenDevelopersRow.module.css";
 
-import avatar from "../../assets/avatar1.jpg";
 import { useState } from "react";
 import ChooseDevelopersModal from "../ChooseDevelopersModal/ChooseDevelopersModal";
 
 const ChosenDevelopersRow = (props) => {
-  const { project } = props;
+  const { project, chosenDevelopers, setChosenDevelopers } = props;
 
-  const [chosenDevelopers, setChosenDevelopers] = useState([]);
   const [showDevelopersEditModal, setShowDevelopersEditModal] = useState(false);
 
   const onChosenDevelopersEditButtonClick = (event) => {
@@ -23,6 +21,9 @@ const ChosenDevelopersRow = (props) => {
   return (
     <div className={classes.chosenDevelopersRowContainer}>
       <ul className={classes.chosenDevelopersList}>
+        {chosenDevelopers.length === 0 && (
+          <p className={classes.noDevelopersText}>No developers found.</p>
+        )}
         {
           //We only show the first 3 developers
           chosenDevelopers.slice(0, 3).map((developer) => {

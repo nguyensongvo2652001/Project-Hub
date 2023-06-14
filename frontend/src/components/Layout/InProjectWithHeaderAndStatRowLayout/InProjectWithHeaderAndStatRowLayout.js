@@ -9,6 +9,9 @@ const InProjectWithHeaderAndStatRowLayout = (props) => {
     shouldDisplayNewTaskButton,
     dropDownOnChange,
     statRowOptions,
+    setStatRowOptions,
+    setTasks,
+    listStatus,
   } = props;
 
   return (
@@ -19,6 +22,9 @@ const InProjectWithHeaderAndStatRowLayout = (props) => {
         dropDownOptions={dropDownOptions}
         shouldDisplayNewTaskButton={shouldDisplayNewTaskButton}
         dropDownOnChange={dropDownOnChange}
+        setTasks={setTasks}
+        setStatRowOptions={setStatRowOptions}
+        listStatus={listStatus}
       />
       {props.children}
     </div>

@@ -83,13 +83,13 @@ const ProjectDashboard = (props) => {
     actionWhenLastTaskRefInViewport
   );
 
-  const tasksCountBasedOnStatus = {
+  const [tasksCountBasedOnStatus, setTasksCountBasedOnStatus] = useState({
     open: 0,
     doing: 0,
     closed: 0,
     testing: 0,
     overdue: 0,
-  };
+  });
 
   const { tasksCount } = project;
   tasksCount.map((taskCountInfo) => {
@@ -98,10 +98,14 @@ const ProjectDashboard = (props) => {
     return null;
   });
 
-  const tasksStatRowOptions = Object.keys(tasksCountBasedOnStatus).map(
+  const initialTasksStatRowOptions = Object.keys(tasksCountBasedOnStatus).map(
     (key) => {
       return { label: key, value: tasksCountBasedOnStatus[key] };
     }
+  );
+
+  const [tasksStatRowOptions, setTasksStatRowOptions] = useState(
+    initialTasksStatRowOptions
   );
 
   useEffect(() => {
@@ -170,6 +174,9 @@ const ProjectDashboard = (props) => {
       project={project}
       shouldDisplayNewTaskButton={true}
       statRowOptions={tasksStatRowOptions}
+      setStatRowOptions={setTasksStatRowOptions}
+      setTasks={setTasks}
+      listStatus={taskStatus}
     >
       <div className={classes.projectDashboard__searchBarContainer}>
         <SearchBar

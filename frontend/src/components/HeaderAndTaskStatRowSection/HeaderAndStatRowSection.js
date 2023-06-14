@@ -11,6 +11,9 @@ const HeaderAndStatRowSection = (props) => {
     dropDownOnChange,
     shouldDisplayNewTaskButton,
     statRowOptions,
+    setStatRowOptions,
+    setTasks,
+    listStatus,
   } = props;
 
   let displayProjectName = project.name;
@@ -32,7 +35,14 @@ const HeaderAndStatRowSection = (props) => {
         <h1 className={classes.header__projectName}>{displayProjectName}</h1>
         <div className={classes.header__buttonAndDropdown}>
           {showNewTaskFormModal && (
-            <NewTaskForm onClick={closeNewTaskFormmodal} project={project} />
+            <NewTaskForm
+              onClick={closeNewTaskFormmodal}
+              project={project}
+              setTasks={setTasks}
+              setStatRowOptions={setStatRowOptions}
+              closeNewTaskForm={closeNewTaskFormmodal}
+              listStatus={listStatus}
+            />
           )}
           {shouldDisplayNewTaskButton && (
             <button
