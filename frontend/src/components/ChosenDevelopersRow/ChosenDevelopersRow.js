@@ -2,9 +2,10 @@ import classes from "./ChosenDevelopersRow.module.css";
 
 import { useState } from "react";
 import ChooseDevelopersModal from "../ChooseDevelopersModal/ChooseDevelopersModal";
+import AvatarLink from "../AvatarLink/AvatarLink";
 
 const ChosenDevelopersRow = (props) => {
-  const { project, chosenDevelopers, setChosenDevelopers } = props;
+  const { project, chosenDevelopers, setChosenDevelopers, allowedEdit } = props;
 
   const [showDevelopersEditModal, setShowDevelopersEditModal] = useState(false);
 
@@ -18,8 +19,10 @@ const ChosenDevelopersRow = (props) => {
     setShowDevelopersEditModal(false);
   };
 
+  const allClasses = `${classes.chosenDevelopersRowContainer} ${props.className}`;
+
   return (
-    <div className={classes.chosenDevelopersRowContainer}>
+    <div className={allClasses}>
       <ul className={classes.chosenDevelopersList}>
         {chosenDevelopers.length === 0 && (
           <p className={classes.noDevelopersText}>No developers found.</p>
@@ -29,7 +32,11 @@ const ChosenDevelopersRow = (props) => {
           chosenDevelopers.slice(0, 3).map((developer) => {
             return (
               <li className={classes.chosenDeveloper}>
-                <img src={developer.avatar} alt="User's avatar" />
+                <AvatarLink
+                  src={developer.avatar}
+                  alt="User's avatar"
+                  id={developer._id}
+                />
               </li>
             );
           })
@@ -43,12 +50,14 @@ const ChosenDevelopersRow = (props) => {
         )}
       </ul>
 
-      <button
-        className={classes.chosenDevelopersEditButton}
-        onClick={onChosenDevelopersEditButtonClick}
-      >
-        Edit
-      </button>
+      {allowedEdit && (
+        <button
+          className={classes.chosenDevelopersEditButton}
+          onClick={onChosenDevelopersEditButtonClick}
+        >
+          Edit
+        </button>
+      )}
 
       {showDevelopersEditModal && (
         <ChooseDevelopersModal

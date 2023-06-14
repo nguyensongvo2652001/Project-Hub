@@ -1,0 +1,75 @@
+.taskDetailContainer {
+  height: 100vh;
+  width: 100%;
+}
+
+.taskDetail__header {
+  display: flex;
+  background-color: #f1f3f5;
+  width: 100%;
+  padding: 1rem 2rem;
+  gap: 5rem;
+}
+
+.taskDetail__editButton {
+  cursor: pointer;
+  border: none;
+  color: #546173;
+  font-family: inherit;
+  font-weight: 700;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  height: 3rem;
+  transition: all 0.3s;
+  background-color: #a8c1e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.taskDetail__editButton:hover {
+  background-color: #97aece;
+}
+
+.taskDetail__taskInfoContainer {
+  padding: 4rem 2rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.taskDetail__info {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.taskDetail__label {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.taskDetail__value {
+  position: absolute;
+  left: 40%;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #626365;
+}
+
+.taskDetail__idValue {
+  color: #4165b3;
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+
+.taskDetail__statusTag {
+  font-weight: bold;
+}
+
+.taskDetail__creatorAvatar {
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+}

@@ -14,6 +14,8 @@ import ProjectNotificationPage from "./pages/ProjectNotificationPage/ProjectNoti
 import ProjectSettingsPage from "./pages/ProjectSettingsPage/ProjectSettingsPage";
 import ProjectStatPage from "./pages/ProjectStatPage/ProjectStatPage";
 import ForbiddenPage from "./pages/ForbiddenPage/ForbiddenPage";
+import TaskDetail from "./components/TaskDetail/TaskDetail";
+import TaskPage from "./pages/TaskPage/TaskPage";
 
 function App() {
   return (
@@ -37,6 +39,9 @@ function App() {
             <Route path="notifications" element={<ProjectNotificationPage />} />
             <Route path="settings" element={<ProjectSettingsPage />} />
             <Route path="stat" element={<ProjectStatPage />} />
+            <Route path="tasks">
+              <Route path=":taskId" element={<TaskPage />} />
+            </Route>
           </Route>
         </Route>
 

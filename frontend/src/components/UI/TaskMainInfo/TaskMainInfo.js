@@ -7,7 +7,7 @@ const TaskMainInfo = (props) => {
     name: task.name,
     tag: task.status,
     description: task.description,
-    link: "tasks/123",
+    link: `tasks/${task._id}`,
   };
 
   return <CardMainInfo mainInfo={mainInfo} />;
