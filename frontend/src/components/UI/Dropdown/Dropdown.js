@@ -8,7 +8,10 @@ const Dropdown = (props) => {
   return (
     <select className={allClassNames} ref={inputRef} onChange={props.onChange}>
       {options.map((optionValue, index) => {
-        if (optionValue === defaultOption) {
+        if (
+          defaultOption &&
+          optionValue.toLowerCase() === defaultOption.toLowerCase()
+        ) {
           return (
             <option value={optionValue} key={index} selected>
               {optionValue}

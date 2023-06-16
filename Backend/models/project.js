@@ -105,9 +105,7 @@ projectSchema
   });
 
 projectSchema.post("save", async function (doc, next) {
-  if (this.skipCreatingOwnerMembership) {
-    return next();
-  }
+  if (!this.isNew) return next();
 
   try {
     await mongoose.model("ProjectMember").create({

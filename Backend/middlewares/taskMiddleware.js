@@ -37,7 +37,7 @@ const prepareUpdateTaskOnFinishMiddleware = (req, res, next) => {
       type: process.env.NOTIFICATION_UPDATE_TASK_TYPE,
       scope: "project",
       receiver: task.projectId,
-      detai: task,
+      detail: task,
     });
   };
 

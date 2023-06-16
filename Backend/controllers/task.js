@@ -21,6 +21,7 @@ const createTask = catchAsync(async (req, res, next) => {
 
   const project = await Project.findById(projectId);
   project.lastChanged = Date.now();
+  project.skipCreatingOwnerMembership = true;
   await project.save();
 
   await Notification.create({

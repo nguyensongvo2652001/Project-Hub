@@ -1,0 +1,113 @@
+.editTaskFormContainer {
+  position: absolute;
+  padding: 3rem;
+  width: 80rem;
+  height: 60rem;
+  top: 30rem;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  overflow-y: scroll;
+}
+
+.editTaskForm {
+  display: flex;
+  flex-direction: column;
+  gap: 7rem;
+  max-width: 60%;
+  height: 100%;
+}
+
+.editTaskForm__title {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.editTaskForm__descriptionControlGroup {
+  margin-bottom: 7rem;
+}
+
+.editTaskForm__controlGroup {
+  display: flex;
+  position: relative;
+  align-items: center;
+}
+
+.editTaskForm__label {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.editTaskForm__controlGroupInput {
+  position: absolute;
+  left: 50%;
+  height: fit-content;
+  font-family: inherit;
+  font-weight: 600;
+}
+
+.editTaskForm__input {
+  padding: 1.6rem;
+  width: 100%;
+  text-align: left;
+}
+
+.editTaskForm__descriptionInput {
+  height: 10rem;
+}
+
+.editTaskForm__submitButton {
+  cursor: pointer;
+  border: none;
+  background-color: #4e75eb;
+  font-family: inherit;
+  font-weight: 700;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  width: 100%;
+  align-self: center;
+  margin-left: 75%;
+  transition: all 0.3s;
+  margin-top: 2rem;
+}
+
+.editTaskForm__submitButton:hover {
+  background-color: #7191ef;
+}
+
+.editTaskForm__loading {
+  min-height: 5rem;
+  min-width: 5rem;
+  margin-left: 75% !important;
+}
+
+@media (max-width: 1150px) {
+  .editTaskFormContainer {
+    max-width: 70%;
+    left: 60%;
+  }
+}
+
+@media (max-width: 650px) {
+  .editTaskFormContainer {
+    font-size: 1.2rem !important;
+  }
+
+  .editTaskForm__title {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .editTaskForm__label {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .editTaskForm__submitButton {
+    font-size: 1.2rem;
+  }
+
+  .editTaskForm__descriptionInput {
+    height: 6rem;
+    font-size: 1.4rem;
+  }
+}

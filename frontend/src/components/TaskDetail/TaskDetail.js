@@ -10,6 +10,7 @@ import Loading from "../UI/Loading/Loading";
 import Tag from "../UI/Tag/Tag";
 import AvatarLink from "../AvatarLink/AvatarLink";
 import ChosenDevelopersRow from "../ChosenDevelopersRow/ChosenDevelopersRow";
+import EditTaskForm from "../EditTaskForm/EditTaskForm";
 
 const TaskDetail = (props) => {
   const { project } = props;
@@ -22,6 +23,7 @@ const TaskDetail = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [task, setTask] = useState({});
   const [taskDevelopers, setTaskDevelopers] = useState(task?.developers);
+  const [showEditTaskForm, setShowEditTaskForm] = useState(false);
 
   useEffect(() => {
     const getTaskDetail = async () => {
@@ -37,8 +39,6 @@ const TaskDetail = (props) => {
 
         const { task } = response.data;
 
-        console.log(task.creator);
-
         setTask(task);
       } catch (err) {
         handleError(err);
@@ -50,14 +50,35 @@ const TaskDetail = (props) => {
     getTaskDetail();
   }, [handleError, navigate, sendRequest, taskId]);
 
+  const closeEditTaskForm = () => {
+    setShowEditTaskForm(false);
+  };
+
+  const openEditTaskForm = () => {
+    setShowEditTaskForm(true);
+  };
+
   return (
     <>
+      {showEditTaskForm && (
+        <EditTaskForm
+          closeEditTaskForm={closeEditTaskForm}
+          task={task}
+          setTask={setTask}
+          project={project}
+        />
+      )}
       {isLoading && <Loading />}
       {!isLoading && (
         <div className={classes.taskDetailContainer}>
           <header className={classes.taskDetail__header}>
             <h1 className={classes.taskDetail__name}>{task.name}</h1>
-            <button className={classes.taskDetail__editButton}>Edit</button>
+            <button
+              className={classes.taskDetail__editButton}
+              onClick={openEditTaskForm}
+            >
+              Edit
+            </button>
           </header>
 
           <ul className={classes.taskDetail__taskInfoContainer}>

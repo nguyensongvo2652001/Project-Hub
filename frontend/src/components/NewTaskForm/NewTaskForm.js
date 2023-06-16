@@ -103,6 +103,7 @@ const NewTaskForm = (props) => {
               project={project}
               setChosenDevelopers={setChosenDevelopers}
               chosenDevelopers={chosenDevelopers}
+              allowedEdit={true}
             />
           </div>
         </div>

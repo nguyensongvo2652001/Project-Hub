@@ -28,7 +28,7 @@ const ProjectMembers = (props) => {
   const [currentMemberRole, setCurrentMemberRole] = useState("All");
 
   const [noMoreProjectMembers, setNoMoreProjectMembers] = useState(false);
-  const [lastProjectMember, setLastProjectMember] = useState(null);
+  const [lastProjectMember, setLastProjectMember] = useState(undefined);
   const { sendRequest } = useSendRequest();
 
   const [memberships, setMemberships] = useState([]);
@@ -43,6 +43,7 @@ const ProjectMembers = (props) => {
     try {
       setIsLoading(true);
       const response = await sendRequest(searchMembersURL);
+
       if (response.status !== "success") {
         throw new Error(response.message);
       }
@@ -206,13 +207,13 @@ const ProjectMembers = (props) => {
               },
             ];
 
-            if (index === member.length - 1) {
+            if (index === memberships.length - 1) {
               return (
                 <ProjectMember
                   member={member}
                   memberMetaInfo={memberMetaInfo}
                   key={member._id}
-                  ref={setLastProjectMember}
+                  lastProjectMemberRef={setLastProjectMember}
                 />
               );
             }
