@@ -1,0 +1,44 @@
+.searchResultsContainer {
+  padding: 2rem;
+  background-color: #f6f8fc;
+  height: 100vh;
+}
+
+.searchResultsTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 4rem;
+}
+
+.searchResultsTabs {
+  list-style: none;
+  display: flex;
+}
+
+.searchResultsTab {
+  font-size: 1.4rem;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 4rem;
+  font-weight: 600;
+  background-color: #e7e9f0;
+  transition: all 0.3s;
+  cursor: pointer;
+  margin-bottom: 4rem;
+}
+
+.searchResultsTab--active {
+  font-weight: 800;
+  background-color: #a8c1e5;
+  color: #546173;
+  border: 5px #4dabf7 solid;
+}
+
+.searchResults__projects,
+.searchResults__users {
+  display: flex;
+  list-style: none;
+  gap: 4rem;
+}

@@ -31,7 +31,7 @@ const ProjectMember = (props) => {
           src={member.avatar}
           alt="member avatar"
           className={classes.member__avatar}
-          id="123"
+          id={member._id}
         />
 
         <CardMetaInfo

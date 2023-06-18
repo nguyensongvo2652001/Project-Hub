@@ -18,6 +18,7 @@ import TaskDetail from "./components/TaskDetail/TaskDetail";
 import TaskPage from "./pages/TaskPage/TaskPage";
 import UserPublicPage from "./pages/UserPublicPage/UserPublicPage";
 import ProjectPublicDetailPage from "./pages/ProjectPublicDetailPage/ProjectPublicDetailPage";
+import SearchResultsPage from "./pages/SearchResultsPage/SearchResultsPage";
 
 function App() {
   return (
@@ -47,9 +48,12 @@ function App() {
             </Route>
           </Route>
         </Route>
+
         <Route path="/users">
           <Route path=":id" element={<UserPublicPage />} />
         </Route>
+
+        <Route path="/search" element={<SearchResultsPage />} />
 
         <Route path="forbidden" element={<ForbiddenPage />} />
         <Route path="*" element={<NotFoundPage />} />
