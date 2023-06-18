@@ -1,0 +1,43 @@
+.projectPublicDetailContainer {
+  padding: 2rem;
+}
+
+.projectPublicDetail__title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 4rem;
+}
+
+.projectPublicDetail__infoList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+}
+
+.projectPublicDetail__info {
+  display: flex;
+  position: relative;
+}
+
+.projectPublicDetail__info label {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.projectPublicDetail__infoValue {
+  position: absolute;
+  left: 50%;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.projectPublicDetail__ownerAvatar {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+}
+
+.projectPublicDetail__description {
+  line-height: 2.5;
+}

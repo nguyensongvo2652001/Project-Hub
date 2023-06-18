@@ -39,6 +39,10 @@ router
     projectController.updateProject
   );
 
+router.get(
+  "/:projectId/publicDetail",
+  projectController.getProjectPublicDetail
+);
 router.use(
   "/:projectId",
   projectMiddelware.validateIfUserIsMemberOfProjectMiddleware

@@ -7,13 +7,41 @@ const crud = require("./crud");
 
 const createProject = crud.createOne(Project);
 
+const getProjectPublicDetail = catchAsync(async (req, res, next) => {
+  const { projectId } = req.params;
+
+  const project = await Project.findOne({
+    _id: projectId,
+    status: "public",
+  })
+    .populate({
+      path: "owner",
+      select: "name avatar background email",
+    })
+    .populate("numberOfMembers");
+
+  if (!project) {
+    return next(
+      new HandledError(`No projects found with id = ${projectId}`, 404)
+    );
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: { project },
+  });
+});
+
 const getProject = catchAsync(async (req, res, next) => {
   const { projectId } = req.params;
 
-  const project = await Project.findById(projectId)
+  const project = await Project.findOne({
+    _id: projectId,
+    status: "public",
+  })
     .populate({
       path: "owner",
-      select: "name",
+      select: "name avatar background email",
     })
     .populate("numberOfMembers");
 
@@ -95,6 +123,7 @@ const searchProjects = catchAsync(async (req, res, next) => {
 module.exports = {
   createProject,
   getProject,
+  getProjectPublicDetail,
   updateProject,
   getAllProjects,
   searchProjects,
