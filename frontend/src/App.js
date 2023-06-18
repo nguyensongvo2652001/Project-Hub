@@ -16,6 +16,7 @@ import ProjectStatPage from "./pages/ProjectStatPage/ProjectStatPage";
 import ForbiddenPage from "./pages/ForbiddenPage/ForbiddenPage";
 import TaskDetail from "./components/TaskDetail/TaskDetail";
 import TaskPage from "./pages/TaskPage/TaskPage";
+import UserPublicPage from "./pages/UserPublicPage/UserPublicPage";
 
 function App() {
   return (
@@ -43,6 +44,9 @@ function App() {
               <Route path=":taskId" element={<TaskPage />} />
             </Route>
           </Route>
+        </Route>
+        <Route path="/users">
+          <Route path=":id" element={<UserPublicPage />} />
         </Route>
 
         <Route path="forbidden" element={<ForbiddenPage />} />

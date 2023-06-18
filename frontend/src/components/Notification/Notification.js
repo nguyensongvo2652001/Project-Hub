@@ -17,7 +17,7 @@ const Notification = (props) => {
     "en-GB"
   );
 
-  const { type, detail } = notification;
+  const { type, detail, receiver } = notification;
 
   const notificationLinkAndMessageBasedOnType = {
     project_invitation: {
@@ -30,15 +30,15 @@ const Notification = (props) => {
     },
     project_new_task: {
       message: `just created a new task ${detail?.name}.`,
-      link: `/tasks/${detail?._id}`,
+      link: `/projects/${receiver}/tasks/${detail?._id}`,
     },
     project_update_task: {
       message: `just updated task ${detail?.name} info.`,
-      link: `/tasks/${detail?._id}`,
+      link: `/projects/${receiver}/tasks/${detail?._id}`,
     },
     project_delete_task: {
       message: `jest deleted task ${detail?.name}`,
-      link: `/tasks/${detail?._id}`,
+      link: `/projects/${receiver}/tasks/${detail?._id}`,
     },
     project_update: {
       message: "just updated project info.",

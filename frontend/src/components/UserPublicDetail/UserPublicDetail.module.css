@@ -1,4 +1,4 @@
-.myProfilePage {
+.userPublicDetail {
   background-color: #f6f8fc;
   min-height: 100vh;
 
@@ -7,49 +7,35 @@
   position: relative;
 }
 
-.myProfilePage__backgroundContainer {
+.userPublicDetail__backgroundContainer {
   position: relative;
   transition: all 0.3s;
 }
 
-.myProfilePage__background {
+.userPublicDetail__background {
   width: 90%;
   height: 20rem;
   border-radius: 20px;
   transition: all 0.3s;
 }
 
-.myProfilePage__backgroundContainer:hover {
-  filter: brightness(0.8);
-}
-
-.myProfilePage__backgroundUploadForm {
+.userPublicDetail__backgroundUploadForm {
   opacity: 0;
 
   position: absolute;
   top: 50%;
   left: 42.5%;
-  transform: translateY(-50%);
-  transition: all 0.3s;
 }
 
-.myProfilePage__backgroundUploadForm input {
+.userPublicDetail__backgroundUploadForm input {
   display: none;
 }
 
-.myProfilePage__backgroundUploadForm label {
-  cursor: pointer;
-}
-
-.myProfilePage__backgroundUploadForm ion-icon {
+.userPublicDetail__backgroundUploadForm ion-icon {
   font-size: 4rem;
 }
 
-.myProfilePage__backgroundContainer:hover .myProfilePage__backgroundUploadForm {
-  opacity: 1;
-}
-
-.myProfilePage__avatarContainer {
+.userPublicDetail__avatarContainer {
   position: relative;
   transform: translate(30px, -50%);
 
@@ -60,33 +46,24 @@
   gap: 15px;
 }
 
-.myProfilePage__avatarUploadForm {
+.userPublicDetail__avatarUploadForm {
   opacity: 0;
 
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translateY(-50%) translateX(-50%);
-  transition: all 0.3s;
 }
 
-.myProfilePage__avatarUploadForm input {
+.userPublicDetail__avatarUploadForm input {
   display: none;
 }
 
-.myProfilePage__avatarUploadForm label {
-  cursor: pointer;
-}
-
-.myProfilePage__avatarUploadForm ion-icon {
+.userPublicDetail__avatarUploadForm ion-icon {
   font-size: 4rem;
 }
 
-.myProfilePage__avatarContainer:hover .myProfilePage__avatarUploadForm {
-  opacity: 1;
-}
-
-.myProfilePage__avatar {
+.userPublicDetail__avatar {
   width: 14rem;
   height: 14rem;
   border-radius: 50%;
@@ -94,11 +71,7 @@
   transition: all 0.3s;
 }
 
-.myProfilePage__avatarContainer:hover {
-  filter: brightness(0.8);
-}
-
-.myProfilePage__avatarAndTitleContainer {
+.userPublicDetail__avatarAndTitleContainer {
   position: relative;
   display: flex;
   gap: 40px;
@@ -106,17 +79,17 @@
   height: 10rem;
 }
 
-.myProfilePage__titleContainer h1 {
+.userPublicDetail__titleContainer h1 {
   font-size: 2rem;
   font-weight: 700;
 }
 
-.myProfilePage__titleContainer p {
+.userPublicDetail__titleContainer p {
   font-size: 1.4rem;
   font-weight: 500;
 }
 
-.myProfilePage__saveButton {
+.userPublicDetail__saveButton {
   position: absolute;
   right: 10%;
   top: 1.4rem;
@@ -136,7 +109,7 @@
   outline: none;
 }
 
-.myProfilePage__textForm {
+.userPublicDetail__textForm {
   margin-left: 30px;
   width: 80%;
 
@@ -152,16 +125,12 @@
   position: relative;
 }
 
-.formControlGroup input,
-.formControlGroup textarea {
+.formControlGroup p {
   position: absolute;
   left: 30%;
   width: 80%;
-}
-
-.formControlGroup textarea {
-  margin-top: 100px;
-  min-height: 15rem;
+  font-size: 1.2rem;
+  font-weight: 600;
 }
 
 .formControlGroup label {
@@ -169,7 +138,7 @@
   font-weight: 700;
 }
 
-.myProfilePage__loading {
+.userPublicDetail__loading {
   border: 8px solid #ccc; /* Light gray border */
   border-top: 8px solid #4e75eb; /* Blue border on top */
   width: 8rem;
@@ -183,20 +152,28 @@
 }
 
 @media (max-width: 600px) {
-  .myProfilePage__avatar {
+  .userPublicDetail__avatar {
     width: 10rem;
     height: 10rem;
 
     top: 25rem;
   }
 
-  .myProfilePage__titleContainer h1 {
+  .userPublicDetail__titleContainer h1 {
     font-size: 1.8rem;
     font-weight: 700;
   }
 
-  .myProfilePage__titleContainer p {
+  .userPublicDetail__titleContainer p {
     font-size: 1.2rem;
     font-weight: 500;
+  }
+
+  .formControlGroup p {
+    position: absolute;
+    left: 50%;
+    width: 80%;
+    font-size: 1.2rem;
+    font-weight: 600;
   }
 }

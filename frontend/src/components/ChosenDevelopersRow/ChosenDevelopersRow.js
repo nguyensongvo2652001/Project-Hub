@@ -31,7 +31,7 @@ const ChosenDevelopersRow = (props) => {
           //We only show the first 3 developers
           chosenDevelopers.slice(0, 3).map((developer) => {
             return (
-              <li className={classes.chosenDeveloper}>
+              <li className={classes.chosenDeveloper} key={developer._id}>
                 <AvatarLink
                   src={developer.avatar}
                   alt="User's avatar"

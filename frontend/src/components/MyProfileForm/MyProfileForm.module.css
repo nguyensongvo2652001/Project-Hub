@@ -1,0 +1,202 @@
+.myProfileForm {
+  background-color: #f6f8fc;
+  min-height: 100vh;
+
+  padding: 30px 50px;
+
+  position: relative;
+}
+
+.myProfileForm__backgroundContainer {
+  position: relative;
+  transition: all 0.3s;
+}
+
+.myProfileForm__background {
+  width: 90%;
+  height: 20rem;
+  border-radius: 20px;
+  transition: all 0.3s;
+}
+
+.myProfileForm__backgroundContainer:hover {
+  filter: brightness(0.8);
+}
+
+.myProfileForm__backgroundUploadForm {
+  opacity: 0;
+
+  position: absolute;
+  top: 50%;
+  left: 42.5%;
+  transform: translateY(-50%);
+  transition: all 0.3s;
+}
+
+.myProfileForm__backgroundUploadForm input {
+  display: none;
+}
+
+.myProfileForm__backgroundUploadForm label {
+  cursor: pointer;
+}
+
+.myProfileForm__backgroundUploadForm ion-icon {
+  font-size: 4rem;
+}
+
+.myProfileForm__backgroundContainer:hover .myProfileForm__backgroundUploadForm {
+  opacity: 1;
+}
+
+.myProfileForm__avatarContainer {
+  position: relative;
+  transform: translate(30px, -50%);
+
+  width: fit-content;
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.myProfileForm__avatarUploadForm {
+  opacity: 0;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+  transition: all 0.3s;
+}
+
+.myProfileForm__avatarUploadForm input {
+  display: none;
+}
+
+.myProfileForm__avatarUploadForm label {
+  cursor: pointer;
+}
+
+.myProfileForm__avatarUploadForm ion-icon {
+  font-size: 4rem;
+}
+
+.myProfileForm__avatarContainer:hover .myProfileForm__avatarUploadForm {
+  opacity: 1;
+}
+
+.myProfileForm__avatar {
+  width: 14rem;
+  height: 14rem;
+  border-radius: 50%;
+
+  transition: all 0.3s;
+}
+
+.myProfileForm__avatarContainer:hover {
+  filter: brightness(0.8);
+}
+
+.myProfileForm__avatarAndTitleContainer {
+  position: relative;
+  display: flex;
+  gap: 40px;
+
+  height: 10rem;
+}
+
+.myProfileForm__titleContainer h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.myProfileForm__titleContainer p {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.myProfileForm__saveButton {
+  position: absolute;
+  right: 10%;
+  top: 1.4rem;
+
+  font-family: inherit;
+  color: #fff;
+  background-color: #000;
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.formControlGroup input:focus,
+.formControlGroup textarea:focus {
+  outline: none;
+}
+
+.myProfileForm__textForm {
+  margin-left: 30px;
+  width: 80%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.formControlGroup {
+  display: flex;
+  align-items: center;
+
+  position: relative;
+}
+
+.formControlGroup input,
+.formControlGroup textarea {
+  position: absolute;
+  left: 30%;
+  width: 80%;
+}
+
+.formControlGroup textarea {
+  margin-top: 100px;
+  min-height: 15rem;
+}
+
+.formControlGroup label {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.myProfileForm__loading {
+  border: 8px solid #ccc; /* Light gray border */
+  border-top: 8px solid #4e75eb; /* Blue border on top */
+  width: 8rem;
+  height: 8rem;
+
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  z-index: 100;
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  .myProfileForm__avatar {
+    width: 10rem;
+    height: 10rem;
+
+    top: 25rem;
+  }
+
+  .myProfileForm__titleContainer h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+
+  .myProfileForm__titleContainer p {
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+}
