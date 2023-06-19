@@ -1,7 +1,7 @@
 import classes from "./SearchBar.module.css";
 
 const SearchBar = (props) => {
-  const { onChange } = props;
+  const { onChange, onClick, inputRef } = props;
 
   const allClasses = `${classes.searchBar} ${props.className}`;
 
@@ -12,8 +12,9 @@ const SearchBar = (props) => {
         placeholder="Search"
         className={classes.searchBarInput}
         onChange={onChange}
+        ref={inputRef}
       ></textarea>
-      <ion-icon name="search-outline"></ion-icon>
+      <ion-icon name="search-outline" onClick={onClick}></ion-icon>
     </div>
   );
 };

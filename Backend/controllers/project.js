@@ -37,7 +37,6 @@ const getProject = catchAsync(async (req, res, next) => {
 
   const project = await Project.findOne({
     _id: projectId,
-    status: "public",
   })
     .populate({
       path: "owner",

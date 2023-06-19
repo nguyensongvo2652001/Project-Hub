@@ -14,6 +14,8 @@ const InProjectLayout = (props) => {
   const params = useParams();
   const projectId = params.id;
 
+  console.log(params);
+
   const { sendRequest } = useSendRequest();
   const [isLoading, setIsLoading] = useState(false);
   const [project, setProject] = useState({});
