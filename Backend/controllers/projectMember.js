@@ -278,7 +278,11 @@ const searchNonProjectMembers = catchAsync(async (req, res, next) => {
     .limitFields()
     .paginate();
 
-  const nonMembers = await features.query;
+  let nonMembers = await features.query;
+  nonMembers = nonMembers.map((nonMember) => {
+    nonMember.password = undefined;
+    return nonMember;
+  });
 
   res.status(200).json({
     status: "success",

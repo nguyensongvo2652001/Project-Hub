@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import useSendRequest from "../../../hooks/useSendRequest";
 import AuthContext from "../../../contexts/AuthContext";
 import Modal from "../../UI/Modal/Modal";
+import useErrorHandling from "../../../hooks/useErrorHandling";
 
 const MainNavBar = (props) => {
   const navItems = [
@@ -23,6 +24,7 @@ const MainNavBar = (props) => {
   ];
 
   const [showLogOutModal, setShowLogOutModal] = useState(false);
+  const handleError = useErrorHandling();
 
   const toggleModal = () => {
     setShowLogOutModal((prev) => !prev);
@@ -40,9 +42,6 @@ const MainNavBar = (props) => {
   if (userJobTitleDisplay.length === 0) {
     userJobTitleDisplay = "No job title";
   }
-  // if (userJobTitleDisplay && userJobTitleDisplay.length > 20) {
-  //   userJobTitleDisplay = userJobTitleDisplay.slice(0, 17) + "...";
-  // }
 
   const { sendRequest } = useSendRequest();
   const confirmLogOutHandler = async () => {
@@ -51,7 +50,7 @@ const MainNavBar = (props) => {
       await sendRequest(logoutUrl);
       authContext.logOut();
     } catch (err) {
-      console.log(err);
+      handleError(err);
     }
   };
 

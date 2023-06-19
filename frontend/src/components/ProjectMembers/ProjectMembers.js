@@ -176,6 +176,7 @@ const ProjectMembers = (props) => {
       dropDownOptions={capitalizedMemberRolesOption}
       dropDownOnChange={onDropdownOptionChange}
       statRowOptions={membersStatRowOptions}
+      shouldDisplayNewMemberButton={true}
     >
       <div className={classes.members__searchBarContainer}>
         <SearchBar onChange={onSearchBarChange} />

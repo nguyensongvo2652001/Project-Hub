@@ -1,0 +1,91 @@
+.newMemberModal__modal {
+  z-index: 13;
+  padding-top: 1.6rem;
+  padding-left: 2.4rem;
+  height: 40rem;
+  overflow-y: scroll;
+  width: 43rem;
+}
+
+.newMemberModal__content {
+  height: fit-content;
+}
+
+.newMemberModal__searchBar {
+  margin-top: 0;
+}
+
+.newMemberModal__backdrop {
+  z-index: 12;
+}
+
+.newMemberModal__title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+}
+
+.newMemberModal__developersList {
+  margin-top: 4rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.newMemberModal__developer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 3.2rem;
+}
+
+.newMemberModal__developerInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.newMemberModal__developerInfo img {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+}
+
+.newMemberModal__developerMainInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.newMemberModal__developerName {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.newMemberModal__developerJobTitle {
+  font-size: 1rem;
+  color: #c2c8da;
+  font-weight: 800;
+}
+
+.newMemberModal__noChosenDevelopers {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.newMemberModal__inviteUserButton {
+  font-family: inherit;
+  font-weight: 700;
+  background-color: #fcc419;
+  color: #654e0a;
+  border: none;
+  border-radius: 5px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.newMemberModal__inviteUserButton:hover {
+  background-color: #ca9d14;
+}

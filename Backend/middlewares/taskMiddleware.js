@@ -64,8 +64,6 @@ const prepareDeleteTaskOnFinishMiddleware = (req, res, next) => {
 
 const validateIfUserIsAllowedToMofidyTaskMiddleware = catchAsync(
   async (req, res, next) => {
-    console.log(req.params.id);
-
     const { taskId } = req.params;
     const task = await Task.findById(taskId);
 

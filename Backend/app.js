@@ -24,7 +24,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 const baseApiRoute = process.env.BASE_V1_API_ROUTE || "/api/v1";
-console.log(baseApiRoute);
+
 app.use(`${baseApiRoute}/demo`, demoRoute);
 app.use(`${baseApiRoute}/project`, projectRoute);
 app.use(`${baseApiRoute}/projectMember`, projectMemberRoute);

@@ -3,6 +3,7 @@ import Dropdown from "../UI/Dropdown/Dropdown";
 
 import classes from "./HeaderAndStatRowSection.module.css";
 import NewTaskForm from "../NewTaskForm/NewTaskForm";
+import NewMemberModal from "../NewMemberModal/NewMemberModal";
 
 const HeaderAndStatRowSection = (props) => {
   const {
@@ -10,6 +11,7 @@ const HeaderAndStatRowSection = (props) => {
     dropDownOptions,
     dropDownOnChange,
     shouldDisplayNewTaskButton,
+    shouldDisplayNewMemberButton,
     statRowOptions,
     setStatRowOptions,
     setTasks,
@@ -22,11 +24,18 @@ const HeaderAndStatRowSection = (props) => {
   }
 
   const [showNewTaskFormModal, setShowNewTaskFormModal] = useState(false);
+  const [showNewMemberModal, setShowNewMemberModal] = useState(false);
   const onNewTaskButtonClick = () => {
     setShowNewTaskFormModal(true);
   };
+  const onNewMemberButtonClick = () => {
+    setShowNewMemberModal(true);
+  };
   const closeNewTaskFormmodal = () => {
     setShowNewTaskFormModal(false);
+  };
+  const closeNewMemberModal = () => {
+    setShowNewMemberModal(false);
   };
 
   return (
@@ -44,12 +53,23 @@ const HeaderAndStatRowSection = (props) => {
               listStatus={listStatus}
             />
           )}
+          {showNewMemberModal && (
+            <NewMemberModal project={project} onClick={closeNewMemberModal} />
+          )}
           {shouldDisplayNewTaskButton && (
             <button
               className={classes.header__newTaskButton}
               onClick={onNewTaskButtonClick}
             >
               New Task
+            </button>
+          )}
+          {shouldDisplayNewMemberButton && (
+            <button
+              className={classes.header__newTaskButton}
+              onClick={onNewMemberButtonClick}
+            >
+              New Member
             </button>
           )}
 

@@ -71,6 +71,7 @@
   font-size: 1.4rem;
   gap: 10px;
   font-weight: 800;
+
   color: #e03131;
   margin-top: auto;
   margin-bottom: 6rem;
@@ -88,6 +89,7 @@
   align-items: center;
   padding-top: 10px;
   padding-bottom: 10px;
+  font-family: inherit;
 }
 
 .logOutModal__logo {
@@ -120,7 +122,8 @@
 }
 
 .logOutModal__confirmButton {
-  background-color: #e03131;
+  background-color: #e8b0b1;
+  color: #745859;
 }
 
 .logOutModal__cancelButton {

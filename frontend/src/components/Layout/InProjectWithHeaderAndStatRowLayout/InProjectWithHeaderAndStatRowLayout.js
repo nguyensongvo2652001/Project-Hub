@@ -7,6 +7,7 @@ const InProjectWithHeaderAndStatRowLayout = (props) => {
     dropDownOptions,
     project,
     shouldDisplayNewTaskButton,
+    shouldDisplayNewMemberButton,
     dropDownOnChange,
     statRowOptions,
     setStatRowOptions,
@@ -21,6 +22,7 @@ const InProjectWithHeaderAndStatRowLayout = (props) => {
         statRowOptions={statRowOptions}
         dropDownOptions={dropDownOptions}
         shouldDisplayNewTaskButton={shouldDisplayNewTaskButton}
+        shouldDisplayNewMemberButton={shouldDisplayNewMemberButton}
         dropDownOnChange={dropDownOnChange}
         setTasks={setTasks}
         setStatRowOptions={setStatRowOptions}

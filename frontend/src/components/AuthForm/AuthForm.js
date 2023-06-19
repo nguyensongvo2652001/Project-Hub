@@ -77,7 +77,6 @@ const AuthForm = (props) => {
         await authContext.logIn();
       }
     } catch (err) {
-      console.log(err);
       setIsError(true);
       setIsErrorMessage("something just went really wrong");
     }

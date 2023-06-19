@@ -6,7 +6,6 @@ import classes from "./HighestCompletionRateProject.module.css";
 
 const HighestCompletionRateProject = (props) => {
   const { info } = props;
-  console.log(info);
 
   return (
     <Card className={classes.highestCompletionRateProject}>

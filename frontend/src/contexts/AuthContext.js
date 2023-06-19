@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Cookies from "js-cookie";
 import useSendRequest from "../hooks/useSendRequest";
+import useErrorHandling from "../hooks/useErrorHandling";
 
 const AuthContext = React.createContext({
   isLoggedIn: undefined,
@@ -18,6 +19,7 @@ export const AuthContextProvider = function (props) {
   const validateTokenURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/validateToken`;
   const getCurrentUserInfoURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/me`;
   const { sendRequest } = useSendRequest();
+  const handleError = useErrorHandling();
 
   const getUserInfo = async () => {
     const responseBody = await sendRequest(getCurrentUserInfoURL);
@@ -39,7 +41,7 @@ export const AuthContextProvider = function (props) {
 
       setIsLoggedIn(tokenIsValid);
     } catch (err) {
-      console.log(err);
+      handleError(err);
       setIsLoggedIn(false);
     }
   };
