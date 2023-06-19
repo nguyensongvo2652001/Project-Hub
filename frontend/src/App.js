@@ -19,6 +19,7 @@ import TaskPage from "./pages/TaskPage/TaskPage";
 import UserPublicPage from "./pages/UserPublicPage/UserPublicPage";
 import ProjectPublicDetailPage from "./pages/ProjectPublicDetailPage/ProjectPublicDetailPage";
 import SearchResultsPage from "./pages/SearchResultsPage/SearchResultsPage";
+import ConfirmProjectMembershipPage from "./pages/ConfirmProjectMembershipPage/ConfirmProjectMembershipPage";
 
 function App() {
   return (
@@ -54,6 +55,11 @@ function App() {
         </Route>
 
         <Route path="/search" element={<SearchResultsPage />} />
+
+        <Route
+          path="/confirmMembership/:invitationToken"
+          element={<ConfirmProjectMembershipPage />}
+        />
 
         <Route path="forbidden" element={<ForbiddenPage />} />
         <Route path="*" element={<NotFoundPage />} />

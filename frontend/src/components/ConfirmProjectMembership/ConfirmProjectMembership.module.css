@@ -1,0 +1,23 @@
+.confirmProjectMembership {
+  padding: 4rem;
+  min-height: 100vh;
+}
+
+.confirmProjectMembership__message {
+  margin: auto;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #a8c1e5;
+  margin-bottom: 4rem;
+}
+
+.confirmProjectMembership__imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmProjectMembership__image {
+  width: 40%;
+}

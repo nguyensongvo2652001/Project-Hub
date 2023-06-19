@@ -92,6 +92,7 @@ const confirmMembership = catchAsync(async (req, res, next) => {
 
   const membership = await ProjectMember.findOneAndUpdate(
     {
+      memberId: req.user._id,
       invitationToken,
     },
     { status: "done" },
