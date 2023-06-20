@@ -76,13 +76,14 @@ const inviteMemberToProject = catchAsync(async (req, res, next) => {
   const token = newMemberMembership.createInvitationToken();
   await newMemberMembership.save();
 
-  const link = `${process.env.BASE_V1_API_ROUTE}/confirmMembership/${token}`;
+  const link = `${process.env.BASE_FRONTEND_ROUTE}/confirmMembership/${token}`;
 
   const emailSender = new Email(newMember, link);
   emailSender.projectName = project.name;
   await emailSender.sendProjectInvitation();
 
   res.status(200).json({
+    status: "success",
     message: `An invitation letter has been sent to ${email}`,
   });
 });
