@@ -164,6 +164,7 @@ projectSchema.methods.countTasksByType = async function () {
 
 projectSchema.methods.countMembersByRole = async function () {
   const result = await mongoose.model("ProjectMember").aggregate([
+    { $match: { status: "done" } },
     {
       $lookup: {
         from: "projects",

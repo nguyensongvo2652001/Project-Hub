@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const crypto = require("crypto");
 const { HandledError } = require("../utils/errorHandling");
 
-const possibleProjectMembersRole = ["owner", "admin", "developer"];
+const possibleProjectMembersRole = ["owner", "admin", "developer", "pending"];
 
 const projectMemberSchema = new mongoose.Schema(
   {

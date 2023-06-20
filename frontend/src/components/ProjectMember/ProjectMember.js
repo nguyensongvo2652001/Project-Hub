@@ -14,6 +14,11 @@ const ProjectMember = (props) => {
     displayMemberName = displayMemberName.slice(0, 17) + "...";
   }
 
+  let displayTag = member.role;
+  if (member.status === "pending") {
+    displayTag = "pending";
+  }
+
   return (
     <li ref={lastProjectMemberRef}>
       <Card className={classes.member}>
@@ -24,7 +29,7 @@ const ProjectMember = (props) => {
             link={`/users/${member._id}`}
           />
 
-          <Tag tag={member.role} />
+          <Tag tag={displayTag} />
         </header>
 
         <AvatarLink

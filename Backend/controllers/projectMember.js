@@ -62,6 +62,7 @@ const inviteMemberToProject = catchAsync(async (req, res, next) => {
       memberId: newMember._id,
       projectId,
       status: "pending",
+      role: "pending",
     });
 
     await Notification.create({
@@ -96,7 +97,7 @@ const confirmMembership = catchAsync(async (req, res, next) => {
       memberId: req.user._id,
       invitationToken,
     },
-    { status: "done" },
+    { status: "done", role: "developer" },
     { new: true }
   );
 

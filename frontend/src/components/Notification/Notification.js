@@ -22,7 +22,7 @@ const Notification = (props) => {
   const notificationLinkAndMessageBasedOnType = {
     project_invitation: {
       message: `just invited you to project ${detail?.name}. Please check your email for more information.`,
-      link: `/projects/${detail?._id}`,
+      link: `/projects/${detail?._id}/publicDetail`,
     },
     project_invitation_confirm: {
       message: "just confirm to join the project",

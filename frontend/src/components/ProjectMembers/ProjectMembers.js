@@ -189,9 +189,11 @@ const ProjectMembers = (props) => {
               dateJoined,
               performance,
               role,
+              status,
             } = membership;
 
             member.role = role;
+            member.status = status;
 
             const memberMetaInfo = [
               {

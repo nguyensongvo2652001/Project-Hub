@@ -19,7 +19,10 @@ const getAllJoinedProjects = catchAsync(async (req, res, next) => {
   //The idea is that we find all membership with memberId = req.user._id (current user id) and then just populate the projectId field of the membership
   const memberships = await ProjectMember.aggregate([
     {
-      $match: { memberId: new mongoose.Types.ObjectId(req.user._id) },
+      $match: {
+        memberId: new mongoose.Types.ObjectId(req.user._id),
+        status: "done",
+      },
     },
     {
       $sort: { dateJoined: -1 },
