@@ -61,6 +61,14 @@ const deleteProjectMember = catchAsync(async (req, res, next) => {
     { creator: ownerMembership.memberId._id }
   );
 
+  await Notification.create({
+    initiator: req.user._id,
+    type: "project_delete_member",
+    scope: "projectl",
+    receiver: soonToBeDeletedMembership.projectId._id,
+    detail: soonToBeDeletedMembership,
+  });
+
   res.status(200).json({
     status: "success",
   });

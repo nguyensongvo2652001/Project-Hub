@@ -37,6 +37,10 @@ router
     projectMiddelware.filterProjectDataMiddleware,
     projectMiddelware.prepareUpdateProjectMiddleware,
     projectController.updateProject
+  )
+  .delete(
+    projectMiddelware.validateIfUserIsOwnerOfTheProjectMiddleware,
+    projectController.deleteProject
   );
 
 router.get(

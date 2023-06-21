@@ -1,5 +1,7 @@
+const Notification = require("../models/notification");
 const Project = require("../models/project");
 const ProjectMember = require("../models/projectMember");
+const Task = require("../models/task");
 const User = require("../models/user");
 const APIFeatures = require("../utils/apiFeatures");
 const { catchAsync, HandledError } = require("../utils/errorHandling");
@@ -119,6 +121,32 @@ const searchProjects = catchAsync(async (req, res, next) => {
   });
 });
 
+const deleteProject = catchAsync(async (req, res, next) => {
+  const { projectId } = req.params;
+
+  const project = await Project.findByIdAndDelete(projectId);
+
+  if (!project) {
+    return next(
+      new HandledError(`no projects found with id = ${projectId}`, 404)
+    );
+  }
+
+  const deleteAllMembersPromise = ProjectMember.deleteMany({ projectId });
+  const deleteAllTasksPromise = Task.deleteMany({ projectId });
+  const deleteAllNotificationsPromise = Notification.deleteMany({
+    receiver: projectId,
+  });
+
+  await Promise.all([
+    deleteAllMembersPromise,
+    deleteAllNotificationsPromise,
+    deleteAllTasksPromise,
+  ]);
+
+  res.status(200).json({ status: "success" });
+});
+
 module.exports = {
   createProject,
   getProject,
@@ -126,4 +154,5 @@ module.exports = {
   updateProject,
   getAllProjects,
   searchProjects,
+  deleteProject,
 };
