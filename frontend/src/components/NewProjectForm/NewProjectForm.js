@@ -92,6 +92,7 @@ const NewProjectForm = (props) => {
             handleNewActiveValue={(activeValue) =>
               setActiveStatusOption(activeValue)
             }
+            turnOffStateManagement={true}
           />
         </div>
         {!isSubmitting && (

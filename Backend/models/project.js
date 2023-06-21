@@ -104,8 +104,13 @@ projectSchema
     this._skipCreatingOwnerMembership = value;
   });
 
+projectSchema.pre("save", function (next) {
+  this.wasNew = this.isNew;
+  next();
+});
+
 projectSchema.post("save", async function (doc, next) {
-  if (!this.isNew) return next();
+  if (!this.wasNew) return next();
 
   try {
     await mongoose.model("ProjectMember").create({

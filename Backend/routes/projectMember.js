@@ -4,6 +4,7 @@ const projectMemberController = require("../controllers/projectMember");
 const authController = require("../controllers/auth");
 
 const authMiddleware = require("../middlewares/authMiddleware");
+const projectMiddleware = require("../middlewares/projectMiddleware");
 const projectMemberMiddleware = require("../middlewares/projectMemberMiddleware");
 
 const router = express.Router();
@@ -22,6 +23,7 @@ router
   .patch(
     projectMemberMiddleware.validateIfUserIsAllowToEditRoleMiddleware,
     projectMemberController.editMemberRole
-  );
+  )
+  .delete(projectMemberController.deleteProjectMember);
 
 module.exports = router;

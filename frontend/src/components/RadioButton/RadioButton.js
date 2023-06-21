@@ -1,13 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import classes from "./RadioButton.module.css";
 
 const RadioButton = (props) => {
-  const { active: defaultActive, value, onClick } = props;
+  const {
+    active: defaultActive,
+    value,
+    onClick,
+    turnOffStateManagement,
+  } = props;
 
   const [active, setActive] = useState(defaultActive);
 
+  useEffect(() => {
+    setActive(defaultActive);
+  }, [defaultActive]);
+
   const onRadioButtonClick = () => {
-    props.onClick(active, value);
+    if (turnOffStateManagement) return;
+
+    if (props.onClick) props.onClick(active, value);
     setActive((prev) => !prev);
   };
 

@@ -6,6 +6,65 @@ const { catchAsync, HandledError } = require("../utils/errorHandling");
 const userStatController = require("./userStat");
 const APIFeatures = require("../utils/apiFeatures");
 const Email = require("../utils/email");
+const Task = require("../models/task");
+
+const deleteProjectMember = catchAsync(async (req, res, next) => {
+  const projectMemberId = req.params.membershipId;
+
+  const soonToBeDeletedMembership = await ProjectMember.findById(
+    projectMemberId
+  );
+
+  if (!soonToBeDeletedMembership) {
+    return next(
+      new HandledError(
+        `can not find any membership with id = ${projectMemberId}`,
+        404
+      )
+    );
+  }
+
+  // you are not allowed to remove the owner
+  if (soonToBeDeletedMembership.role === "owner") {
+    return next(
+      new HandledError("you are not allowed to perform this action", 403)
+    );
+  }
+
+  //Only owner is allowed to remove other members.
+  const ownerMembership = await ProjectMember.findOne({
+    projectId: soonToBeDeletedMembership.projectId._id,
+    role: "owner",
+    memberId: req.user._id,
+  });
+
+  if (!ownerMembership) {
+    return next(
+      new HandledError("you are not allowed to perform this action", 403)
+    );
+  }
+
+  await soonToBeDeletedMembership.deleteOne();
+
+  // Find tasks that include the member and remove the member from that tasks
+  await Task.updateMany(
+    {
+      developers: { $in: [soonToBeDeletedMembership.memberId._id] },
+    },
+    { $pull: { developers: soonToBeDeletedMembership.memberId._id } }
+  );
+
+  // - Find tasks that are created by the member and change the creator of that task to the owner of the project.
+
+  await Task.updateMany(
+    { creator: soonToBeDeletedMembership.memberId._id },
+    { creator: ownerMembership.memberId._id }
+  );
+
+  res.status(200).json({
+    status: "success",
+  });
+});
 
 const inviteMemberToProject = catchAsync(async (req, res, next) => {
   const { email, projectId } = req.body;
@@ -331,4 +390,5 @@ module.exports = {
   editMemberRole,
   searchProjectMembers,
   searchNonProjectMembers,
+  deleteProjectMember,
 };

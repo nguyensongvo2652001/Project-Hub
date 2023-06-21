@@ -10,6 +10,8 @@ const notificationTypeOptions = [
   "project_update_task",
   "project_delete_task",
   "project_update",
+  "project_delete_member",
+  "project_member_left",
 ];
 
 const notificationSchema = new mongoose.Schema({

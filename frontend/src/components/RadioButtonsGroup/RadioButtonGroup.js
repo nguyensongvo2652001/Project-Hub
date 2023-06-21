@@ -3,7 +3,12 @@ import classes from "./RadioButtonGroup.module.css";
 import RadioButton from "../RadioButton/RadioButton";
 
 const RadioButtonGroup = (props) => {
-  const { options, handleNewActiveValue, defaultActiveOption } = props;
+  const {
+    options,
+    handleNewActiveValue,
+    defaultActiveOption,
+    turnOffStateManagement,
+  } = props;
 
   const [activeOption, setActiveOption] = useState(
     defaultActiveOption ? defaultActiveOption : props.options[0]
@@ -28,7 +33,10 @@ const RadioButtonGroup = (props) => {
             value={option.toLowerCase()}
             onClick={() => onRadioButtonClick(option.toLowerCase())}
           >
-            <RadioButton active={isActive} />
+            <RadioButton
+              active={isActive}
+              turnOffStateManagement={turnOffStateManagement}
+            />
             <p>{option}</p>
           </li>
         );

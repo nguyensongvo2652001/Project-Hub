@@ -31,6 +31,8 @@ const validateIfUserIsOwnerOfTheProjectMiddleware = catchAsync(
       );
     }
 
+    req.ownerMembership = membership;
+
     next();
   }
 );

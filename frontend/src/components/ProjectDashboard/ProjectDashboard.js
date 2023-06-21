@@ -109,12 +109,12 @@ const ProjectDashboard = (props) => {
   );
 
   useEffect(() => {
-    const getMoreTasks = async () => {
-      if (isInitialRender) {
-        setIsInitialRender(false);
-        return;
-      }
+    if (isInitialRender) {
+      setIsInitialRender(false);
+      return;
+    }
 
+    const getMoreTasks = async () => {
       if (noMoreTasks) {
         return;
       }
@@ -138,7 +138,9 @@ const ProjectDashboard = (props) => {
         setNoMoreTasks(true);
       }
 
-      setTasks((prev) => [...prev, ...moreTasks]);
+      setTasks((prev) => {
+        return [...prev, ...moreTasks];
+      });
 
       setIsLoading(false);
 
@@ -150,9 +152,9 @@ const ProjectDashboard = (props) => {
 
     getMoreTasks();
   }, [
+    isInitialRender,
     getMoreTasksPage,
     handleError,
-    isInitialRender,
     project._id,
     sendRequest,
     taskStatus,
