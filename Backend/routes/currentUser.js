@@ -3,6 +3,7 @@ const express = require("express");
 const userController = require("../controllers/user");
 const notificationController = require("../controllers/notification");
 const userStatController = require("../controllers/userStat");
+const projectMemberController = require("../controllers/projectMember");
 
 const authMiddleware = require("../middlewares/authMiddleware");
 const notificationMiddleware = require("../middlewares/notificationMiddleware");
@@ -36,6 +37,7 @@ router.get(
 );
 
 router.route("/project").get(userController.getAllJoinedProjects);
+router.delete("/leaveProject", projectMemberController.leaveProject);
 
 router.get("/stat", userStatController.getPersonalStat);
 module.exports = router;

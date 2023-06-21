@@ -8,6 +8,74 @@ const APIFeatures = require("../utils/apiFeatures");
 const Email = require("../utils/email");
 const Task = require("../models/task");
 
+const leaveProject = catchAsync(async (req, res, next) => {
+  const { projectId } = req.body;
+
+  const membership = await ProjectMember.findOne({
+    projectId,
+    memberId: req.user._id,
+  });
+
+  if (!membership) {
+    return next(
+      new HandledError(
+        `You are not the member of this project (id = ${projectId})`,
+        404
+      )
+    );
+  }
+
+  if (membership.role === "owner") {
+    return next(
+      new HandledError(
+        `You must assign another user to be owner of the project`,
+        403
+      )
+    );
+  }
+
+  const ownerMembership = await ProjectMember.findOne({
+    projectId,
+    role: "owner",
+  });
+
+  await deleteProjectMemberCascade(membership, ownerMembership);
+
+  await Notification.create({
+    initiator: req.user._id,
+    type: "project_member_left",
+    scope: "project",
+    receiver: membership.projectId._id,
+    detail: membership,
+  });
+
+  res.status(200).json({
+    status: "success",
+  });
+});
+
+const deleteProjectMemberCascade = async (
+  soonToBeDeletedMembership,
+  ownerMembership
+) => {
+  await soonToBeDeletedMembership.deleteOne();
+
+  // Find tasks that include the member and remove the member from that tasks
+  await Task.updateMany(
+    {
+      developers: { $in: [soonToBeDeletedMembership.memberId._id] },
+    },
+    { $pull: { developers: soonToBeDeletedMembership.memberId._id } }
+  );
+
+  // - Find tasks that are created by the member and change the creator of that task to the owner of the project.
+
+  await Task.updateMany(
+    { creator: soonToBeDeletedMembership.memberId._id },
+    { creator: ownerMembership.memberId._id }
+  );
+};
+
 const deleteProjectMember = catchAsync(async (req, res, next) => {
   const projectMemberId = req.params.membershipId;
 
@@ -44,27 +112,12 @@ const deleteProjectMember = catchAsync(async (req, res, next) => {
     );
   }
 
-  await soonToBeDeletedMembership.deleteOne();
-
-  // Find tasks that include the member and remove the member from that tasks
-  await Task.updateMany(
-    {
-      developers: { $in: [soonToBeDeletedMembership.memberId._id] },
-    },
-    { $pull: { developers: soonToBeDeletedMembership.memberId._id } }
-  );
-
-  // - Find tasks that are created by the member and change the creator of that task to the owner of the project.
-
-  await Task.updateMany(
-    { creator: soonToBeDeletedMembership.memberId._id },
-    { creator: ownerMembership.memberId._id }
-  );
+  await deleteProjectMemberCascade(soonToBeDeletedMembership, ownerMembership);
 
   await Notification.create({
     initiator: req.user._id,
     type: "project_delete_member",
-    scope: "projectl",
+    scope: "project",
     receiver: soonToBeDeletedMembership.projectId._id,
     detail: soonToBeDeletedMembership,
   });
@@ -399,4 +452,6 @@ module.exports = {
   searchProjectMembers,
   searchNonProjectMembers,
   deleteProjectMember,
+  deleteProjectMemberCascade,
+  leaveProject,
 };
