@@ -11,6 +11,8 @@ import Tag from "../UI/Tag/Tag";
 import AvatarLink from "../AvatarLink/AvatarLink";
 import ChosenDevelopersRow from "../ChosenDevelopersRow/ChosenDevelopersRow";
 import EditTaskForm from "../EditTaskForm/EditTaskForm";
+import ConfirmModal from "../ConfirmationModal/ConfirmModal";
+import { successAlert } from "../../utils/alert";
 
 const TaskDetail = (props) => {
   const { project } = props;
@@ -24,6 +26,8 @@ const TaskDetail = (props) => {
   const [task, setTask] = useState({});
   const [taskDevelopers, setTaskDevelopers] = useState(task?.developers);
   const [showEditTaskForm, setShowEditTaskForm] = useState(false);
+  const [showDeleteTaskConfirmationModal, setShowDeleteTaskConfirmationModal] =
+    useState(false);
 
   useEffect(() => {
     const getTaskDetail = async () => {
@@ -58,6 +62,29 @@ const TaskDetail = (props) => {
     setShowEditTaskForm(true);
   };
 
+  const closeDeleteTaskConfirmationModal = () => {
+    setShowDeleteTaskConfirmationModal(false);
+  };
+
+  const openDeleteTaskConfirmationModal = () => {
+    setShowDeleteTaskConfirmationModal(true);
+  };
+
+  const deleteTask = async () => {
+    const deleteTaskURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/task/${task._id}`;
+    const response = await sendRequest(deleteTaskURL, { method: "DELETE" });
+
+    if (response.status !== "success") {
+      throw new Error(response.message);
+    }
+
+    successAlert("Delete task successfully");
+
+    setTimeout(() => {
+      navigate(`/projects/${project._id}`);
+    }, 1500);
+  };
+
   return (
     <>
       {showEditTaskForm && (
@@ -66,6 +93,13 @@ const TaskDetail = (props) => {
           task={task}
           setTask={setTask}
           project={project}
+        />
+      )}
+      {showDeleteTaskConfirmationModal && (
+        <ConfirmModal
+          question={`Are you sure you want to delete ${task.name} task ?`}
+          closeModal={closeDeleteTaskConfirmationModal}
+          onConfirm={deleteTask}
         />
       )}
       {isLoading && <Loading />}
@@ -78,6 +112,12 @@ const TaskDetail = (props) => {
               onClick={openEditTaskForm}
             >
               Edit
+            </button>
+            <button
+              className={classes.taskDetail__deleteButton}
+              onClick={openDeleteTaskConfirmationModal}
+            >
+              Delete
             </button>
           </header>
 

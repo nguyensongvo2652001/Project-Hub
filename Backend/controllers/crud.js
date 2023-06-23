@@ -103,7 +103,7 @@ const deleteOne = (Model) =>
       await req.onFinish(req, doc);
     }
 
-    res.status(204).json({
+    res.status(200).json({
       status: "success",
       data: null,
     });
