@@ -425,7 +425,7 @@ const editMemberRole = catchAsync(async (req, res, next) => {
   }
 
   const newMembership = await ProjectMember.findOneAndUpdate(
-    { memberId: membershipId, status: "done" },
+    { _id: membershipId, status: "done" },
     { role: newRole },
     { runValidators: true, new: true }
   );

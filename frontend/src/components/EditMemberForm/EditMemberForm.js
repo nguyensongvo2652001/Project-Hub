@@ -5,12 +5,57 @@ import Tag from "../UI/Tag/Tag";
 import Dropdown from "../UI/Dropdown/Dropdown";
 import avatar from "../../assets/avatar1.jpg";
 import ConstantContext from "../../contexts/ConstantContext";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import AvatarLink from "../AvatarLink/AvatarLink";
 import ConfirmModal from "../ConfirmationModal/ConfirmModal";
+import useErrorHandling from "../../hooks/useErrorHandling";
+import useSendRequest from "../../hooks/useSendRequest";
+import { useNavigate } from "react-router-dom";
+import Loading from "../UI/Loading/Loading";
+import { successAlert } from "../../utils/alert";
 
 const EditMemberForm = (props) => {
   const { member, closeForm } = props;
+
+  let displayName = member.name;
+  if (displayName.length > 10) {
+    displayName = displayName.slice(0, 7) + "...";
+  }
+
+  const handleError = useErrorHandling();
+  const { sendRequest } = useSendRequest();
+  const navigate = useNavigate();
+  const [isSaving, setIsSaving] = useState(false);
+  const roleDropdownRef = useRef();
+
+  const onSaveButtonClick = async () => {
+    const editMemberRoleURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/projectMember/${member.membershipId}`;
+    setIsSaving(true);
+    try {
+      const data = {
+        role: roleDropdownRef.current.value,
+      };
+      const response = await sendRequest(editMemberRoleURL, {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      });
+
+      if (response.status !== "success") {
+        throw new Error(response.message);
+      }
+
+      successAlert("Update role successfully");
+      setIsSaving(false);
+
+      //reload the page after 1 second
+      setTimeout(() => {
+        navigate(0);
+      }, 1000);
+    } catch (err) {
+      handleError(err);
+    }
+    setIsSaving(false);
+  };
 
   const constantContext = useContext(ConstantContext);
 
@@ -40,8 +85,16 @@ const EditMemberForm = (props) => {
       )}
 
       <header className={classes.editMemberForm__header}>
-        <p className={classes.editMemberForm__memberName}>{member.name}</p>
-        <button className={classes.editMemberForm__saveButton}>Save</button>
+        <p className={classes.editMemberForm__memberName}>{displayName}</p>
+        {!isSaving && (
+          <button
+            className={classes.editMemberForm__saveButton}
+            onClick={onSaveButtonClick}
+          >
+            Save
+          </button>
+        )}
+        {isSaving && <Loading />}
       </header>
 
       <Tag
@@ -64,6 +117,7 @@ const EditMemberForm = (props) => {
           className={classes.editMemberForm__memberRoleDropdown}
           options={constantContext.MEMBER_ROLES}
           defaultOption={member.role}
+          inputRef={roleDropdownRef}
         />
       </div>
 

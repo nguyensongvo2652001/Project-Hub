@@ -1,12 +1,11 @@
 .editMemberForm {
-  width: 25rem;
+  width: 26rem;
   height: fit-content;
   left: 50%;
 }
 
 .editMemberForm__header {
   display: flex;
-  justify-content: center;
   gap: 5rem;
   margin-left: 1rem;
   margin-bottom: 1rem;
