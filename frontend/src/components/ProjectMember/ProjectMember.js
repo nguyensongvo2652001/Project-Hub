@@ -47,27 +47,23 @@ const ProjectMember = (props) => {
 
           <Tag tag={displayTag} />
         </header>
-
         <AvatarLink
           src={member.avatar}
           alt="member avatar"
           className={classes.member__avatar}
           id={member._id}
         />
-
         <CardMetaInfo
           metaInfoList={memberMetaInfo}
           className={classes.member__metaInfoContainer}
         />
 
-        {member.status === "done" && (
-          <button
-            className={classes.member__editButton}
-            onClick={openEditMemberForm}
-          >
-            Edit
-          </button>
-        )}
+        <button
+          className={classes.member__editButton}
+          onClick={openEditMemberForm}
+        >
+          Edit
+        </button>
       </Card>
     </li>
   );

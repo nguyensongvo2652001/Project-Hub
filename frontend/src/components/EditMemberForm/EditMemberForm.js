@@ -70,8 +70,19 @@ const EditMemberForm = (props) => {
     setShowRemoveMemberConfirmModal(true);
   };
 
-  const removeMember = () => {
-    console.log(member.membershipId);
+  const removeMember = async () => {
+    const removeMemberURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/projectMember/${member.membershipId}`;
+    const response = await sendRequest(removeMemberURL, {
+      method: "DELETE",
+    });
+    if (response.status !== "success") {
+      throw new Error(response.message);
+    }
+
+    successAlert("Remove member from project successfully");
+    setTimeout(() => {
+      navigate(0);
+    }, 1500);
   };
 
   return (
@@ -86,7 +97,7 @@ const EditMemberForm = (props) => {
 
       <header className={classes.editMemberForm__header}>
         <p className={classes.editMemberForm__memberName}>{displayName}</p>
-        {!isSaving && (
+        {!isSaving && member.status === "done" && (
           <button
             className={classes.editMemberForm__saveButton}
             onClick={onSaveButtonClick}
@@ -111,15 +122,17 @@ const EditMemberForm = (props) => {
         />
       </div>
 
-      <div className={classes.editMemberForm__memberRoleSelect}>
-        <label>Role</label>
-        <Dropdown
-          className={classes.editMemberForm__memberRoleDropdown}
-          options={constantContext.MEMBER_ROLES}
-          defaultOption={member.role}
-          inputRef={roleDropdownRef}
-        />
-      </div>
+      {member.status === "done" && (
+        <div className={classes.editMemberForm__memberRoleSelect}>
+          <label>Role</label>
+          <Dropdown
+            className={classes.editMemberForm__memberRoleDropdown}
+            options={constantContext.MEMBER_ROLES}
+            defaultOption={member.role}
+            inputRef={roleDropdownRef}
+          />
+        </div>
+      )}
 
       <button
         className={classes.editMemberForm__deleteMemberButton}
