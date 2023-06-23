@@ -14,7 +14,7 @@ const leaveProject = catchAsync(async (req, res, next) => {
   const membership = await ProjectMember.findOne({
     projectId,
     memberId: req.user._id,
-  });
+  }).populate("memberId");
 
   if (!membership) {
     return next(
@@ -37,7 +37,7 @@ const leaveProject = catchAsync(async (req, res, next) => {
   const ownerMembership = await ProjectMember.findOne({
     projectId,
     role: "owner",
-  });
+  }).populate("memberId");
 
   await deleteProjectMemberCascade(membership, ownerMembership);
 
@@ -46,7 +46,7 @@ const leaveProject = catchAsync(async (req, res, next) => {
     type: "project_member_left",
     scope: "project",
     receiver: membership.projectId._id,
-    detail: membership,
+    detail: membership.memberId.name,
   });
 
   res.status(200).json({
@@ -119,7 +119,7 @@ const deleteProjectMember = catchAsync(async (req, res, next) => {
     type: "project_delete_member",
     scope: "project",
     receiver: soonToBeDeletedMembership.projectId._id,
-    detail: soonToBeDeletedMembership,
+    detail: soonToBeDeletedMembership.memberId.name,
   });
 
   res.status(200).json({

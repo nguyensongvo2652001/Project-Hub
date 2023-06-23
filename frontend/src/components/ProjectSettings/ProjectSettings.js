@@ -3,10 +3,12 @@ import TextAreaInput from "../TextAreaInput/TextAreaInput.js";
 import TextInput from "../TextInput/TextInput.js";
 import ProjectTagDropdown from "../UI/ProjectTagDropdown/ProjectTagDropdown.js";
 import Loading from "../UI/Loading/Loading.js";
+import ConfirmModal from "../ConfirmationModal/ConfirmModal.js";
 
 import useSendRequest from "../../hooks/useSendRequest.js";
 import { useRef, useState } from "react";
 import useErrorHandling from "../../hooks/useErrorHandling.js";
+import { useNavigate } from "react-router-dom";
 
 import classes from "./ProjectSettings.module.css";
 
@@ -60,8 +62,80 @@ const ProjectSettings = (props) => {
     setIsSendingRequest(false);
   };
 
+  const [showLeaveProjectConfirmModal, setShowLeaveProjectConfirmModal] =
+    useState(false);
+  const [showDeleteProjectConfirmModal, setShowDeleteProjectConfirmModal] =
+    useState(false);
+
+  const openLeaveProjectConfirmModal = () => {
+    setShowLeaveProjectConfirmModal(true);
+  };
+  const openDeleteProjectConfirmModal = () => {
+    setShowDeleteProjectConfirmModal(true);
+  };
+  const closeLeaveProjectConfirmModal = () => {
+    setShowLeaveProjectConfirmModal(false);
+  };
+  const closeDeleteProjectConfirmModal = () => {
+    setShowDeleteProjectConfirmModal(false);
+  };
+
+  const navigate = useNavigate();
+
+  const leaveProject = async () => {
+    const leaveProjectURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/me/leaveProject`;
+    const data = { projectId: project._id };
+
+    const response = await sendRequest(leaveProjectURL, {
+      method: "DELETE",
+      body: JSON.stringify(data),
+    });
+
+    if (response.status !== "success") {
+      throw new Error(response.message);
+    }
+
+    successAlert("Leave project successfully");
+
+    setTimeout(() => {
+      navigate("/projects");
+    }, 1500);
+  };
+
+  const deleteProject = async () => {
+    const deleteProjectURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/project/${project._id}`;
+
+    const response = await sendRequest(deleteProjectURL, {
+      method: "DELETE",
+    });
+
+    if (response.status !== "success") {
+      throw new Error(response.message);
+    }
+
+    successAlert("Delete project successfully");
+
+    setTimeout(() => {
+      navigate("/projects");
+    }, 1500);
+  };
+
   return (
     <div className={classes.projectSetting}>
+      {showLeaveProjectConfirmModal && (
+        <ConfirmModal
+          question={`Are you sure you want to leave project ${project.name} ?`}
+          closeModal={closeLeaveProjectConfirmModal}
+          onConfirm={leaveProject}
+        />
+      )}
+      {showDeleteProjectConfirmModal && (
+        <ConfirmModal
+          question={`Are you sure you want to delete project ${project.name} ?`}
+          closeModal={closeDeleteProjectConfirmModal}
+          onConfirm={deleteProject}
+        />
+      )}
       <header className={classes.projectSetting__header}>
         <h1 className={classes.projectSetting__projectName}>{project.name}</h1>
         {isSendingRequest && (
@@ -124,6 +198,22 @@ const ProjectSettings = (props) => {
           />
         </div>
       </form>
+
+      <div className={classes.projectSetting__footerButtons}>
+        <button
+          className={classes.projectSetting__leaveProjectButton}
+          onClick={openLeaveProjectConfirmModal}
+        >
+          Leave this project
+        </button>
+
+        <button
+          className={classes.projectSetting__deleteProjectButton}
+          onClick={openDeleteProjectConfirmModal}
+        >
+          Delete this project
+        </button>
+      </div>
     </div>
   );
 };

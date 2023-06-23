@@ -66,6 +66,44 @@
   gap: 40%;
 }
 
+.projectSetting__footerButtons {
+  display: flex;
+  margin-top: 6rem;
+
+  justify-content: center;
+
+  gap: 10rem;
+}
+
+.projectSetting__footerButtons button {
+  border: none;
+  cursor: pointer;
+  font-weight: 800;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  margin-right: 3rem;
+  transition: all 0.3s;
+  font-size: 1.2rem;
+}
+
+.projectSetting__leaveProjectButton {
+  background-color: #fcc419;
+  color: #654e0a;
+}
+
+.projectSetting__leaveProjectButton:hover {
+  background-color: #ca9d14;
+}
+
+.projectSetting__deleteProjectButton {
+  background-color: #e8b0b1;
+  color: #5d4647;
+}
+
+.projectSetting__deleteProjectButton:hover {
+  background-color: #ba8d8e;
+}
+
 @media (max-width: 850px) {
   .projectSetting__header {
     margin-bottom: 6rem;

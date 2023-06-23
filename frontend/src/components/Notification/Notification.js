@@ -10,6 +10,8 @@ const Notification = (props) => {
   // project_update_task
   // project_delete_task
   // project_update
+  // "project_delete_member"
+  // "project_member_left"
 
   const { lastNotificationRef, notification } = props;
 
@@ -38,11 +40,19 @@ const Notification = (props) => {
     },
     project_delete_task: {
       message: `jest deleted task ${detail?.name}`,
-      link: `/projects/${receiver}/tasks/${detail?._id}`,
+      link: ``,
     },
     project_update: {
       message: "just updated project info.",
       link: `/projects/${detail?._id}`,
+    },
+    project_delete_member: {
+      message: `just remove ${detail} from the project`,
+      link: ``,
+    },
+    project_member_left: {
+      message: `${detail} just left the project`,
+      link: ``,
     },
   };
 
