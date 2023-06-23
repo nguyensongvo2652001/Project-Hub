@@ -185,6 +185,7 @@ const ProjectMembers = (props) => {
         <ul className={classes.members}>
           {memberships.map((membership, index) => {
             const {
+              _id: membershipId,
               memberId: member,
               dateJoined,
               performance,
@@ -194,6 +195,7 @@ const ProjectMembers = (props) => {
 
             member.role = role;
             member.status = status;
+            member.membershipId = membershipId;
 
             const memberMetaInfo = [
               {

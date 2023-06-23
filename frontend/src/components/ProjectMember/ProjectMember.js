@@ -5,9 +5,21 @@ import Tag from "../UI/Tag/Tag";
 import AvatarLink from "../AvatarLink/AvatarLink.js";
 
 import classes from "./ProjectMember.module.css";
+import { useState } from "react";
+import EditMemberForm from "../EditMemberForm/EditMemberForm";
 
 const ProjectMember = (props) => {
   const { member, memberMetaInfo, lastProjectMemberRef } = props;
+
+  const [showEditMemberForm, setShowEditMemberForm] = useState(false);
+
+  const closeEditMemberForm = () => {
+    setShowEditMemberForm(false);
+  };
+
+  const openEditMemberForm = () => {
+    setShowEditMemberForm(true);
+  };
 
   let displayMemberName = member.name;
   if (displayMemberName.length > 20) {
@@ -21,6 +33,10 @@ const ProjectMember = (props) => {
 
   return (
     <li ref={lastProjectMemberRef}>
+      {showEditMemberForm && (
+        <EditMemberForm closeForm={closeEditMemberForm} member={member} />
+      )}
+
       <Card className={classes.member}>
         <header className={classes.member__header}>
           <MyLink
@@ -44,7 +60,14 @@ const ProjectMember = (props) => {
           className={classes.member__metaInfoContainer}
         />
 
-        <button className={classes.member__editButton}>Edit</button>
+        {member.status === "done" && (
+          <button
+            className={classes.member__editButton}
+            onClick={openEditMemberForm}
+          >
+            Edit
+          </button>
+        )}
       </Card>
     </li>
   );

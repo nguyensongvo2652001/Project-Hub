@@ -18,6 +18,7 @@ const MEMBER_ROLES = ["owner", "admin", "developer"];
 const ConstantContext = React.createContext({
   TASK_STATUS_CONSTANT,
   PROJECT_TAGS,
+  MEMBER_ROLES,
 });
 
 export const ConstantContextProvider = (props) => {

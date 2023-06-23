@@ -424,11 +424,20 @@ const editMemberRole = catchAsync(async (req, res, next) => {
     return next(new HandledError("role can not be empty", 400));
   }
 
-  const newMembership = await ProjectMember.findByIdAndUpdate(
-    membershipId,
+  const newMembership = await ProjectMember.findOneAndUpdate(
+    { memberId: membershipId, status: "done" },
     { role: newRole },
     { runValidators: true, new: true }
   );
+
+  if (!newMembership) {
+    return next(
+      new HandledError(
+        `No membership found with this id = ${membershipId}`,
+        404
+      )
+    );
+  }
 
   // If the new role is owner then demote the current owner to admin
   if (newRole === "owner") {

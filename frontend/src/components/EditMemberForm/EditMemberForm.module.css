@@ -1,0 +1,87 @@
+.editMemberForm {
+  width: 25rem;
+  height: fit-content;
+  left: 50%;
+}
+
+.editMemberForm__header {
+  display: flex;
+  justify-content: center;
+  gap: 5rem;
+}
+
+.editMemberForm__memberName {
+  color: #000;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.editMemberForm__memberRoleTag {
+  margin-left: 1rem;
+}
+
+.editMemberForm__saveButton {
+  width: 6.8rem;
+  height: 2.3rem;
+  flex-shrink: 0;
+  border-radius: 5px;
+  background-color: #a8c1e5;
+  border: none;
+  color: #434d5c;
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.editMemberForm__saveButton:hover {
+  background-color: #869ab7;
+}
+
+.editMemberForm__avatarContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.editMemberForm__avatar {
+  width: 8.5rem;
+  height: 8.5rem;
+  border-radius: 50%;
+}
+
+.editMemberForm__memberRoleSelect {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.editMemberForm__memberRoleSelect label {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.editMemberForm__memberRoleDropdown {
+  font-size: 1.2rem;
+}
+
+.editMemberForm__deleteMemberButton {
+  height: 3rem;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: none;
+  background-color: #e8b0b1;
+  color: #5d4647;
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.editMemberForm__deleteMemberButton:hover {
+  background-color: #ba8d8e;
+}
