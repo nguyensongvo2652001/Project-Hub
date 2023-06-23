@@ -8,6 +8,8 @@
   display: flex;
   justify-content: center;
   gap: 5rem;
+  margin-left: 1rem;
+  margin-bottom: 1rem;
 }
 
 .editMemberForm__memberName {
@@ -47,8 +49,8 @@
 }
 
 .editMemberForm__avatar {
-  width: 8.5rem;
-  height: 8.5rem;
+  width: 12.5rem;
+  height: 12.5rem;
   border-radius: 50%;
 }
 

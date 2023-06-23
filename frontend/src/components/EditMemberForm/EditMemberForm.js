@@ -5,17 +5,40 @@ import Tag from "../UI/Tag/Tag";
 import Dropdown from "../UI/Dropdown/Dropdown";
 import avatar from "../../assets/avatar1.jpg";
 import ConstantContext from "../../contexts/ConstantContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AvatarLink from "../AvatarLink/AvatarLink";
+import ConfirmModal from "../ConfirmationModal/ConfirmModal";
 
 const EditMemberForm = (props) => {
   const { member, closeForm } = props;
-  console.log(member);
 
   const constantContext = useContext(ConstantContext);
 
+  const [showRemoveMemberConfirmModal, setShowRemoveMemberConfirmModal] =
+    useState(false);
+
+  const closeRemoveMemberConfirmModal = () => {
+    setShowRemoveMemberConfirmModal(false);
+  };
+
+  const openRemoveMemberConfirmModal = () => {
+    setShowRemoveMemberConfirmModal(true);
+  };
+
+  const removeMember = () => {
+    console.log(member.membershipId);
+  };
+
   return (
-    <Modal className={classes.editMemberForm} onClick={props.closeForm}>
+    <Modal className={classes.editMemberForm} onClick={closeForm}>
+      {showRemoveMemberConfirmModal && (
+        <ConfirmModal
+          closeModal={closeRemoveMemberConfirmModal}
+          question={`Are you sure you want to remove ${member.name} from the project ?`}
+          onConfirm={removeMember}
+        />
+      )}
+
       <header className={classes.editMemberForm__header}>
         <p className={classes.editMemberForm__memberName}>{member.name}</p>
         <button className={classes.editMemberForm__saveButton}>Save</button>
@@ -44,7 +67,10 @@ const EditMemberForm = (props) => {
         />
       </div>
 
-      <button className={classes.editMemberForm__deleteMemberButton}>
+      <button
+        className={classes.editMemberForm__deleteMemberButton}
+        onClick={openRemoveMemberConfirmModal}
+      >
         Remove this member
       </button>
     </Modal>

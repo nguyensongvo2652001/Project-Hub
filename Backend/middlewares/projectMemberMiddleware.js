@@ -5,7 +5,10 @@ const validateIfUserIsAllowToEditRoleMiddleware = catchAsync(
   async (req, res, next) => {
     const { membershipId } = req.params;
 
-    const needToUpdateMembership = await ProjectMember.findById(membershipId);
+    const needToUpdateMembership = await ProjectMember.findOne({
+      memberId: membershipId,
+      status: "done",
+    });
     if (!needToUpdateMembership) {
       return next(
         new HandledError(

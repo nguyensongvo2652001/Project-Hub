@@ -1,0 +1,79 @@
+.confirmModal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-family: inherit;
+  z-index: 16;
+}
+
+.confirmModal__backdrop {
+  z-index: 15;
+}
+
+.confirmModal__logo {
+  width: 12rem;
+  margin-bottom: 5px;
+}
+
+.confirmModal__question {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.confirmModal__buttons {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.confirmModal__confirmButton,
+.confirmModal__cancelButton {
+  background: none;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 5px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.confirmModal__confirmButton {
+  background-color: #a8c1e5;
+  color: #434d5c;
+}
+
+.confirmModal__cancelButton {
+  background-color: #000;
+  color: #fff;
+}
+
+.confirmModal__loading {
+  margin: unset;
+}
+
+@media (max-width: 800px) {
+  .confirmModal {
+    width: 50%;
+    left: 35%;
+  }
+}
+
+@media (max-width: 700px) {
+  .confirmModal {
+    width: 60%;
+    left: 35%;
+  }
+}
+
+@media (max-width: 600px) {
+  .confirmModal {
+    width: 70%;
+    left: 25%;
+  }
+}
