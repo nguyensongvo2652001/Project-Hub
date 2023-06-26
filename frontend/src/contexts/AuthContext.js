@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Cookies from "js-cookie";
 import useSendRequest from "../hooks/useSendRequest";
 import useErrorHandling from "../hooks/useErrorHandling";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = React.createContext({
   isLoggedIn: undefined,
@@ -9,7 +10,7 @@ const AuthContext = React.createContext({
   checkIfUserIsLoggedIn: async () => {},
   getUserInfo: async () => {},
   logIn: () => {},
-  logOut: () => {},
+  logOut: async () => {},
 });
 
 export const AuthContextProvider = function (props) {
@@ -20,6 +21,7 @@ export const AuthContextProvider = function (props) {
   const getCurrentUserInfoURL = `${process.env.REACT_APP_BACKEND_BASE_URL}/me`;
   const { sendRequest } = useSendRequest();
   const handleError = useErrorHandling();
+  const navigate = useNavigate();
 
   const getUserInfo = async () => {
     const responseBody = await sendRequest(getCurrentUserInfoURL);
@@ -49,11 +51,18 @@ export const AuthContextProvider = function (props) {
   const logIn = async () => {
     await checkIfUserIsLoggedIn();
     setIsLoggedIn(true);
+    navigate("/projects");
   };
 
-  const logOut = () => {
+  const logOut = async () => {
     setIsLoggedIn(false);
     setCurrentUser({});
+    const logoutUrl = `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/logout`;
+    try {
+      await sendRequest(logoutUrl);
+    } catch (err) {
+      handleError(err);
+    }
   };
 
   return (

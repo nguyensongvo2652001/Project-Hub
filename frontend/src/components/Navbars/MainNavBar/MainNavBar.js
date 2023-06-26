@@ -43,15 +43,8 @@ const MainNavBar = (props) => {
     userJobTitleDisplay = "No job title";
   }
 
-  const { sendRequest } = useSendRequest();
   const confirmLogOutHandler = async () => {
-    const logoutUrl = `${process.env.REACT_APP_BACKEND_BASE_URL}/auth/logout`;
-    try {
-      await sendRequest(logoutUrl);
-      authContext.logOut();
-    } catch (err) {
-      handleError(err);
-    }
+    await authContext.logOut();
   };
 
   return (

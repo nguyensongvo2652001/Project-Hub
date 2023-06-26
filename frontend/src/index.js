@@ -8,13 +8,13 @@ import { ConstantContextProvider } from "./contexts/ConstantContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <ConstantContextProvider>
-    <AuthContextProvider>
-      <BrowserRouter>
+  <BrowserRouter>
+    <ConstantContextProvider>
+      <AuthContextProvider>
         <>
           <App />
         </>
-      </BrowserRouter>
-    </AuthContextProvider>
-  </ConstantContextProvider>
+      </AuthContextProvider>
+    </ConstantContextProvider>
+  </BrowserRouter>
 );

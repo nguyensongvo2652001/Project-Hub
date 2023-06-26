@@ -17,7 +17,7 @@ const NoAuthComponent = (props) => {
     if (authContext.isLoggedIn === false) {
       setIsLoading(false);
     } else if (authContext.isLoggedIn === true) {
-      navigate("/projects");
+      authContext.logOut();
     } else {
       checkLoginStatus();
     }

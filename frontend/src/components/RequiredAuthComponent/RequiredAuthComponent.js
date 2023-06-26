@@ -17,7 +17,7 @@ const RequiredAuthComponent = (props) => {
     if (authContext.isLoggedIn === true) {
       setIsLoading(false);
     } else if (authContext.isLoggedIn === false) {
-      navigate("/");
+      navigate("/login");
     } else {
       checkLoginStatus();
     }

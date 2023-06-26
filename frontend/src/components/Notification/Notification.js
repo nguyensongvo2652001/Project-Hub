@@ -4,15 +4,6 @@ import classes from "./Notification.module.css";
 import MyLink from "../MyLink/MyLink.js";
 
 const Notification = (props) => {
-  // project_invitation
-  // project_invitation_confirm
-  // project_new_task
-  // project_update_task
-  // project_delete_task
-  // project_update
-  // "project_delete_member"
-  // "project_member_left"
-
   const { lastNotificationRef, notification } = props;
 
   const dateDisplay = new Date(notification.dateCreated).toLocaleDateString(
