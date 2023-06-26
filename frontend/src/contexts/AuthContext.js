@@ -9,7 +9,7 @@ const AuthContext = React.createContext({
   currentUser: {},
   checkIfUserIsLoggedIn: async () => {},
   getUserInfo: async () => {},
-  logIn: () => {},
+  logIn: async () => {},
   logOut: async () => {},
 });
 

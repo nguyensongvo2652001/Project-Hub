@@ -21,6 +21,7 @@ import ProjectPublicDetailPage from "./pages/ProjectPublicDetailPage/ProjectPubl
 import SearchResultsPage from "./pages/SearchResultsPage/SearchResultsPage";
 import ConfirmProjectMembershipPage from "./pages/ConfirmProjectMembershipPage/ConfirmProjectMembershipPage";
 import ForgetPasswordPage from "./pages/ForgetPasswordPage/ForgetPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/forgetPassword" element={<ForgetPasswordPage />} />
+        <Route path="/resetPassword/:token" element={<ResetPasswordPage />} />
 
         <Route path="/me">
           <Route index element={<MyProfilePage />} />

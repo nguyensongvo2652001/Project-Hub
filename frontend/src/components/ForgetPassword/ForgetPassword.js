@@ -78,7 +78,7 @@ const ForgetPassword = (props) => {
           {!sendEmailSuccessful && (
             <form className={classes.forgetPassword}>
               <h1 className={classes["forgetPassword__title"]}>
-                Reset password
+                Forgot password
               </h1>
 
               <p className={classes.forgetPassword__info}>
