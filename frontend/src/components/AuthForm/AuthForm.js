@@ -117,7 +117,7 @@ const AuthForm = (props) => {
               <label htmlFor="password">Password</label>
               {isSignIn && (
                 <Link
-                  to="/resetPassword"
+                  to="/forgetPassword"
                   className={authFormStyles["authForm__link"]}
                 >
                   I forgot password

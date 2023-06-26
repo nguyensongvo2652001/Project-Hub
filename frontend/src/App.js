@@ -20,6 +20,7 @@ import UserPublicPage from "./pages/UserPublicPage/UserPublicPage";
 import ProjectPublicDetailPage from "./pages/ProjectPublicDetailPage/ProjectPublicDetailPage";
 import SearchResultsPage from "./pages/SearchResultsPage/SearchResultsPage";
 import ConfirmProjectMembershipPage from "./pages/ConfirmProjectMembershipPage/ConfirmProjectMembershipPage";
+import ForgetPasswordPage from "./pages/ForgetPasswordPage/ForgetPasswordPage";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/" element={<Navigate to="/projects" replace />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signUp" element={<SignUpPage />} />
+        <Route path="/forgetPassword" element={<ForgetPasswordPage />} />
 
         <Route path="/me">
           <Route index element={<MyProfilePage />} />
