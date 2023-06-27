@@ -1,5 +1,8 @@
 const { HandledError, catchAsync } = require("../utils/errorHandling");
 const APIFeatures = require("../utils/apiFeatures");
+const { getRedisClient } = require("../utils/redisClient");
+
+const redisClient = getRedisClient();
 
 const createOne = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -48,11 +51,31 @@ const getOne = (Model) =>
   catchAsync(async (req, res, next) => {
     let selectOptions = req.selectOptions;
 
-    const doc = await Model.findById(req.params.id).select(selectOptions);
     const modelName = Model.modelName.toLowerCase();
+    const docId = req.params.id;
+    const docCacheKey = `${modelName}_${docId}`;
+
+    let doc;
+    let cachedJSONDoc;
+
+    if (!req.notCache) {
+      cachedJSONDoc = await redisClient.get(docCacheKey);
+    }
+
+    if (cachedJSONDoc) {
+      doc = JSON.parse(cachedJSONDoc);
+    }
+
+    if (!doc) {
+      doc = await Model.findById(req.params.id).select(selectOptions);
+    }
 
     if (!doc) {
       return next(new HandledError(`No ${modelName} found with that id`, 404));
+    }
+
+    if (!req.notCache) {
+      await redisClient.set(docCacheKey, JSON.stringify(doc), { EX: 3600 });
     }
 
     res.status(200).json({

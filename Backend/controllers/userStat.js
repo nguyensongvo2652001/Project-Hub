@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const Task = require("../models/task");
 const { catchAsync } = require("../utils/errorHandling");
+const { getRedisClient } = require("../utils/redisClient");
+
+const redisClient = getRedisClient();
 
 const getTasksCountByStatus = async (userId) => {
   const result = await Task.aggregate([
@@ -306,30 +309,42 @@ const getNewlyCompletedTasksInEachMonth = async (userId) => {
 
 const getPersonalStat = catchAsync(async (req, res, next) => {
   const userId = req.user._id;
-  const promises = [
-    getTasksCountByStatus(userId),
-    getPersonalProjectStat(userId),
-    getNewlyCompletedTasksInEachMonth(userId),
-    getCompletionRateInEachMonth(userId),
-  ];
-  const results = await Promise.all(promises);
 
-  let currentCompletionRate = 0;
-  const totalTasksAssigned = results[0].total;
-  const totalTasksFinished = results[0].closed;
-  if (totalTasksAssigned !== 0) {
-    currentCompletionRate = Math.round(
-      (totalTasksFinished / totalTasksAssigned) * 100
-    );
+  const userStatCacheKey = `user_${userId}_stat`;
+  let stat;
+  const cachedJSONStat = await redisClient.get(userStatCacheKey);
+  if (cachedJSONStat) {
+    stat = JSON.parse(cachedJSONStat);
   }
 
-  const stat = {
-    tasksCountByStatus: results[0],
-    projectStat: results[1],
-    newlyCompletedTasksByMonthAndYear: results[2],
-    completionRateByMonthAndYear: results[3],
-    currentCompletionRate,
-  };
+  if (!stat) {
+    const promises = [
+      getTasksCountByStatus(userId),
+      getPersonalProjectStat(userId),
+      getNewlyCompletedTasksInEachMonth(userId),
+      getCompletionRateInEachMonth(userId),
+    ];
+    const results = await Promise.all(promises);
+
+    let currentCompletionRate = 0;
+    const totalTasksAssigned = results[0].total;
+    const totalTasksFinished = results[0].closed;
+    if (totalTasksAssigned !== 0) {
+      currentCompletionRate = Math.round(
+        (totalTasksFinished / totalTasksAssigned) * 100
+      );
+    }
+
+    stat = {
+      tasksCountByStatus: results[0],
+      projectStat: results[1],
+      newlyCompletedTasksByMonthAndYear: results[2],
+      completionRateByMonthAndYear: results[3],
+      currentCompletionRate,
+    };
+
+    await redisClient.set(userStatCacheKey, JSON.stringify(stat), { EX: 3600 });
+  }
   res.status(200).json({
     status: "success",
     data: {

@@ -2,6 +2,9 @@ const { default: mongoose } = require("mongoose");
 const Task = require("../models/task");
 const { catchAsync, HandledError } = require("../utils/errorHandling");
 const Project = require("../models/project");
+const { getRedisClient } = require("../utils/redisClient");
+
+const redisClient = getRedisClient();
 
 const getProjectTasksStat = async (projectId) => {
   const tasksCountByStatus = await Task.aggregate([
@@ -274,28 +277,41 @@ const getProjectCompletionRateByMonthAndYear = async (projectId) => {
 const getProjectStat = catchAsync(async (req, res, next) => {
   const { projectId } = req.params;
 
-  const project = await Project.findById(projectId);
-  if (!project) {
-    return next(
-      new HandledError(`No projects found with id = ${projectId}`, 404)
-    );
+  const projectStatCacheKey = `project_${projectId}_stat`;
+  let stat;
+  const cachedJSONStat = await redisClient.get(projectStatCacheKey);
+  if (cachedJSONStat) {
+    stat = JSON.parse(cachedJSONStat);
   }
 
-  const promises = [
-    getProjectTasksStat(projectId),
-    getProjectTasksCompletionRate(projectId),
-    getProjectNewlyCompletedTasksCountByMonthAndYear(projectId),
-    getProjectCompletionRateByMonthAndYear(projectId),
-  ];
+  if (!stat) {
+    const project = await Project.findById(projectId);
+    if (!project) {
+      return next(
+        new HandledError(`No projects found with id = ${projectId}`, 404)
+      );
+    }
 
-  const results = await Promise.all(promises);
+    const promises = [
+      getProjectTasksStat(projectId),
+      getProjectTasksCompletionRate(projectId),
+      getProjectNewlyCompletedTasksCountByMonthAndYear(projectId),
+      getProjectCompletionRateByMonthAndYear(projectId),
+    ];
 
-  const stat = {
-    tasksStat: results[0],
-    completionRate: results[1],
-    newlyCompletedTasksCountByMonthAndYear: results[2],
-    projectCompletionRateByMonthAndYear: results[3],
-  };
+    const results = await Promise.all(promises);
+
+    stat = {
+      tasksStat: results[0],
+      completionRate: results[1],
+      newlyCompletedTasksCountByMonthAndYear: results[2],
+      projectCompletionRateByMonthAndYear: results[3],
+    };
+
+    await redisClient.set(projectStatCacheKey, JSON.stringify(stat), {
+      EX: 3600,
+    });
+  }
 
   res.status(200).json({
     status: "success",
