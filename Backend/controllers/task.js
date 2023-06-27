@@ -6,6 +6,9 @@ const Task = require("../models/task");
 const APIFeatures = require("../utils/apiFeatures");
 const { catchAsync, HandledError } = require("../utils/errorHandling");
 const crud = require("./crud");
+const { getRedisClient } = require("../utils/redisClient");
+
+const redisClient = getRedisClient();
 
 const createTask = catchAsync(async (req, res, next) => {
   const { projectId, name, description, type, developers } = req.body;
@@ -42,7 +45,29 @@ const createTask = catchAsync(async (req, res, next) => {
 
 const getAllTasks = crud.getAll(Task);
 
-const getTask = crud.getOne(Task);
+// const getTask = crud.getOne(Task);
+const getTask = catchAsync(async (req, res, next) => {
+  let task;
+  const taskJSON = await redisClient.get(req.params.taskId);
+  if (taskJSON) task = JSON.parse(taskJSON);
+
+  if (!task) {
+    task = await Task.findById(req.params.taskId);
+  }
+
+  if (!task) {
+    return next(
+      new HandledError(`Can not find any tasks with that id = ${task._id}`, 404)
+    );
+  }
+
+  await redisClient.set(`${task._id}`, JSON.stringify(task), { EX: 3600 });
+
+  res.status(200).json({
+    status: "success",
+    task,
+  });
+});
 
 const updateTask = crud.updateOne(Task);
 const deleteTask = crud.deleteOne(Task);

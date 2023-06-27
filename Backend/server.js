@@ -1,3 +1,6 @@
+const dotenv = require("dotenv");
+dotenv.config({ path: "./env/main.env" });
+
 const { connectDB } = require("./utils/db");
 const taskController = require("./controllers/task");
 
@@ -11,8 +14,7 @@ process.on("unhandledRejection", (err) => {
   process.exit(1);
 });
 
-const dotenv = require("dotenv");
-dotenv.config({ path: "./env/main.env" });
+const { getRedisClient } = require("./utils/redisClient");
 
 let uri = process.env.DB_STRING;
 uri = uri.replace(/<password>/, process.env.DB_PASSWORD);
@@ -20,6 +22,8 @@ uri = uri.replace(/<databaseName>/, process.env.DB_NAME);
 
 (async () => {
   await connectDB(uri);
+  redisClient = getRedisClient();
+  await redisClient.connect();
   taskController.updateTaskStatusCron();
 })();
 

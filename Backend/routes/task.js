@@ -7,16 +7,16 @@ const taskMiddleware = require("../middlewares/taskMiddleware");
 
 const router = express.Router({ mergeParams: true });
 
-router.use(authMiddleware.validateIfUserLoggedIn);
+// router.use(authMiddleware.validateIfUserLoggedIn);
 
 router.route("/").post(taskController.createTask);
 
 router
   .route("/:taskId")
-  .all(
-    taskMiddleware.setRequestParamsIdMiddleware,
-    taskMiddleware.validateIfUserIsAllowedToViewTaskMiddleware
-  )
+  // .all(
+  //   taskMiddleware.setRequestParamsIdMiddleware,
+  //   taskMiddleware.validateIfUserIsAllowedToViewTaskMiddleware
+  // )
   .patch(
     taskMiddleware.validateIfUserIsAllowedToMofidyTaskMiddleware,
     taskMiddleware.filterRequestBodyBeforeUpdateTaskMiddleware,
