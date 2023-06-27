@@ -28,6 +28,7 @@ app.use(cors(corsOptions));
 const baseApiRoute = process.env.BASE_V1_API_ROUTE || "/api/v1";
 
 app.use(monitorController.updateRequestsCounterMiddleware);
+app.use(monitorController.updateProcessTimeMiddleware);
 app.use(`${baseApiRoute}/demo`, demoRoute);
 app.use(`${baseApiRoute}/project`, projectRoute);
 app.use(`${baseApiRoute}/projectMember`, projectMemberRoute);
@@ -35,7 +36,7 @@ app.use(`${baseApiRoute}/task`, taskRoute);
 app.use(`${baseApiRoute}/user`, userRoute);
 app.use(`${baseApiRoute}/me`, currentUserRoute);
 app.use(`${baseApiRoute}/auth`, authRoute);
-app.use(`${baseApiRoute}/monitor`, monitorController.getNumberOfRequests);
+app.use(`${baseApiRoute}/monitor`, monitorRoute);
 app.use("*", (req, res, next) => {
   next(new HandledError("Route not found", 404));
 });

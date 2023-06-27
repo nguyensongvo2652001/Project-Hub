@@ -5,13 +5,30 @@ const { promisify } = require("util");
 promClient.collectDefaultMetrics();
 
 const APP_REQUESTS_TOTAL = "app_requests_total";
+const APP_PROCESS_TIME_SECONDS = "app_process_time_seconds";
 
-// Define a Prometheus counter to track the number of requests
 const requestsCounter = new promClient.Counter({
   name: APP_REQUESTS_TOTAL,
   help: "Total number of requests made to the app",
   labelNames: ["timestampInSeconds"],
 });
+
+const processTimeSummary = new promClient.Summary({
+  name: APP_PROCESS_TIME_SECONDS,
+  help: "Process time of requests in seconds",
+});
+
+const updateProcessTimeMiddleware = (req, res, next) => {
+  const timer = processTimeSummary.startTimer();
+
+  res.on("finish", () => {
+    const processTime = timer();
+
+    processTimeSummary.observe(processTime);
+  });
+
+  next();
+};
 
 const updateRequestsCounterMiddleware = (req, res, next) => {
   const timestampInSeconds = Math.floor(Date.now() / 1000);
@@ -25,7 +42,7 @@ const updateRequestsCounterMiddleware = (req, res, next) => {
 const getNumberOfRequests = catchAsync(async (req, res, next) => {
   const durationInMinutes = req.query.duration || 10;
   const metrics = await promClient.register
-    .getSingleMetric("app_requests_total")
+    .getSingleMetric(APP_REQUESTS_TOTAL)
     .get();
   const allRequestsCount = metrics.values;
 
@@ -50,4 +67,28 @@ const getNumberOfRequests = catchAsync(async (req, res, next) => {
   });
 });
 
-module.exports = { updateRequestsCounterMiddleware, getNumberOfRequests };
+const getAverageProcessTime = catchAsync(async (req, res, next) => {
+  const metrics = await promClient.register
+    .getSingleMetric(APP_PROCESS_TIME_SECONDS)
+    .get();
+  const metricsValues = metrics.values;
+  const numberOfRequests = metricsValues[metricsValues.length - 1].value;
+  const totalProcessTimeInSeconds =
+    metricsValues[metricsValues.length - 2].value;
+  const averageProcessTimeInSeconds =
+    numberOfRequests === 0 ? 0 : totalProcessTimeInSeconds / numberOfRequests;
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      averageProcessTimeInSeconds,
+    },
+  });
+});
+
+module.exports = {
+  updateRequestsCounterMiddleware,
+  updateProcessTimeMiddleware,
+  getNumberOfRequests,
+  getAverageProcessTime,
+};
