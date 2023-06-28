@@ -18,6 +18,7 @@ const requestsCounter = new promClient.Counter({
 const processTimeSummary = new promClient.Summary({
   name: APP_PROCESS_TIME_SECONDS,
   help: "Process time of requests in seconds",
+  labelNames: ["timestampInSeconds"],
 });
 
 const updateProcessTimeMiddleware = (req, res, next) => {
@@ -26,7 +27,9 @@ const updateProcessTimeMiddleware = (req, res, next) => {
   res.on("finish", () => {
     const processTime = timer();
 
-    processTimeSummary.observe(processTime);
+    const timestampInSeconds = Math.floor(Date.now() / 1000);
+
+    processTimeSummary.observe({ timestampInSeconds }, processTime);
   });
 
   next();
@@ -40,31 +43,25 @@ const updateRequestsCounterMiddleware = (req, res, next) => {
   next();
 };
 
-const getNumberOfRequests = catchAsync(async (req, res, next) => {
+const getMetricsWithinTimeRange = (func, from, duration) => {
   //Both duration and from are in minutes
-  // from = 30 meaning we will only count number of requests from 30 minutes ago
-  // duration = 10 meaning we will group the requests in group of 10 minutes
-  // so let's say now is 12:30, then we will return the number of requests from 12:00 => 12:10, 12:10 => 12:20 and 12:20 => 12:30
-  const { duration, from } = req.query;
+  // from = 30 meaning we will only count metrics from 30 minutes ago
+  // duration = 10 meaning we will group the metrics in group of 10 minutes
+  // so let's say now is 12:30, then we will return the metrics from 12:00 => 12:10, 12:10 => 12:20 and 12:20 => 12:30
 
   if (from > MAX_FROM) {
-    return res.status(400).json({
-      status: "fail",
-      message: `Can only retrieve data from less than ${MAX_FROM} minutes ago.`,
-    });
+    throw new HandledError(
+      `Can only retrieve data from less than ${MAX_FROM} minutes ago.`,
+      400
+    );
   }
 
   if (from / duration > MIN_FROM_DIVIDE_DURATION) {
-    return res.status(400).json({
-      status: "fail",
-      message: `From / duration must be smaller or equal to ${MIN_FROM_DIVIDE_DURATION}`,
-    });
+    throw new HandledError(
+      `From / duration must be smaller or equal to ${MIN_FROM_DIVIDE_DURATION}`,
+      400
+    );
   }
-
-  const metrics = await promClient.register
-    .getSingleMetric(APP_REQUESTS_TOTAL)
-    .get();
-  const allRequestsCount = metrics.values;
 
   const currentTime = Date.now();
   const currentTimeInSeconds = currentTime / 1000;
@@ -75,20 +72,41 @@ const getNumberOfRequests = catchAsync(async (req, res, next) => {
   const data = [];
   while (startTimeInSeconds < currentTimeInSeconds) {
     const endTimeInSeconds = startTimeInSeconds + durationInSeconds;
-    const requestsWithinDuration = allRequestsCount.filter((requestCount) => {
-      const { timestampInSeconds } = requestCount.labels;
-      return (
-        timestampInSeconds >= startTimeInSeconds &&
-        timestampInSeconds <= endTimeInSeconds
-      );
-    });
-    data.push({
-      time: startTimeInSeconds,
-      value: requestsWithinDuration.length,
-    });
+    const result = func(startTimeInSeconds, endTimeInSeconds);
+    data.push(result);
 
     startTimeInSeconds = endTimeInSeconds;
   }
+
+  return data;
+};
+
+const getNumberOfRequests = catchAsync(async (req, res, next) => {
+  const { duration, from } = req.query;
+
+  const metrics = await promClient.register
+    .getSingleMetric(APP_REQUESTS_TOTAL)
+    .get();
+  const allRequestsCount = metrics.values;
+
+  const countNumberOfRequestsWithinRange = (fromInSeconds, toInSeconds) => {
+    const requestsWithinDuration = allRequestsCount.filter((requestCount) => {
+      const { timestampInSeconds } = requestCount.labels;
+      return (
+        timestampInSeconds >= fromInSeconds && timestampInSeconds <= toInSeconds
+      );
+    });
+    return {
+      time: fromInSeconds,
+      value: requestsWithinDuration.length,
+    };
+  };
+
+  const data = getMetricsWithinTimeRange(
+    countNumberOfRequestsWithinRange,
+    from,
+    duration
+  );
 
   res.status(200).json({
     status: "success",
@@ -97,21 +115,46 @@ const getNumberOfRequests = catchAsync(async (req, res, next) => {
 });
 
 const getAverageProcessTime = catchAsync(async (req, res, next) => {
+  const { from, duration } = req.query;
+
   const metrics = await promClient.register
     .getSingleMetric(APP_PROCESS_TIME_SECONDS)
     .get();
+
   const metricsValues = metrics.values;
-  const numberOfRequests = metricsValues[metricsValues.length - 1].value;
-  const totalProcessTimeInSeconds =
-    metricsValues[metricsValues.length - 2].value;
-  const averageProcessTimeInSeconds =
-    numberOfRequests === 0 ? 0 : totalProcessTimeInSeconds / numberOfRequests;
+
+  const getAverageProcessTimeWithinRange = (fromInSeconds, toInSeconds) => {
+    const qualifiedMetrics = metricsValues.filter((metric) => {
+      return (
+        metric.labels.timestampInSeconds >= fromInSeconds &&
+        metric.labels.timestampInSeconds <= toInSeconds
+      );
+    });
+
+    const sumOfProcessTime = qualifiedMetrics.reduce((acc, metric) => {
+      return acc + metric.value;
+    }, 0);
+    let averageProcessTimeInMiliseconds = 0;
+    if (qualifiedMetrics.length > 0) {
+      averageProcessTimeInMiliseconds =
+        (sumOfProcessTime / qualifiedMetrics.length) * 1000;
+    }
+
+    return {
+      time: fromInSeconds,
+      value: averageProcessTimeInMiliseconds,
+    };
+  };
+
+  const data = getMetricsWithinTimeRange(
+    getAverageProcessTimeWithinRange,
+    from,
+    duration
+  );
 
   res.status(200).json({
     status: "success",
-    data: {
-      averageProcessTimeInSeconds,
-    },
+    data,
   });
 });
 
