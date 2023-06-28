@@ -3,6 +3,7 @@ dotenv.config({ path: "./env/main.env" });
 
 const { connectDB } = require("./utils/db");
 const taskController = require("./controllers/task");
+const monitorController = require("./controllers/monitor");
 
 process.on("uncaughtException", (err) => {
   console.error(err, "Uncaught Exception Caught");
@@ -25,6 +26,7 @@ uri = uri.replace(/<databaseName>/, process.env.DB_NAME);
   redisClient = getRedisClient();
   await redisClient.connect();
   taskController.updateTaskStatusCron();
+  monitorController.resetPrometheusMetricsCronJob();
 })();
 
 const app = require("./app");
