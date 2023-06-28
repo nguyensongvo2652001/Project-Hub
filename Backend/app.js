@@ -38,7 +38,7 @@ app.use(`${baseApiRoute}/me`, currentUserRoute);
 app.use(`${baseApiRoute}/auth`, authRoute);
 app.use(`${baseApiRoute}/monitor`, monitorRoute);
 app.use("*", (req, res, next) => {
-  next(new HandledError("Route not found", 404));
+  next(new HandledError(`Route ${req.url} not found`, 404));
 });
 app.use(errorController);
 

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Cookies from "js-cookie";
 import useSendRequest from "../hooks/useSendRequest";
 import useErrorHandling from "../hooks/useErrorHandling";
 import { useNavigate } from "react-router-dom";

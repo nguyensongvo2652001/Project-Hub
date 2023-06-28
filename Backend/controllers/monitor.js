@@ -40,30 +40,44 @@ const updateRequestsCounterMiddleware = (req, res, next) => {
 };
 
 const getNumberOfRequests = catchAsync(async (req, res, next) => {
-  const durationInMinutes = req.query.duration || 10;
+  //Both duration and from are in minutes
+  // from = 30 meaning we will only count number of requests from 30 minutes ago
+  // duration = 10 meaning we will group the requests in group of 10 minutes
+  // so let's say now is 12:30, then we will return the number of requests from 12:00 => 12:10, 12:10 => 12:20 and 12:20 => 12:30
+  const { duration, from } = req.query;
+
   const metrics = await promClient.register
     .getSingleMetric(APP_REQUESTS_TOTAL)
     .get();
   const allRequestsCount = metrics.values;
 
-  const currentTimeInSeconds = Date.now() / 1000;
-  const durationInSeconds = durationInMinutes * 60;
-  const startTimeInSeconds = currentTimeInSeconds - durationInSeconds;
+  const currentTime = Date.now();
+  const currentTimeInSeconds = currentTime / 1000;
+  const durationInSeconds = duration * 60;
+  const fromInSeconds = from * 60;
+  let startTimeInSeconds = currentTimeInSeconds - fromInSeconds;
 
-  //We only count the requests that happen within the duration
-  const requestsInDuration = allRequestsCount.filter((requestCount) => {
-    const { timestampInSeconds } = requestCount.labels;
-    return (
-      timestampInSeconds >= startTimeInSeconds &&
-      timestampInSeconds <= currentTimeInSeconds
-    );
-  });
+  const data = [];
+  while (startTimeInSeconds < currentTimeInSeconds) {
+    const endTimeInSeconds = startTimeInSeconds + durationInSeconds;
+    const requestsWithinDuration = allRequestsCount.filter((requestCount) => {
+      const { timestampInSeconds } = requestCount.labels;
+      return (
+        timestampInSeconds >= startTimeInSeconds &&
+        timestampInSeconds <= endTimeInSeconds
+      );
+    });
+    data.push({
+      time: startTimeInSeconds,
+      value: requestsWithinDuration.length,
+    });
+
+    startTimeInSeconds = endTimeInSeconds;
+  }
 
   res.status(200).json({
     status: "success",
-    data: {
-      numberOfRequests: requestsInDuration.length,
-    },
+    data,
   });
 });
 
