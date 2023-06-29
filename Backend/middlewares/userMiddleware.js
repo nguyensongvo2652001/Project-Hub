@@ -10,7 +10,6 @@ const prepareGetCurrentUserProfileMiddleware = (req, res, next) => {
 
 const prepareUserSelectOptionsMiddleware = (req, res, next) => {
   req.selectOptions = "name jobTitle description email avatar background";
-
   next();
 };
 

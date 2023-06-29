@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import classes from "./SearchBarContainer.module.css";
 import { useRef } from "react";
@@ -7,6 +7,7 @@ import { useRef } from "react";
 const SearchBarContainer = (props) => {
   const searchInputRef = useRef();
   const navigate = useNavigate();
+  const location = useLocation();
   const clickSearchIcon = () => {
     const query = searchInputRef.current.value;
     if (query === "") {
@@ -14,7 +15,10 @@ const SearchBarContainer = (props) => {
     }
 
     navigate(`/search?q=${query}`);
-    navigate(0);
+
+    if (location.pathname.startsWith("/search")) {
+      navigate(0);
+    }
   };
 
   return (

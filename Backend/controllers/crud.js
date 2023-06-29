@@ -101,6 +101,10 @@ const updateOne = (Model) =>
       return next(new HandledError(`No ${modelName} found with that id`, 404));
     }
 
+    const docId = req.params.id;
+    const docCacheKey = `${modelName}_${docId}`;
+    redisClient.set(docCacheKey, JSON.stringify(doc), { EX: 3600 });
+
     if (req.onFinish) {
       await req.onFinish(req, doc);
     }
