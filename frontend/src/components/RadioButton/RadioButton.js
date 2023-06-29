@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 import classes from "./RadioButton.module.css";
 
 const RadioButton = (props) => {
-  const {
-    active: defaultActive,
-    value,
-    onClick,
-    turnOffStateManagement,
-  } = props;
+  const { active: defaultActive, value, turnOffStateManagement } = props;
 
   const [active, setActive] = useState(defaultActive);
 

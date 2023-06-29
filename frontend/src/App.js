@@ -14,7 +14,6 @@ import ProjectNotificationPage from "./pages/ProjectNotificationPage/ProjectNoti
 import ProjectSettingsPage from "./pages/ProjectSettingsPage/ProjectSettingsPage";
 import ProjectStatPage from "./pages/ProjectStatPage/ProjectStatPage";
 import ForbiddenPage from "./pages/ForbiddenPage/ForbiddenPage";
-import TaskDetail from "./components/TaskDetail/TaskDetail";
 import TaskPage from "./pages/TaskPage/TaskPage";
 import UserPublicPage from "./pages/UserPublicPage/UserPublicPage";
 import ProjectPublicDetailPage from "./pages/ProjectPublicDetailPage/ProjectPublicDetailPage";

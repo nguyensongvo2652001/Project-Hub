@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import NotificationContainer from "../UI/ErrorNotification/NotificationContainer";
 import NoAuthComponent from "../NoAuthComponent/NoAuthComponent";
 import BlueBackground from "../UI/Background/BlueBackground";

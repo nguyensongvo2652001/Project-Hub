@@ -1,19 +1,16 @@
 import Modal from "../UI/Modal/Modal.js";
 import RadioButton from "../RadioButton/RadioButton.js";
 import SearchBar from "../SearchBar/SearchBar.js";
-import SearchBarContainer from "../SearchBar/SearchBarContainer.js";
+
 import Loading from "../UI/Loading/Loading.js";
 
 import { useState } from "react";
 import useSendRequest from "../../hooks/useSendRequest.js";
 import useErrorHandling from "../../hooks/useErrorHandling.js";
-import useIntersectionObserver from "../../hooks/useIntersectionObserver.js";
 
 import debounce from "../../utils/debounce.js";
 
 import classes from "./ChooseDevelopersModal.module.css";
-
-import avatar from "../../assets/avatar1.jpg";
 
 const ChooseDevelopersModal = (props) => {
   const { onClick, project, chosenDevelopers, setChosenDevelopers } = props;

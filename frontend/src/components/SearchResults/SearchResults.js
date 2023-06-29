@@ -12,7 +12,6 @@ import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import classes from "./SearchResults.module.css";
 import Card from "../UI/Card/Card";
 import UserMainInfo from "../UserMainInfo/UserMainInfo";
-import avatar from "../../assets/avatar1.jpg";
 
 const SearchResults = () => {
   const location = useLocation();

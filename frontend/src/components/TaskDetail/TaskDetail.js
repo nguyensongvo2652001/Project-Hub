@@ -24,7 +24,6 @@ const TaskDetail = (props) => {
   const handleError = useErrorHandling();
   const [isLoading, setIsLoading] = useState(true);
   const [task, setTask] = useState({});
-  const [taskDevelopers, setTaskDevelopers] = useState(task?.developers);
   const [showEditTaskForm, setShowEditTaskForm] = useState(false);
   const [showDeleteTaskConfirmationModal, setShowDeleteTaskConfirmationModal] =
     useState(false);

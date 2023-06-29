@@ -1,9 +1,8 @@
-import { Link } from "react-router-dom";
 import Card from "../UI/Card/Card";
 
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Loading from "../UI/Loading/Loading";
-import AuthContext from "../../contexts/AuthContext";
+
 import useSendRequest from "../../hooks/useSendRequest";
 import useErrorHandling from "../../hooks/useErrorHandling";
 import NoAuthComponent from "../NoAuthComponent/NoAuthComponent";

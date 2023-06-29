@@ -2,7 +2,6 @@ import navBarStyles from "./NavBar.module.css";
 import logo from "../../../assets/logo.png";
 import NavItemList from "./NavItemList";
 import { useContext, useState } from "react";
-import useSendRequest from "../../../hooks/useSendRequest";
 import AuthContext from "../../../contexts/AuthContext";
 import Modal from "../../UI/Modal/Modal";
 import useErrorHandling from "../../../hooks/useErrorHandling";
