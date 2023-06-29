@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 const corsOptions = {
-  origin: "https://darling-cheesecake-022293.netlify.app",
+  origin: "https://project-hub.onrender.com",
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204,
   credentials: true,
 };
