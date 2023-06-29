@@ -20,7 +20,7 @@ Below are some screenshots that I took from this project (you can check more in 
 ![ProjectHub not found page](/media/projectHub_404.jpg)
 ![ProjectHub forbidden page](/media/projectHub_403.jpg)
 
-**TECHNOLOGIES USED**:
+## TECHNOLOGIES USED:
 
 1. NodeJS (For backend)
 2. MongoDB (For database)
@@ -33,7 +33,7 @@ Below are some screenshots that I took from this project (you can check more in 
 9. CronJob (For task scheduling)
 10. SendGrid (for sending email)
 
-**MAIN FUNCTIONALITIES AND FEATURES**:
+## MAIN FUNCTIONALITIES AND FEATURES:
 
 1. Authentication (Login, Signup, Reset password)
 2. Create / update / delete / join a project
@@ -48,30 +48,31 @@ Below are some screenshots that I took from this project (you can check more in 
 11. Caching (with Redis)
 12. Sending email
 
-**WEBSITE**
-Link: project-hub.onrender.com
-Email: user1@example.com  
-Pass: someThing2605!
+## WEBSITE
+
+Link: project-hub.onrender.com <br>
+Email: user1@example.com <br>
+Pass: someThing2605! <br>
 **Warning**: Unfortunately SendGrid now requires you to have a business email in order to send emails which I don't have right now so there will be two features that will be affected (reset password and invite new member to project)
 
 ## PROJECT STRUCTURE
 
 ### Backend
 
-**server.js**: This is where you config environment variables, start cron jobs, connecting to database and start the server
-**app.js**: This is where you define all the routes
-**models/**: As the name suggest this is the folder to store and the models
-**routes/**: This is the folder to store all the routes
-**tests/**: The folder that stores and the unit tests
-**controllers/**: This folder will maintain all the controllers that are responsible for the "last" task and send the response back to clients. For tasks like validation or authorization, we will put it in middlewares
-**middlewares/**: Basically for tasks that are not "directly" related to the main task (for example we need to validate that the user making the request is the owner of a project before letting them delete the project), we will put it in middlewares.
-**utils/**: To store useful functions that are not directly related to server, for example: sending email
+**server.js**: This is where you config environment variables, start cron jobs, connecting to database and start the server <br>
+**app.js**: This is where you define all the routes <br>
+**models/**: As the name suggest this is the folder to store and the models <br>
+**routes/**: This is the folder to store all the routes <br>
+**tests/**: The folder that stores and the unit tests <br>
+**controllers/**: This folder will maintain all the controllers that are responsible for the "last" task and send the response back to clients. For tasks like validation or authorization, we will put it in middlewares <br>
+**middlewares/**: Basically for tasks that are not "directly" related to the main task (for example we need to validate that the user making the request is the owner of a project before letting them delete the project), we will put it in middlewares. <br>
+**utils/**: To store useful functions that are not directly related to server, for example: sending email <br>
 
 ### frontend
 
-**assets/**: These are some images that will be used either for testing or for visualization purpose.
-**components/**: Store all the components that will be used in this project
-**contexts/**: Store all the contexts and context providers that will used in this project
-**hooks/**: Custom hook for repetitive tasks like useSendRequest for sending request, useIntersectionObserver for infinitiy scroll
-**pages/**: Basically pages will be the final component that will be served by React.
-**utils/**: Repetitive tasks like capitalizing the first letter of a string
+**assets/**: These are some images that will be used either for testing or for visualization purpose. <br>
+**components/**: Store all the components that will be used in this project <br>
+**contexts/**: Store all the contexts and context providers that will used in this project <br>
+**hooks/**: Custom hook for repetitive tasks like useSendRequest for sending request, useIntersectionObserver for infinitiy scroll <br>
+**pages/**: Basically pages will be the final component that will be served by React. <br>
+**utils/**: Repetitive tasks like capitalizing the first letter of a string <br>
