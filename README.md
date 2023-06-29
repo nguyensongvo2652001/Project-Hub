@@ -1,10 +1,14 @@
-**NAME**: ProjectHub
+## NAME
 
-**DESCRIPTION**: A fullstack project that allows you to manage projects, tasks, members, changes and metrics.
+ProjectHub
+
+## DESCRIPTION
+
+A fullstack project that allows you to manage projects, tasks, members, changes and metrics.
 
 ## Screenshots
 
-Below are some screenshots that I took from this project
+Below are some screenshots that I took from this project (you can check more in the media folder)
 ![Grafana for monitoring](/media/grafana_screenshot.jpg)
 ![Project hub personal stat page 1](/media/projectHub_personal_stat.jpg)
 ![Project hub personal stat page 2](/media/projectHub_personal_stat_2.jpg)
