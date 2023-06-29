@@ -1,0 +1,28 @@
+.forbidden {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.forbidden__image {
+  width: 40%;
+}
+
+.forbidden__text {
+  font-size: 3.2rem;
+  font-weight: 800;
+}
+
+@media (max-width: 950px) {
+  .forbidden__image {
+    width: 70%;
+  }
+}
+
+@media (max-width: 600px) {
+  .forbidden__text {
+    font-size: 2.5rem;
+  }
+}

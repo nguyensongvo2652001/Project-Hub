@@ -1,0 +1,28 @@
+.notFound {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.notFound__image {
+  width: 40%;
+}
+
+.notFound__text {
+  font-size: 3.2rem;
+  font-weight: 800;
+}
+
+@media (max-width: 950px) {
+  .notFound__image {
+    width: 70%;
+  }
+}
+
+@media (max-width: 600px) {
+  .notFound__text {
+    font-size: 2.5rem;
+  }
+}

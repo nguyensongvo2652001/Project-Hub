@@ -3,7 +3,7 @@ import "./App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/AuthPage/LoginPage";
 import SignUpPage from "./pages/AuthPage/SignUpPage";
-import NotFoundPage from "./pages/NotFoundPage";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import ProjectsPage from "./pages/ProjectsPage/ProjectsPage";
 import PersonalNotificationsPage from "./pages/NotificationPage/PersonalNotificationsPage";
 import MyProfilePage from "./pages/MyProfilePage/MyProfilePage";
